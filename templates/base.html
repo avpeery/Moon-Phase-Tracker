@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+  <title>Moon Phase Tracker</title>
+</head>
+<body>
+<header>
+    <div class = "container">
+        <nav>
+            <ul>
+                <li><a href="/">Homepage</a></li>
+                <li><a href="/register">Sign up for alerts</a></li>
+                <li><a href="/login">Log in</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+        {% endwith %}
+
+  {% block content %} put your content here {% endblock %}
+
+</body>
+</html>

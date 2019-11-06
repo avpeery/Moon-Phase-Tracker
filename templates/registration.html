@@ -1,0 +1,26 @@
+
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Register Form</h1>
+
+<form action='/register' method="POST">
+    Enter your first name:
+    <input type='text' name ='fname'>
+    Enter your last name:
+    <input type='text' name ='lname'>
+    Enter your phone number:
+    <input type='text' name ='phone'>
+    Enter your email:
+    <input type='text' name ='email'>
+    Enter your password:
+    <input type='text' name = 'password'><br>
+    Which text alerts would you like to receive?
+    <input type="checkbox" name="moon_phase" value="new_moon">New Moon
+    <input type="checkbox" name="moon_phase" value="first_quarter">First Quarter
+    <input type="checkbox" name="moon_phase" value="last_quarter">Last Quarter
+    <input type="checkbox" name="moon_phase" value="full_moon">Full Moon
+    <input type="submit">
+</form>
+
+{% endblock %}

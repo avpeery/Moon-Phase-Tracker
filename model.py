@@ -50,6 +50,7 @@ class Alert(db.Model):
     alert_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     users_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     moon_phase_id = db.Column(db.Integer, db.ForeignKey('moon_phases.moon_phase_id'))
+    alert_type = db.Column(db.String(64))
 
     user = db.relationship("User", backref=db.backref("alerts"))
     moon_phase = db.relationship("Moon_Phase", backref=db.backref("alerts"))
