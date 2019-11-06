@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 #initialize SQL Alchemy object
-db = SQLAlhemy()
+db = SQLAlchemy()
 
 
 
@@ -37,7 +37,6 @@ class Moon_Phase(db.Model):
     moon_phase_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(64))
     start_date = db.Column(db.DateTime)
-    end_date = db.Column(db.DateTime)
 
     def __repr__(self):
 
@@ -51,8 +50,9 @@ class Alert(db.Model):
     alert_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     users_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     moon_phase_id = db.Column(db.Integer, db.ForeignKey('moon_phases.moon_phase_id'))
+
     user = db.relationship("User", backref=db.backref("alerts"))
-    movie = db.relationship("Moon_Phase", backref=db.backref("alerts"))
+    moon_phase = db.relationship("Moon_Phase", backref=db.backref("alerts"))
 
     def __repr__(self):
 
