@@ -10,7 +10,12 @@
             <ul>
                 <li><a href="/">Homepage</a></li>
                 <li><a href="/register">Sign up for alerts</a></li>
-                <li><a href="/login">Log in</a></li>
+                <li> {% if "email" not in session %}
+                        <a href="/login">Log in</a>
+                    {% else %}
+                        <a href="/logout">Log out</a>
+                    {% endif %}
+                </li>
             </ul>
         </nav>
     </div>

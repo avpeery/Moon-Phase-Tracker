@@ -65,8 +65,7 @@ def login_process():
     user = User.query.filter((User.email == email), (User.password == password)).first()
 
     if user: 
-        session['user_email'] = user.email
-        session['user_id'] = user.user_id
+        session['email'] = user.email
 
         flash("Succesfully logged in!")
         return redirect("/")
@@ -78,8 +77,7 @@ def login_process():
 @app.route("/logout")
 def logout_user():
 
-    del session['user_email']
-    del session['user_id']
+    del session['email']
     flash('Succesfully logged out!')
 
     return redirect('/')
