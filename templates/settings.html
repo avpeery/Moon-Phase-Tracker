@@ -1,0 +1,16 @@
+
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Settings</h1>
+
+Name: {{ user.fname }} {{ user.lname }} <br>
+Phone number: {{ user.phone }} <br>
+Email address: {{ user.email }} <br>
+Text alerts: <br><br>
+    New moon alert: {{ user.new_moon }} <br>
+    First quarter alert: {{ user.first_quarter }} <br>
+    Last quarter alert: {{ user.last_quarter }} <br>
+    Full moon alert: {{ user.full_moon }} <br>
+
+{% endblock %}

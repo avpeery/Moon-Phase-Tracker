@@ -13,9 +13,6 @@ app = Flask(__name__)
 # Required to use Flask sessions and the debug toolbar
 app.secret_key = "ABC"
 
-# Normally, if you use an undefined variable in Jinja2, it fails
-# silently. This is horrible. Fix this so that, instead, it raises an
-# error.
 app.jinja_env.undefined = StrictUndefined
 
 @app.route('/')
@@ -36,10 +33,22 @@ def register_process():
     phone = request.form.get('phone')
     email = request.form.get('email')
     password = request.form.get('password')
-    new_moon = request.form.get('new_moon')
-    first_quarter = request.form.get('first_quarter')
-    last_quarter = request.form.get('last_quarter')
-    full_moon = request.form.get('full_moon')
+    moon_phases = request.form.getlist('moon_phases')
+
+    new_moon = False 
+    first_quarter = False 
+    last_quarter = False
+    full_moon = False
+
+    for moon_phase in moon_phases:
+        if moon_phase == 'new_moon':
+            new_moon = True
+        elif moon_phase == 'first_quarter':
+            first_quarter = True
+        elif moon_phase == 'last_quarter':
+            last_quarter = True
+        elif moon_phase == 'full_moon':
+            full_moon = True
 
     if User.query.filter_by(email = email).first():
         flash("Account with that email already exists!")
@@ -73,6 +82,11 @@ def login_process():
     flash("That is not a valid email and password")
     return redirect('/login')
 
+@app.route("/settings")
+def user_settings():
+    email = session['email']
+    user = User.query.filter(User.email == email).first()
+    return render_template("settings.html", user = user)
 
 @app.route("/logout")
 def logout_user():
@@ -81,8 +95,6 @@ def logout_user():
     flash('Succesfully logged out!')
 
     return redirect('/')
-
-
 
 
 

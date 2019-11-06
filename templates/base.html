@@ -9,7 +9,12 @@
         <nav>
             <ul>
                 <li><a href="/">Homepage</a></li>
-                <li><a href="/register">Sign up for alerts</a></li>
+                <li>{% if "email" in session %}</li>
+                        <a href="/settings">Manage settings</a>
+                    {% else %}
+                        <a href="/register">Sign up for alerts</a>
+                    {% endif %}
+                </li>
                 <li> {% if "email" not in session %}
                         <a href="/login">Log in</a>
                     {% else %}
