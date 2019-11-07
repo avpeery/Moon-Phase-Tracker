@@ -8,6 +8,7 @@ Name: {{ user.fname }} {{ user.lname }} <br>
 Phone number: {{ user.phone }} <br>
 Email address: {{ user.email }} <br>
 
+{{Text alerts}}
 {% for alert in user.alerts %}
     {{ alert.moon_phase_types.title }}
 {% endfor %}
