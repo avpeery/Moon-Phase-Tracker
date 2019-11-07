@@ -19,28 +19,36 @@ class User(db.Model):
     password = db.Column(db.String(64))
     phone = db.Column(db.String(64))
 
-    new_moon = db.Column(db.Boolean(False))
-    first_quarter = db.Column(db.Boolean(False))
-    last_quarter = db.Column(db.Boolean(False))
-    full_moon = db.Column(db.Boolean(False))
-
     def __repr__(self):
 
         return f"<User user_id={self.user_id} email={self.email}>"
 
+class MoonPhaseType(db.Model):
+    """Types of Moon Phases"""
 
-class Moon_Phase(db.Model):
-    """Moon Phase of Moon Phase Tracker Web App"""
+    __tablename__ = "moon_phase_types"
 
-    __tablename__ = "moon_phases"
-
-    moon_phase_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    name = db.Column(db.String(64))
-    start_date = db.Column(db.DateTime)
+    moon_phase_type_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    title = db.Column(db.String(64))
 
     def __repr__(self):
 
-        return f"<Moon_Phase moon_phase_id={self.moon_phase_id} name={self.name}>"
+        return f"<MoonPhaseType moon_phase_type_id={self.moon_phase_type_id} title={self.title}>"
+
+class MoonPhaseOccurence(db.Model):
+    """Moon Phases with date and time occurances"""
+
+    __tablename__ = "moon_phase_occurences"
+
+    moon_phase_occurence_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    start_date = db.Column(db.DateTime)
+    moon_phase_type_id = db.Column(db.Integer, db.ForeignKey('moon_phase_types.moon_phase_type_id'))
+
+    moon_phase_types = db.relationship("MoonPhaseType", backref=db.backref("moon_phase_occurences"))
+
+    def __repr__(self):
+
+        return f"<Moon_Phase moon_phase_occurence_id={self.moon_phase_id} moon_phase_type_id ={self.moon_phase_type_id}>"
 
 
 class Alert(db.Model):
@@ -48,16 +56,17 @@ class Alert(db.Model):
     __tablename__ = "alerts"
 
     alert_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    users_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    moon_phase_id = db.Column(db.Integer, db.ForeignKey('moon_phases.moon_phase_id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    moon_phase_type_id = db.Column(db.Integer, db.ForeignKey('moon_phase_types.moon_phase_type_id'))
+    is_active = db.Column(db.Boolean(False))
     alert_type = db.Column(db.String(64))
 
     user = db.relationship("User", backref=db.backref("alerts"))
-    moon_phase = db.relationship("Moon_Phase", backref=db.backref("alerts"))
+    moon_phase_types = db.relationship("MoonPhaseType", backref=db.backref("alerts"))
 
     def __repr__(self):
 
-        return f"<Alert alert_id={self.alert_id} user_id={self.user_id} moon_phase_id={self.moon_phase_id}>"
+        return f"<Alert alert_id={self.alert_id} user_id={self.user_id} moon_phase_type_id={self.moon_phase_type_id}>"
 
 def connect_to_db(app):
     """Connect the database to our Flask app."""

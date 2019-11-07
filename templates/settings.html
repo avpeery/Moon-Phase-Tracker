@@ -7,10 +7,52 @@
 Name: {{ user.fname }} {{ user.lname }} <br>
 Phone number: {{ user.phone }} <br>
 Email address: {{ user.email }} <br>
-Text alerts: <br><br>
-    New moon alert: {{ user.new_moon }} <br>
-    First quarter alert: {{ user.first_quarter }} <br>
-    Last quarter alert: {{ user.last_quarter }} <br>
-    Full moon alert: {{ user.full_moon }} <br>
 
+{% for alert in user.alerts %}
+    {{ alert.moon_phase_types.title }}
+{% endfor %}
+<a href="/change">Change settings</a>
 {% endblock %}
+<!-- 
+*/ send as asynchro
+callback function when this completed, do this
+jquery 
+event listener on there 
+$ . on submit 
+when a submit happens 
+prevent default
+values - go to api /user id - send post call 
+request to server 
+update the data - turn into dictionary 
+
+send a 200 that's successful (server needs to respond, error or success)
+on the serve send success or fail
+
+Jquery success or error, and loading state.
+-user session data - user.id 
+- .checked - 
+https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input 
+mozilla mdn - javascript, html, css
+-password
+promises 
+/*
+react - web components that you name yourself, and define yourself routing and index,
+base html 
+create react app - command line tool - sets up your react 
+https://github.com/facebook/create-react-app
+
+code pen  - full files 
+code sandbox - full file - repl
+
+repl.it - old school way code snippet 
+cron jobs 
+
+api key - stick it in server, in an environmental variable - passed into properties file 
+- like requirments.txt 
+property file or environmental - all caps TWILIO API KEY
+PUT IT IN MY GIT IGNORE 
+don't ever save a server key
+- make sure sessions encrypted
+- request level encryption with http - last steps ready to go to production
+
+ -->

@@ -5,7 +5,7 @@ from flask import (Flask, render_template, redirect, request, flash, session)
 
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import User, Moon_Phase, Alert, connect_to_db, db
+from model import User, MoonPhaseOccurence, MoonPhaseType, Alert, connect_to_db, db
 
 
 app = Flask(__name__)
@@ -23,6 +23,7 @@ def index():
 
 @app.route('/register')
 def register_user():
+    """Dislay registration form"""
     return render_template('registration.html')
 
 
@@ -35,29 +36,22 @@ def register_process():
     password = request.form.get('password')
     moon_phases = request.form.getlist('moon_phases')
 
-    new_moon = False 
-    first_quarter = False 
-    last_quarter = False
-    full_moon = False
-
-    for moon_phase in moon_phases:
-        if moon_phase == 'new_moon':
-            new_moon = True
-        elif moon_phase == 'first_quarter':
-            first_quarter = True
-        elif moon_phase == 'last_quarter':
-            last_quarter = True
-        elif moon_phase == 'full_moon':
-            full_moon = True
-
     if User.query.filter_by(email = email).first():
         flash("Account with that email already exists!")
         return redirect("/register")
-    else:
-        email = User(fname=fname, lname=lname, phone=phone, email = email, password = password, new_moon=new_moon, first_quarter=first_quarter, last_quarter=last_quarter, full_moon=full_moon)
-        db.session.add(email)
-        db.session.commit()
-        return redirect("/")
+
+    user= User(fname=fname, lname=lname, phone=phone, email = email, password = password)
+
+    db.session.add(user)
+
+    for moon_phase in moon_phases:
+        moon_phase_type = MoonPhaseType.query.filter(MoonPhaseType.title == moon_phase).first()
+        alert = Alert(user_id = user.user_id, moon_phase_type_id = moon_phase_type.moon_phase_type_id, is_active=True)
+        db.session.add(alert)
+
+    db.session.commit()
+
+    return redirect("/")
 
 
 @app.route('/login')
@@ -86,7 +80,13 @@ def login_process():
 def user_settings():
     email = session['email']
     user = User.query.filter(User.email == email).first()
+    
     return render_template("settings.html", user = user)
+
+@app.route("/change")
+def  change_settings():
+
+    return redirect("/")
 
 @app.route("/logout")
 def logout_user():
