@@ -4,56 +4,43 @@
 
 <h1>Settings</h1>
 
-Name: {{ user.fname }} {{ user.lname }} <br>
-Phone number: {{ user.phone }} <br>
-Email address: {{ user.email }} <br>
 
-{{Text alerts}}
-{% for alert in user.alerts %}
-    {{ alert.moon_phase_types.title }}
-{% endfor %}
-<a href="/change">Change settings</a>
+<form action='/change-settings' method="POST">
+
+    First name:
+    <input type='text' name ='fname' value = '{{ user.fname }}' disabled>
+    Last name:
+    <input type='text' name ='lname' value = '{{ user.lname }}' disabled>
+    Phone number:
+    <input type='text' name ='phone' value = '{{ user.phone }}' disabled>
+    Email address:
+    <input type='text' name ='email' value = '{{ user.email }}' disabled>
+    Texts:
+    {% for moon_phase in moon_phases %}
+        {% if moon_phase.moon_phase_type_id in user_moon_alerts %}
+            <input type="checkbox" name="moon_phases" value="{{ moon_phase.title }}" checked disabled>{{ moon_phase.title }}
+        {% else %}
+            <input type="checkbox" name="moon_phases" value="{{ moon_phase.title }}" disabled>{{ moon_phase.title }}
+        {% endif %}
+    {% endfor %}
+<button type="button" class="change-settings">Change settings</button>
+</form>
+
+
+
+<script>
+    $('button').on('click', () => {
+        $('input').removeAttr('disabled');
+        $('button').replaceWith($('<input type=submit>'));
+    })
+</script>
 {% endblock %}
-<!-- 
-*/ send as asynchro
-callback function when this completed, do this
-jquery 
-event listener on there 
-$ . on submit 
-when a submit happens 
-prevent default
-values - go to api /user id - send post call 
-request to server 
-update the data - turn into dictionary 
+<!-- // create  check boxes for the phases
+// a javascript is will loop through the phases to see if the user has an alert 
 
-send a 200 that's successful (server needs to respond, error or success)
-on the serve send success or fail
-
-Jquery success or error, and loading state.
--user session data - user.id 
-- .checked - 
-https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input 
-mozilla mdn - javascript, html, css
--password
-promises 
-/*
-react - web components that you name yourself, and define yourself routing and index,
-base html 
-create react app - command line tool - sets up your react 
-https://github.com/facebook/create-react-app
-
-code pen  - full files 
-code sandbox - full file - repl
-
-repl.it - old school way code snippet 
-cron jobs 
-
-api key - stick it in server, in an environmental variable - passed into properties file 
-- like requirments.txt 
-property file or environmental - all caps TWILIO API KEY
-PUT IT IN MY GIT IGNORE 
-don't ever save a server key
-- make sure sessions encrypted
-- request level encryption with http - last steps ready to go to production
-
+// if the user has this moon phase, show itll be checked else unchecked, inside the for looped
  -->
+
+
+
+

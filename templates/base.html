@@ -1,7 +1,11 @@
 <!doctype html>
 <html>
 <head>
-  <title>Moon Phase Tracker</title>
+    <title>Moon Phase Tracker</title>
+    <script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
 </head>
 <body>
 <header>
@@ -10,7 +14,7 @@
             <ul>
                 <li><a href="/">Homepage</a></li>
                 <li>{% if "email" in session %}</li>
-                        <a href="/settings">Manage settings</a>
+                        <a href="/display-settings">Manage settings</a>
                     {% else %}
                         <a href="/register">Sign up for alerts</a>
                     {% endif %}

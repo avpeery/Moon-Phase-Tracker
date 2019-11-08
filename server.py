@@ -7,6 +7,8 @@ from flask_debugtoolbar import DebugToolbarExtension
 
 from model import User, MoonPhaseOccurence, MoonPhaseType, Alert, connect_to_db, db
 
+import itertools
+
 
 app = Flask(__name__)
 
@@ -76,17 +78,49 @@ def login_process():
     flash("That is not a valid email and password")
     return redirect('/login')
 
-@app.route("/settings")
+@app.route("/display-settings")
 def user_settings():
     email = session['email']
     user = User.query.filter(User.email == email).first()
-    
-    return render_template("settings.html", user = user)
+    moon_phases = MoonPhaseType.query.all()
 
-@app.route("/change")
+    user_moon_alerts = []
+    for alert in user.alerts:
+        if alert.is_active == True:
+            user_moon_alerts.append(alert.moon_phase_type_id)
+
+
+    return render_template("settings.html", user = user, moon_phases = moon_phases, user_moon_alerts = user_moon_alerts)
+
+@app.route("/change-settings", methods=['POST'])
 def  change_settings():
+    first_name = request.form.get('fname')
+    last_name = request.form.get('lname')
+    new_phone = request.form.get('phone')
+    new_email = request.form.get('email')
+    new_moon_phases = request.form.getlist('moon_phases')
 
-    return redirect("/")
+    email = session['email']
+    user = User.query.filter(User.email == email).first()
+    moon_phase_types = MoonPhaseType.query.all()
+
+    user.fname = first_name
+    user.lname = last_name
+    user.phone = new_phone
+    user.email = new_email
+
+  
+
+    for moon_phase_type, alert in zip(moon_phase_types, user.alerts):
+        if moon_phase_type.title in new_moon_phases:
+            alert.is_active = True
+            db.session.commit()
+        else:
+            alert.is_active = False 
+            db.session.commit()
+
+    db.session.commit()
+    return redirect("/display-settings")
 
 @app.route("/logout")
 def logout_user():
