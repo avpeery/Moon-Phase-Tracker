@@ -47,9 +47,12 @@ def register_process():
     db.session.add(user)
 
     for moon_phase in moon_phases:
-        moon_phase_type = MoonPhaseType.query.filter(MoonPhaseType.title == moon_phase).first()
-        alert = Alert(user_id = user.user_id, moon_phase_type_id = moon_phase_type.moon_phase_type_id, is_active=True)
-        db.session.add(alert)
+        if MoonPhaseType.query.filter(MoonPhaseType.title == moon_phase).one():
+            alert = Alert(user_id = user.user_id, moon_phase_type_id = moon_phase_type.moon_phase_type_id, is_active=True)
+            db.session.add(alert)
+        else:
+            alert = Alert(user_id = user.user_id, moon_phase_type_id = moon_phase_type.moon_phase_type_id, is_active=False)
+            db.session.add(alert)
 
     db.session.commit()
 
@@ -108,9 +111,7 @@ def  change_settings():
     user.lname = last_name
     user.phone = new_phone
     user.email = new_email
-
   
-
     for moon_phase_type, alert in zip(moon_phase_types, user.alerts):
         if moon_phase_type.title in new_moon_phases:
             alert.is_active = True
@@ -129,8 +130,6 @@ def logout_user():
     flash('Succesfully logged out!')
 
     return redirect('/')
-
-
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
