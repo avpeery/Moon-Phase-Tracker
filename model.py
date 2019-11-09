@@ -49,8 +49,7 @@ class MoonPhaseOccurence(db.Model):
     def __repr__(self):
 
         return f"<Moon_Phase moon_phase_occurence_id={self.moon_phase_id} moon_phase_type_id ={self.moon_phase_type_id}>"
-
-
+        
 class Alert(db.Model):
 
     __tablename__ = "alerts"
