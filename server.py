@@ -46,8 +46,10 @@ def register_process():
 
     db.session.add(user)
 
-    for moon_phase in moon_phases:
-        if MoonPhaseType.query.filter(MoonPhaseType.title == moon_phase).one():
+    moon_phase_types = MoonPhaseType.query.all()
+
+    for moon_phase_type in moon_phase_types:
+        if moon_phase_type.title in moon_phases:
             alert = Alert(user_id = user.user_id, moon_phase_type_id = moon_phase_type.moon_phase_type_id, is_active=True)
             db.session.add(alert)
         else:
@@ -102,6 +104,7 @@ def  change_settings():
     new_phone = request.form.get('phone')
     new_email = request.form.get('email')
     new_moon_phases = request.form.getlist('moon_phases')
+    print(new_moon_phases)
 
     email = session['email']
     user = User.query.filter(User.email == email).first()
@@ -116,9 +119,10 @@ def  change_settings():
         if moon_phase_type.title in new_moon_phases:
             alert.is_active = True
             db.session.commit()
-        else:
+        elif moon_phase_type.title not in new_moon_phases:
             alert.is_active = False 
             db.session.commit()
+        
 
     db.session.commit()
     return redirect("/display-settings")
