@@ -23,7 +23,7 @@ def load_moon_phase_occurences():
     e = api.load('de421.bsp')
 
     t0 = ts.utc(2000, 1, 1)
-    t1 = ts.utc(2000, 12, 31)
+    t1 = ts.utc(2050, 12, 31)
     t, y = almanac.find_discrete(t0, t1, almanac.moon_phases(e))
 
     dates = t.utc_iso()

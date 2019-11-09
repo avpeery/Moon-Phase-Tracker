@@ -104,7 +104,6 @@ def  change_settings():
     new_phone = request.form.get('phone')
     new_email = request.form.get('email')
     new_moon_phases = request.form.getlist('moon_phases')
-    print(new_moon_phases)
 
     email = session['email']
     user = User.query.filter(User.email == email).first()
