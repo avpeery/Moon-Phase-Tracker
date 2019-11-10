@@ -44,12 +44,12 @@ class MoonPhaseOccurence(db.Model):
     start_date = db.Column(db.DateTime)
     moon_phase_type_id = db.Column(db.Integer, db.ForeignKey('moon_phase_types.moon_phase_type_id'))
 
-    moon_phase_types = db.relationship("MoonPhaseType", backref=db.backref("moon_phase_occurences"))
+    moon_phase_type = db.relationship("MoonPhaseType", backref=db.backref("moon_phase_occurences"))
 
     def __repr__(self):
 
-        return f"<Moon_Phase moon_phase_occurence_id={self.moon_phase_id} moon_phase_type_id ={self.moon_phase_type_id}>"
-        
+        return f"<MoonPhaseOccurence moon_phase_occurence_id={self.moon_phase_occurence_id} moon_phase_type_id ={self.moon_phase_type_id}>"
+
 class Alert(db.Model):
 
     __tablename__ = "alerts"
@@ -61,7 +61,7 @@ class Alert(db.Model):
     alert_type = db.Column(db.String(64))
 
     user = db.relationship("User", backref=db.backref("alerts"))
-    moon_phase_types = db.relationship("MoonPhaseType", backref=db.backref("alerts"))
+    moon_phase_type = db.relationship("MoonPhaseType", backref=db.backref("alerts"))
 
     def __repr__(self):
 
