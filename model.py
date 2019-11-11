@@ -43,7 +43,7 @@ class FullMoonNickname(db.Model):
 
     full_moon_nickname_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     title = db.Column(db.String(64))
-    nickname_month = db.Column(Integer)
+    nickname_month = db.Column(db.Integer)
 
     def __repr__(self):
 
@@ -59,7 +59,6 @@ class MoonPhaseOccurence(db.Model):
     start_date = db.Column(db.DateTime)
     moon_phase_type_id = db.Column(db.Integer, db.ForeignKey('moon_phase_types.moon_phase_type_id'))
     full_moon_nickname_id = db.Column(db.Integer, db.ForeignKey('full_moon_nicknames.full_moon_nickname_id'))
-    harvest_moon = db.Column(Boolean(False))
 
     moon_phase_type = db.relationship("MoonPhaseType", backref=db.backref("moon_phase_occurences"))
     full_moon_nickname = db.relationship("FullMoonNickname", backref=db.backref("moon_phase_occurences"))
@@ -77,11 +76,13 @@ class Alert(db.Model):
     alert_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     moon_phase_type_id = db.Column(db.Integer, db.ForeignKey('moon_phase_types.moon_phase_type_id'))
+    full_moon_nickname_id = db.Column(db.Integer, db.ForeignKey('full_moon_nicknames.full_moon_nickname_id'))
     is_active = db.Column(db.Boolean(False))
     alert_type = db.Column(db.String(64))
 
     user = db.relationship("User", backref=db.backref("alerts"))
     moon_phase_type = db.relationship("MoonPhaseType", backref=db.backref("alerts"))
+    full_moon_nickname = db.relationship("FullMoonNickname", backref=db.backref("alerts"))
 
     def __repr__(self):
 

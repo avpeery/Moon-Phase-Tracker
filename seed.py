@@ -10,6 +10,7 @@ import itertools
 MOON_PHASE_TYPES = ["New Moon", "First Quarter", "Full Moon", "Last Quarter"]
 FULL_MOON_NICKNAMES = ["Wolf Moon", "Snow Moon", "Worm Moon", "Pink Moon", "Flower Moon", "Strawberry Moon", "Buck Moon", "Sturgeon Moon", "Corn Moon", "Hunter's Moon", "Beaver Moon", "Cold Moon"]
 
+#Add in for blue moons (if two full moons occur in one month, latest is a blue moon)and harvest moon (full moon closest to the autumn solistice - either Sept or Oct)
 
 def load_moon_phase_types():
     """adds moon phase types to moon phase types table"""
@@ -46,7 +47,13 @@ def load_moon_phase_occurences():
 
         moon_phase_type = MoonPhaseType.query.filter(MoonPhaseType.title == moon_phase_name).first()
 
-        moon_phase_occurence = MoonPhaseOccurence(start_date = date, moon_phase_type_id = moon_phase_type.moon_phase_type_id)         
+        if moon_phase_type.title == "Full Moon":
+            full_moon_nickname = FullMoonNickname.query.filter(FullMoonNickname.nickname_month == date.month).first()
+
+            moon_phase_occurence = MoonPhaseOccurence(start_date = date, moon_phase_type_id = moon_phase_type.moon_phase_type_id, full_moon_nickname_id = full_moon_nickname.full_moon_nickname_id)
+        else:
+            moon_phase_occurence = MoonPhaseOccurence(start_date = date, moon_phase_type_id = moon_phase_type.moon_phase_type_id)         
+        
         db.session.add(moon_phase_occurence)
 
     db.session.commit()
@@ -56,5 +63,6 @@ if __name__ == "__main__":
 
     db.create_all()
     load_moon_phase_types()
+    load_full_moon_nicknames()
     load_moon_phase_occurences()
     
