@@ -1,9 +1,10 @@
 from twilio.rest import Client
 import os
 import flask
-import flask.ext.sqlalchemy
+from flask_sqlalchemy import SQLAlchemy 
 import schedule
 import datetime
+import time
 from model import *
 
 
@@ -47,6 +48,12 @@ def send_text():
 
     return schedule.CancelJob
 
-
 schedule.every().day.at('10:00').do(send_text)
+
+while True: 
+  
+    schedule.run_pending() 
+    time.sleep(1) 
+
+
 

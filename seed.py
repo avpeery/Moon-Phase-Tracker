@@ -1,19 +1,29 @@
 
 from sqlalchemy import func
-from model import User, MoonPhaseType, MoonPhaseOccurence, Alert, connect_to_db, db
+from model import User, MoonPhaseType, MoonPhaseOccurence, FullMoonNickname, Alert, connect_to_db, db
 from server import app
 
 from datetime import datetime
 from skyfield import api, almanac
 import itertools
 
-MOON_PHASE_TYPES = ['New Moon', 'First Quarter', 'Full Moon', 'Last Quarter']
+MOON_PHASE_TYPES = ["New Moon", "First Quarter", "Full Moon", "Last Quarter"]
+FULL_MOON_NICKNAMES = ["Wolf Moon", "Snow Moon", "Worm Moon", "Pink Moon", "Flower Moon", "Strawberry Moon", "Buck Moon", "Sturgeon Moon", "Corn Moon", "Hunter's Moon", "Beaver Moon", "Cold Moon"]
+
 
 def load_moon_phase_types():
     """adds moon phase types to moon phase types table"""
     for moon_phase in MOON_PHASE_TYPES:
         moon_phase_type = MoonPhaseType(title=moon_phase)
         db.session.add(moon_phase_type)
+
+    db.session.commit
+
+def load_full_moon_nicknames():
+    """adds full moon nicknames to moon phase nicknames table"""
+    for (nickname, month) in zip(FULL_MOON_NICKNAMES, range(1, 13)):
+        full_moon_nickname = FullMoonNickname(title=nickname, nickname_month=month)
+        db.session.add(full_moon_nickname)
 
     db.session.commit
 
@@ -30,8 +40,10 @@ def load_moon_phase_occurences():
     moon_phase_names = [almanac.MOON_PHASES[yi] for yi in y]
 
     for (date, moon_phase_name) in zip(dates, moon_phase_names):
-        date = date[:10]
-        date = datetime.strptime(date, "%Y-%m-%d")
+
+        date = date.replace("Z", "UTC")
+        date = datetime.strptime(date, "%Y-%m-%dT%H:%M:%S%Z")
+
         moon_phase_type = MoonPhaseType.query.filter(MoonPhaseType.title == moon_phase_name).first()
 
         moon_phase_occurence = MoonPhaseOccurence(start_date = date, moon_phase_type_id = moon_phase_type.moon_phase_type_id)         
