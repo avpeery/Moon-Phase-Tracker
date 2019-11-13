@@ -42,7 +42,9 @@ def register_process():
         flash("Account with that email already exists!")
         return redirect("/register")
 
-    user= User(fname=fname, lname=lname, phone=phone, email = email, password = password)
+    phone = "+1" + phone
+
+    user= User(fname=fname, lname=lname, phone= phone, email = email, password = password)
 
     db.session.add(user)
 

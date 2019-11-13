@@ -41,9 +41,8 @@ def load_moon_phase_occurences():
     moon_phase_names = [almanac.MOON_PHASES[yi] for yi in y]
 
     for (date, moon_phase_name) in zip(dates, moon_phase_names):
-
-        date = date.replace("Z", "UTC")
-        date = datetime.strptime(date, "%Y-%m-%dT%H:%M:%S%Z")
+        date = date[:10]
+        date = datetime.strptime(date, "%Y-%m-%d")
 
         moon_phase_type = MoonPhaseType.query.filter(MoonPhaseType.title == moon_phase_name).first()
 
@@ -65,4 +64,7 @@ if __name__ == "__main__":
     load_moon_phase_types()
     load_full_moon_nicknames()
     load_moon_phase_occurences()
+
+    # .replace("Z", "UTC")
+    # T%H:%M:%S%Z
     
