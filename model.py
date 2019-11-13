@@ -88,6 +88,16 @@ class Alert(db.Model):
 
         return f"<Alert alert_id={self.alert_id} user_id={self.user_id} moon_phase_type_id={self.moon_phase_type_id}>"
 
+class Solstice(db.Model):
+    __tablename__ = "solstices"
+
+    solstice_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    title = db.Column(db.String(64))
+    date = db.Column(db.DateTime)
+
+    def __repr__(self):
+
+        return f"<Solstice solstice_id={self.solstice_id} title={self.title}>"
 
 def connect_to_db(app):
     """Connect the database to our Flask app."""

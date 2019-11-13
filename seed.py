@@ -1,6 +1,7 @@
 
 from sqlalchemy import func
-from model import User, MoonPhaseType, MoonPhaseOccurence, FullMoonNickname, Alert, connect_to_db, db
+from sqlalchemy.orm import joinedload
+from model import User, MoonPhaseType, MoonPhaseOccurence, Solstice, FullMoonNickname, Alert, connect_to_db, db
 from server import app
 
 from datetime import datetime
@@ -10,6 +11,8 @@ import itertools
 MOON_PHASE_TYPES = ["New Moon", "First Quarter", "Full Moon", "Last Quarter"]
 FULL_MOON_NICKNAMES = ["Wolf Moon", "Snow Moon", "Worm Moon", "Pink Moon", "Flower Moon", "Strawberry Moon", "Buck Moon", "Sturgeon Moon", "Corn Moon", "Hunter's Moon", "Beaver Moon", "Cold Moon"]
 MOON_EMOJIS = ["🌚","🌛", "🌝","🌜"]
+TS = api.load.timescale(builtin=True)
+E = api.load('de421.bsp')
 
 #Add in for blue moons (if two full moons occur in one month, latest is a blue moon)and harvest moon (full moon closest to the autumn solistice - either Sept or Oct)
 
@@ -30,30 +33,75 @@ def load_full_moon_nicknames():
         full_moon_nickname = FullMoonNickname(title=nickname, nickname_month=month)
         db.session.add(full_moon_nickname)
 
-    blue_moon = FullMoonNickname(title="Blue Moon")
-    db.session.add(blue_moon)
-
-    harvest_moon = FullMoonNickname(title="Harvest Moon")
-    db.session.add(harvest_moon)
-
     db.session.commit
 
-# def is_blue_moon():
-    
+def load_solstices():
+    """uses skyfield library to calculate season solstices, and add to database"""
+    t0 = TS.utc(2000, 1, 1)
+    t1 = TS.utc(2050, 12, 31)
+    t, y = almanac.find_discrete(t0, t1, almanac.seasons(E))
 
-# def is_harvest_moon():
-#     """checks to see if moon phase occurence is a harvest moon"""
+    dates = t.utc_iso()
+    solstice_names = [almanac.SEASON_EVENTS[yi] for yi in y]
+
+    for (date, solstice_name) in zip(dates, solstice_names):
+        date = date[:10]
+        date = datetime.strptime(date, "%Y-%m-%d")
+
+        solstice_occurence = Solstice(title = solstice_name, date = date)      
+        
+        db.session.add(solstice_occurence)
+
+    db.session.commit()
+
+
+def is_blue_moon():
+    """checks to see if full phase occurence is a blue moon"""
+    blue_moon = FullMoonNickname(title="Blue Moon")
+    db.session.add(blue_moon)
+    db.session.commit()
+
+    full_moon_occurences = MoonPhaseOccurence.query.options(joinedload('moon_phase_type').filter(moon_phase_type.title == "Full Moon")).all()
+
+    blue_moon_nickname = FullMoonNickname.query.filter(FullMoonNickname.title == "Blue Moon").first()
+
+    for idx, full_moon_occurence in enumerate(full_moon_occurences):
+
+        if full_moon_occurence.start_date.month == full_moon_occurences[idx+1].start_date.month:
+            full_moon_occurences[idx+1].full_moon_nickname_id = blue_moon_nickname.full_moon_nickname_id
+            db.session.commit()
+
+
+def is_harvest_moon():
+    """checks to see if full phase occurence is a harvest moon"""
+    harvest_moon = FullMoonNickname(title="Harvest Moon")
+    db.session.add(harvest_moon)
+    db.session.commit()
+
+    harvest_moon = FullMoonNickname.query.filter(FullMoonNickname.title == "Harvest Moon").first()
+    autumn_equinoxes = Solstice.query.filter(Solstice.title == "Autumnal Equinox").all()
+
+    for autumn_equinox in autumn_equinoxes:
+
+        this_years_full_moons = MoonPhaseOccurence.query.filter(MoonPhaseOccurence.moon_phase_type.has(title == "Full Moon"), MoonPhaseOccurence.start_date.year == autumn_equinox.date.year).all()
+
+        full_moon_dates = [this_years_full_moon.start_date for this_years_full_moon in this_years_full_moons] 
+
+        closest_full_moon_date = min(full_moon_dates, key=lambda x: abs(x - autumn_equinox))
+
+        closest_full_moon = MoonPhaseOccurence.query.filter(MoonPhaseOccurence.start_date == closest_full_moon_date).first()
+
+        closest_full_moon.full_moon_nickname_id = harvest_moon.full_moon_nickname_id
+
+        db.session.commit()
 
 
 def load_moon_phase_occurences():
     """adds specific moon phase occurences from file to moon phase occurences table"""
 
-    ts = api.load.timescale(builtin=True)
-    e = api.load('de421.bsp')
-
-    t0 = ts.utc(2000, 1, 1)
-    t1 = ts.utc(2050, 12, 31)
-    t, y = almanac.find_discrete(t0, t1, almanac.moon_phases(e))
+    t0 = TS.utc(2000, 1, 1)
+    t1 = TS.utc(2050, 12, 31)
+    t, y = almanac.find_discrete(t0, t1, almanac.moon_phases(E))
 
     dates = t.utc_iso()
     moon_phase_names = [almanac.MOON_PHASES[yi] for yi in y]
@@ -82,6 +130,10 @@ if __name__ == "__main__":
     load_moon_phase_types()
     load_full_moon_nicknames()
     load_moon_phase_occurences()
+    load_solstices()
+    is_blue_moon()
+    is_harvest_moon()
+
 
     #placeholder to add time of moon phase occurences back into database
     # .replace("Z", "UTC")
