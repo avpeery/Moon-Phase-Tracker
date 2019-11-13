@@ -12,9 +12,9 @@ ACCOUNT_SID = os.environ['TWILIO_ACCOUNT_SID']
 AUTH_TOKEN = os.environ['TWILIO_AUTH_TOKEN']
 TWILIO_NUMBER = os.environ['TWILIO_NUMBER']
 
-def write_text(user, moon_phase_title):
+def write_text(user, moon_phase_title, moon_emoji):
     """Returns string for user's text message"""
-    return f"""Good afternoon { user }. There will be a { moon_phase_title } tonight. Enjoy! 🌝"""
+    return f"""Good afternoon { user }. There will be a { moon_phase_title } tonight. {moon_emoji} Enjoy!"""
 
 
 def find_tonights_moon():
@@ -33,7 +33,9 @@ def check_alerts(tonights_moon):
         alerts = Alert.query.filter(Alert.moon_phase_type_id == tonights_moon.moon_phase_type.moon_phase_type_id).all()
 
         return alerts
+
     else:
+
         return None
 
 
@@ -49,12 +51,14 @@ def send_text():
 
             if alert.is_active == True:
                 
-                text = write_text(alert.user.fname, tonights_moon_phase.moon_phase_type.title)
+                text = write_text(alert.user.fname, tonights_moon_phase.moon_phase_type.title, tonights_moon_phase.moon_phase_type.emoji)
                 phone = alert.user.phone
                 message = client.messages.create(body=text, from_=TWILIO_NUMBER, to=phone)
             else:
                 pass
+
     else:
+
         return None
 
 

@@ -5,7 +5,6 @@ from datetime import datetime
 #initialize SQL Alchemy object
 db = SQLAlchemy()
 
-
 class User(db.Model):
     """User of Moon Phase Tracker Web App"""
 
@@ -30,6 +29,7 @@ class MoonPhaseType(db.Model):
 
     moon_phase_type_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     title = db.Column(db.String(64))
+    emoji = db.Column(db.String(20))
 
     def __repr__(self):
 

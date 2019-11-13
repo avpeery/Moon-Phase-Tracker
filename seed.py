@@ -9,27 +9,45 @@ import itertools
 
 MOON_PHASE_TYPES = ["New Moon", "First Quarter", "Full Moon", "Last Quarter"]
 FULL_MOON_NICKNAMES = ["Wolf Moon", "Snow Moon", "Worm Moon", "Pink Moon", "Flower Moon", "Strawberry Moon", "Buck Moon", "Sturgeon Moon", "Corn Moon", "Hunter's Moon", "Beaver Moon", "Cold Moon"]
+MOON_EMOJIS = ["🌚","🌛", "🌝","🌜"]
 
 #Add in for blue moons (if two full moons occur in one month, latest is a blue moon)and harvest moon (full moon closest to the autumn solistice - either Sept or Oct)
 
+
 def load_moon_phase_types():
     """adds moon phase types to moon phase types table"""
-    for moon_phase in MOON_PHASE_TYPES:
-        moon_phase_type = MoonPhaseType(title=moon_phase)
+
+    for moon_phase, moon_emoji in zip(MOON_PHASE_TYPES, MOON_EMOJIS):
+        moon_phase_type = MoonPhaseType(title=moon_phase, emoji=moon_emoji)
         db.session.add(moon_phase_type)
 
     db.session.commit
 
 def load_full_moon_nicknames():
     """adds full moon nicknames to moon phase nicknames table"""
+
     for (nickname, month) in zip(FULL_MOON_NICKNAMES, range(1, 13)):
         full_moon_nickname = FullMoonNickname(title=nickname, nickname_month=month)
         db.session.add(full_moon_nickname)
 
+    blue_moon = FullMoonNickname(title="Blue Moon")
+    db.session.add(blue_moon)
+
+    harvest_moon = FullMoonNickname(title="Harvest Moon")
+    db.session.add(harvest_moon)
+
     db.session.commit
+
+# def is_blue_moon():
+    
+
+# def is_harvest_moon():
+#     """checks to see if moon phase occurence is a harvest moon"""
+
 
 def load_moon_phase_occurences():
     """adds specific moon phase occurences from file to moon phase occurences table"""
+
     ts = api.load.timescale(builtin=True)
     e = api.load('de421.bsp')
 
@@ -65,6 +83,7 @@ if __name__ == "__main__":
     load_full_moon_nicknames()
     load_moon_phase_occurences()
 
+    #placeholder to add time of moon phase occurences back into database
     # .replace("Z", "UTC")
     # T%H:%M:%S%Z
     
