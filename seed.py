@@ -1,6 +1,5 @@
 
 from sqlalchemy import func
-from sqlalchemy.orm import joinedload
 from model import User, MoonPhaseType, MoonPhaseOccurence, Solstice, FullMoonNickname, Alert, connect_to_db, db
 from server import app
 
@@ -55,47 +54,6 @@ def load_solstices():
     db.session.commit()
 
 
-def is_blue_moon():
-    """checks to see if full phase occurence is a blue moon"""
-    blue_moon = FullMoonNickname(title="Blue Moon")
-    db.session.add(blue_moon)
-    db.session.commit()
-
-    full_moon_occurences = MoonPhaseOccurence.query.options(joinedload('moon_phase_type').filter(moon_phase_type.title == "Full Moon")).all()
-
-    blue_moon_nickname = FullMoonNickname.query.filter(FullMoonNickname.title == "Blue Moon").first()
-
-    for idx, full_moon_occurence in enumerate(full_moon_occurences):
-
-        if full_moon_occurence.start_date.month == full_moon_occurences[idx+1].start_date.month:
-            full_moon_occurences[idx+1].full_moon_nickname_id = blue_moon_nickname.full_moon_nickname_id
-            db.session.commit()
-
-
-def is_harvest_moon():
-    """checks to see if full phase occurence is a harvest moon"""
-    harvest_moon = FullMoonNickname(title="Harvest Moon")
-    db.session.add(harvest_moon)
-    db.session.commit()
-
-    harvest_moon = FullMoonNickname.query.filter(FullMoonNickname.title == "Harvest Moon").first()
-    autumn_equinoxes = Solstice.query.filter(Solstice.title == "Autumnal Equinox").all()
-
-    for autumn_equinox in autumn_equinoxes:
-
-        this_years_full_moons = MoonPhaseOccurence.query.filter(MoonPhaseOccurence.moon_phase_type.has(title == "Full Moon"), MoonPhaseOccurence.start_date.year == autumn_equinox.date.year).all()
-
-        full_moon_dates = [this_years_full_moon.start_date for this_years_full_moon in this_years_full_moons] 
-
-        closest_full_moon_date = min(full_moon_dates, key=lambda x: abs(x - autumn_equinox))
-
-        closest_full_moon = MoonPhaseOccurence.query.filter(MoonPhaseOccurence.start_date == closest_full_moon_date).first()
-
-        closest_full_moon.full_moon_nickname_id = harvest_moon.full_moon_nickname_id
-
-        db.session.commit()
-
-
 def load_moon_phase_occurences():
     """adds specific moon phase occurences from file to moon phase occurences table"""
 
@@ -122,6 +80,50 @@ def load_moon_phase_occurences():
         db.session.add(moon_phase_occurence)
 
     db.session.commit()
+
+
+def is_blue_moon():
+    """checks to see if full phase occurence is a blue moon"""
+    blue_moon = FullMoonNickname(title="Blue Moon")
+    db.session.add(blue_moon)
+    db.session.commit()
+
+    full_moon = MoonPhaseType.query.filter(MoonPhaseType.title == "Full Moon").first()
+    blue_moon_nickname = FullMoonNickname.query.filter(FullMoonNickname.title == "Blue Moon").first()
+
+    for idx, full_moon_occurence in enumerate(full_moon.moon_phase_occurences):
+        if idx+1 < len(full_moon.moon_phase_occurences):
+            if full_moon_occurence.start_date.month == full_moon.moon_phase_occurences[idx+1].start_date.month:
+                full_moon.moon_phase_occurences[idx+1].full_moon_nickname_id = blue_moon_nickname.full_moon_nickname_id
+    db.session.commit()
+
+
+def is_harvest_moon():
+    """checks to see if full phase occurence is a harvest moon"""
+    harvest_moon = FullMoonNickname(title="Harvest Moon")
+    db.session.add(harvest_moon)
+    db.session.commit()
+
+    harvest_moon = FullMoonNickname.query.filter(FullMoonNickname.title == "Harvest Moon").first()
+    autumn_equinoxes = Solstice.query.filter(Solstice.title == "Autumnal Equinox").all()
+    full_moon = MoonPhaseType.query.filter(MoonPhaseType.title == "Full Moon").first()
+
+    for autumn_equinox in autumn_equinoxes:
+
+        this_years_full_moons = [full_moon_occurence for full_moon_occurence in full_moon.moon_phase_occurences if full_moon_occurence.start_date.year == autumn_equinox.date.year]
+
+
+        full_moon_dates = [this_years_full_moon.start_date for this_years_full_moon in this_years_full_moons] 
+
+
+        closest_full_moon_date = min(full_moon_dates, key=lambda x: abs(x - autumn_equinox.date))
+
+        closest_full_moon = MoonPhaseOccurence.query.filter(MoonPhaseOccurence.start_date == closest_full_moon_date).first()
+
+        closest_full_moon.full_moon_nickname_id = harvest_moon.full_moon_nickname_id
+
+    db.session.commit()
+    
 
 if __name__ == "__main__":
     connect_to_db(app)
