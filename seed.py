@@ -92,9 +92,13 @@ def is_blue_moon():
     blue_moon_nickname = FullMoonNickname.query.filter(FullMoonNickname.title == "Blue Moon").first()
 
     for idx, full_moon_occurence in enumerate(full_moon.moon_phase_occurences):
+
         if idx+1 < len(full_moon.moon_phase_occurences):
+
             if full_moon_occurence.start_date.month == full_moon.moon_phase_occurences[idx+1].start_date.month:
+
                 full_moon.moon_phase_occurences[idx+1].full_moon_nickname_id = blue_moon_nickname.full_moon_nickname_id
+
     db.session.commit()
 
 
@@ -133,7 +137,7 @@ if __name__ == "__main__":
     load_full_moon_nicknames()
     load_moon_phase_occurences()
     load_solstices()
-    is_blue_moon()
+    is_blue_moon() #updating existing full_moon_nicknames_to_blue_moon - find_and_update_for_blue_moons #resource links in the code #testing 
     is_harvest_moon()
 
 

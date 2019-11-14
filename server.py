@@ -48,29 +48,34 @@ def register_process():
     phone = "+1" + phone
 
     user = User(fname=fname, lname=lname, phone= phone, email = email, password = password)
-
     db.session.add(user)
+
+    user_moon_phase_types = set(moon_phase_types)
+    user_full_moon_nicknames = set(full_moon_nicknames)
 
     all_moon_phase_types = MoonPhaseType.query.all()
     all_full_moon_nicknames = FullMoonNickname.query.all()
 
-    for moon_phase_type, full_moon_nickname in zip(all_moon_phase_types, all_full_moon_nicknames):
-        if moon_phase_type in moon_phase_types:
+    for moon_phase_type in all_moon_phase_types:
+
+        if moon_phase_type.title in user_moon_phase_types:
             
             moon_phase_alert = Alert(user_id = user.user_id, moon_phase_type_id = moon_phase_type.moon_phase_type_id, is_active=True)
             db.session.add(moon_phase_alert)
 
-        elif full_moon_nickname in full_moon_nicknames:
-
-            full_moon_alert = Alert(user_id = user.user_id, full_moon_nickname_id = full_moon_nickname.full_moon_nickname_id, is_active=True)
-            db.session.add(full_moon_alert)
-
-        elif moon_phase_type not in moon_phase_types:
+        else:
 
             moon_phase_alert = Alert(user_id = user.user_id, moon_phase_type_id = moon_phase_type.moon_phase_type_id, is_active=False)
             db.session.add(moon_phase_alert)
+
+    for full_moon_nickname in all_full_moon_nicknames:
+
+        if full_moon_nickname.title in user_full_moon_nicknames:
+
+            full_moon_alert = Alert(user_id = user.user_id, full_moon_nickname_id = full_moon_nickname.full_moon_nickname_id, is_active=True)
+            db.session.add(full_moon_alert)
         
-        elif full_moon_nickname not in full_moon_nicknames:
+        else:
 
             full_moon_alert = Alert(user_id = user.user_id, full_moon_nickname_id = full_moon_nickname.full_moon_nickname_id, is_active=False)
             db.session.add(full_moon_alert)
@@ -109,14 +114,19 @@ def user_settings():
     moon_phases = MoonPhaseType.query.all()
     full_moon_nicknames = FullMoonNickname.query.all()
 
-    user_moon_alerts = []
+    moon_phase_type_alerts = set()
+    full_moon_nickname_alerts = set()
+
     for alert in user.alerts:
-        if alert.is_active == True:
-            user_moon_alerts.append(alert.moon_phase_type_id)
-            user_moon_alerts.append(alert.full_moon_nickname_id)
+
+        if alert.is_active == True and alert.moon_phase_type_id != None:
+            moon_phase_type_alerts.add(alert.moon_phase_type_id)
+
+        elif alert.is_active == True and alert.full_moon_nickname_id != None:
+            full_moon_nickname_alerts.add(alert.full_moon_nickname_id)
 
 
-    return render_template("settings.html", user = user, moon_phases = moon_phases, full_moon_nicknames = full_moon_nicknames, user_moon_alerts = user_moon_alerts)
+    return render_template("settings.html", user = user, moon_phases = moon_phases, full_moon_nicknames = full_moon_nicknames, moon_phase_type_alerts = moon_phase_type_alerts, full_moon_nickname_alerts = full_moon_nickname_alerts)
 
 @app.route("/change-settings", methods=['POST'])
 def  change_settings():
@@ -127,8 +137,12 @@ def  change_settings():
     new_moon_phases = request.form.getlist('moon_phases')
     new_full_moon_nicknames = request.form.getlist("full_moon_nicknames")
 
+    new_moon_phases = set(new_moon_phases)
+    new_full_moon_nicknames = set(new_full_moon_nicknames)
+
     email = session['email']
     user = User.query.filter(User.email == email).first()
+
     moon_phase_types = MoonPhaseType.query.all()
     full_moon_nicknames = FullMoonNickname.query.all()
 
@@ -137,23 +151,18 @@ def  change_settings():
     user.phone = new_phone
     user.email = new_email
   
-    for moon_phase_type, alert in zip(moon_phase_types, user.alerts):
-        if moon_phase_type.title in new_moon_phases:
-            alert.is_active = True
-            db.session.commit()
-        else: 
-            alert.is_active = False 
-            db.session.commit()
+    for user.alert in user.alerts:
+        if str(user.alert.moon_phase_type_id) in new_moon_phases:
+            user.alert.is_active = True
   
-        elif full_moon_nickname.title in new_full_moon_nicknames:
-            alert.is_active = True
-            db.session.commit()
-    for full_moon_nickname, alert in zip(full_moon_nicknames, user.alerts)
+        elif str(user.alert.full_moon_nickname_id) in new_full_moon_nicknames:
+            user.alert.is_active = True
 
+        elif str(user.alert.moon_phase_type_id) not in new_moon_phases:
+            user.alert.is_active = False 
 
-        elif full_moon_nickname.title not in new_full_moon_nicknames:
-            alert.is_active = False
-            db.session.commit()
+        elif str(full_moon_nickname.full_moon_nickname_id) not in new_full_moon_nicknames:
+            user.alert.is_active = False
         
     db.session.commit()
     return redirect("/display-settings")
