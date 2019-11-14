@@ -5,7 +5,7 @@ from flask import (Flask, render_template, redirect, request, flash, session)
 
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import User, MoonPhaseOccurence, MoonPhaseType, Alert, connect_to_db, db
+from model import User, MoonPhaseOccurence, MoonPhaseType, Alert, FullMoonNickname, connect_to_db, db
 
 import itertools
 
@@ -26,7 +26,9 @@ def index():
 @app.route('/register')
 def register_user():
     """Dislay registration form"""
-    return render_template('registration.html')
+    moon_phase_types = MoonPhaseType.query.all()
+    full_moon_nicknames = FullMoonNickname.query.all()
+    return render_template('registration.html', moon_phase_types=moon_phase_types, full_moon_nicknames=full_moon_nicknames)
 
 
 @app.route("/register", methods= ["POST"])
@@ -36,7 +38,8 @@ def register_process():
     phone = request.form.get('phone')
     email = request.form.get('email')
     password = request.form.get('password')
-    moon_phases = request.form.getlist('moon_phases')
+    moon_phase_types = request.form.getlist('moon_phases')
+    full_moon_nicknames = request.form.getlist('full_moon_nicknames')
 
     if User.query.filter_by(email = email).first():
         flash("Account with that email already exists!")
@@ -44,19 +47,33 @@ def register_process():
 
     phone = "+1" + phone
 
-    user= User(fname=fname, lname=lname, phone= phone, email = email, password = password)
+    user = User(fname=fname, lname=lname, phone= phone, email = email, password = password)
 
     db.session.add(user)
 
-    moon_phase_types = MoonPhaseType.query.all()
+    all_moon_phase_types = MoonPhaseType.query.all()
+    all_full_moon_nicknames = FullMoonNickname.query.all()
 
-    for moon_phase_type in moon_phase_types:
-        if moon_phase_type.title in moon_phases:
-            alert = Alert(user_id = user.user_id, moon_phase_type_id = moon_phase_type.moon_phase_type_id, is_active=True)
-            db.session.add(alert)
-        else:
-            alert = Alert(user_id = user.user_id, moon_phase_type_id = moon_phase_type.moon_phase_type_id, is_active=False)
-            db.session.add(alert)
+    for moon_phase_type, full_moon_nickname in zip(all_moon_phase_types, all_full_moon_nicknames):
+        if moon_phase_type in moon_phase_types:
+            
+            moon_phase_alert = Alert(user_id = user.user_id, moon_phase_type_id = moon_phase_type.moon_phase_type_id, is_active=True)
+            db.session.add(moon_phase_alert)
+
+        elif full_moon_nickname in full_moon_nicknames:
+
+            full_moon_alert = Alert(user_id = user.user_id, full_moon_nickname_id = full_moon_nickname.full_moon_nickname_id, is_active=True)
+            db.session.add(full_moon_alert)
+
+        elif moon_phase_type not in moon_phase_types:
+
+            moon_phase_alert = Alert(user_id = user.user_id, moon_phase_type_id = moon_phase_type.moon_phase_type_id, is_active=False)
+            db.session.add(moon_phase_alert)
+        
+        elif full_moon_nickname not in full_moon_nicknames:
+
+            full_moon_alert = Alert(user_id = user.user_id, full_moon_nickname_id = full_moon_nickname.full_moon_nickname_id, is_active=False)
+            db.session.add(full_moon_alert)
 
     db.session.commit()
 
@@ -90,14 +107,16 @@ def user_settings():
     email = session['email']
     user = User.query.filter(User.email == email).first()
     moon_phases = MoonPhaseType.query.all()
+    full_moon_nicknames = FullMoonNickname.query.all()
 
     user_moon_alerts = []
     for alert in user.alerts:
         if alert.is_active == True:
             user_moon_alerts.append(alert.moon_phase_type_id)
+            user_moon_alerts.append(alert.full_moon_nickname_id)
 
 
-    return render_template("settings.html", user = user, moon_phases = moon_phases, user_moon_alerts = user_moon_alerts)
+    return render_template("settings.html", user = user, moon_phases = moon_phases, full_moon_nicknames = full_moon_nicknames, user_moon_alerts = user_moon_alerts)
 
 @app.route("/change-settings", methods=['POST'])
 def  change_settings():
@@ -106,10 +125,12 @@ def  change_settings():
     new_phone = request.form.get('phone')
     new_email = request.form.get('email')
     new_moon_phases = request.form.getlist('moon_phases')
+    new_full_moon_nicknames = request.form.getlist("full_moon_nicknames")
 
     email = session['email']
     user = User.query.filter(User.email == email).first()
     moon_phase_types = MoonPhaseType.query.all()
+    full_moon_nicknames = FullMoonNickname.query.all()
 
     user.fname = first_name
     user.lname = last_name
@@ -120,11 +141,20 @@ def  change_settings():
         if moon_phase_type.title in new_moon_phases:
             alert.is_active = True
             db.session.commit()
-        elif moon_phase_type.title not in new_moon_phases:
+        else: 
             alert.is_active = False 
             db.session.commit()
-        
+  
+        elif full_moon_nickname.title in new_full_moon_nicknames:
+            alert.is_active = True
+            db.session.commit()
+    for full_moon_nickname, alert in zip(full_moon_nicknames, user.alerts)
 
+
+        elif full_moon_nickname.title not in new_full_moon_nicknames:
+            alert.is_active = False
+            db.session.commit()
+        
     db.session.commit()
     return redirect("/display-settings")
 

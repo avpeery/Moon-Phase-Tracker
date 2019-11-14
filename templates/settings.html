@@ -14,12 +14,19 @@
     <input type='text' name ='phone' value = '{{ user.phone }}' disabled>
     Email address:
     <input type='text' name ='email' value = '{{ user.email }}' disabled>
-    Texts:
+    Texts:<br>
     {% for moon_phase in moon_phases %}
         {% if moon_phase.moon_phase_type_id in user_moon_alerts %}
-            <input type="checkbox" name="moon_phases" value="{{ moon_phase.title }}" checked disabled>{{ moon_phase.title }}
+            <input type="checkbox" name="moon_phases" value="{{ moon_phase.title }}" checked disabled>{{ moon_phase.title }}<br>
         {% else %}
-            <input type="checkbox" name="moon_phases" value="{{ moon_phase.title }}" disabled>{{ moon_phase.title }}
+            <input type="checkbox" name="moon_phases" value="{{ moon_phase.title }}" disabled>{{ moon_phase.title }}<br>
+        {% endif %}
+    {% endfor %}
+    {% for full_moon_nickname in full_moon_nicknames %}
+        {% if full_moon_nickname.full_moon_nickname_id in user_moon_alerts %}
+            <input type="checkbox" name="full_moon_nicknames" value="{{ full_moon_nickname.title }}" checked disabled>{{ full_moon_nickname.title }}<br>
+        {% else %}
+            <input type="checkbox" name="full_moon_nicknames" value="{{ full_moon_nickname.title }}" disabled>{{ full_moon_nickname.title }}<br>
         {% endif %}
     {% endfor %}
 <button type="button" class="change-settings">Change settings</button>
