@@ -137,7 +137,7 @@ if __name__ == "__main__":
     load_full_moon_nicknames()
     load_moon_phase_occurences()
     load_solstices()
-    is_blue_moon() #updating existing full_moon_nicknames_to_blue_moon - find_and_update_for_blue_moons #resource links in the code #testing 
+    is_blue_moon() #updating existing full_moon_nicknames_to_blue_moon - find_and_update_for_blue_moons #resource links in the code #testing #s
     is_harvest_moon()
 
 

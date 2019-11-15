@@ -1,13 +1,15 @@
 
 from jinja2 import StrictUndefined
 
-from flask import (Flask, render_template, redirect, request, flash, session)
+from flask import (Flask, g, render_template, redirect, request, flash, session)
 
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import User, MoonPhaseOccurence, MoonPhaseType, Alert, FullMoonNickname, connect_to_db, db
 
 import itertools
+
+from helpers import *
 
 
 app = Flask(__name__)
@@ -26,20 +28,19 @@ def index():
 @app.route('/register')
 def register_user():
     """Dislay registration form"""
-    moon_phase_types = MoonPhaseType.query.all()
-    full_moon_nicknames = FullMoonNickname.query.all()
-    return render_template('registration.html', moon_phase_types=moon_phase_types, full_moon_nicknames=full_moon_nicknames)
+    all_moon_phase_types = MoonPhaseType.query.all()
+    all_full_moon_nicknames = FullMoonNickname.query.all()
+
+    return render_template('registration.html', moon_phase_types=all_moon_phase_types, full_moon_nicknames=all_full_moon_nicknames)
 
 
 @app.route("/register", methods= ["POST"])
 def register_process():
-    fname = request.form.get('fname')
-    lname = request.form.get('lname')
-    phone = request.form.get('phone')
-    email = request.form.get('email')
-    password = request.form.get('password')
-    moon_phase_types = request.form.getlist('moon_phases')
-    full_moon_nicknames = request.form.getlist('full_moon_nicknames')
+    """gets post request from html registration"""
+
+    fname, lname, phone, email, password = form_get_request('fname', 'lname', 'phone', 'email', 'password')
+
+    moon_phase_types, full_moon_nicknames = form_get_list('moon_phases', 'full_moon_nicknames')
 
     if User.query.filter_by(email = email).first():
         flash("Account with that email already exists!")
@@ -93,8 +94,7 @@ def login_user():
 @app.route("/login", methods=['POST'])
 def login_process():
 
-    email = request.form.get("email")
-    password = request.form.get("password")
+    email, password = form_get_request("email", "password")
 
     user = User.query.filter((User.email == email), (User.password == password)).first()
 
@@ -107,15 +107,18 @@ def login_process():
     flash("That is not a valid email and password")
     return redirect('/login')
 
+
 @app.route("/display-settings")
 def user_settings():
+
     email = session['email']
-    user = User.query.filter(User.email == email).first()
-    moon_phases = MoonPhaseType.query.all()
-    full_moon_nicknames = FullMoonNickname.query.all()
+    user = User.query.filter_by(email = email).first()
 
     moon_phase_type_alerts = set()
     full_moon_nickname_alerts = set()
+
+    all_moon_phase_types = MoonPhaseType.query.all()
+    all_full_moon_nicknames = FullMoonNickname.query.all()
 
     for alert in user.alerts:
 
@@ -126,30 +129,24 @@ def user_settings():
             full_moon_nickname_alerts.add(alert.full_moon_nickname_id)
 
 
-    return render_template("settings.html", user = user, moon_phases = moon_phases, full_moon_nicknames = full_moon_nicknames, moon_phase_type_alerts = moon_phase_type_alerts, full_moon_nickname_alerts = full_moon_nickname_alerts)
+    return render_template("settings.html", user = user, moon_phases = all_moon_phase_types, full_moon_nicknames = all_full_moon_nicknames, moon_phase_type_alerts = moon_phase_type_alerts, full_moon_nickname_alerts = full_moon_nickname_alerts)
+
 
 @app.route("/change-settings", methods=['POST'])
 def  change_settings():
-    first_name = request.form.get('fname')
-    last_name = request.form.get('lname')
-    new_phone = request.form.get('phone')
-    new_email = request.form.get('email')
-    new_moon_phases = request.form.getlist('moon_phases')
-    new_full_moon_nicknames = request.form.getlist("full_moon_nicknames")
+    fname, lname, phone, email = form_get_request('fname', 'lname', 'phone', 'email')
+    new_moon_phases, new_full_moon_nicknames = form_get_list('moon_phases', 'full_moon_nicknames')
 
     new_moon_phases = set(new_moon_phases)
     new_full_moon_nicknames = set(new_full_moon_nicknames)
 
     email = session['email']
-    user = User.query.filter(User.email == email).first()
+    user = User.query.filter_by(email = email).first()
 
-    moon_phase_types = MoonPhaseType.query.all()
-    full_moon_nicknames = FullMoonNickname.query.all()
-
-    user.fname = first_name
-    user.lname = last_name
-    user.phone = new_phone
-    user.email = new_email
+    user.fname = fname
+    user.lname = lname
+    user.phone = phone
+    user.email = email
   
     for user.alert in user.alerts:
         if str(user.alert.moon_phase_type_id) in new_moon_phases:
@@ -161,7 +158,7 @@ def  change_settings():
         elif str(user.alert.moon_phase_type_id) not in new_moon_phases:
             user.alert.is_active = False 
 
-        elif str(full_moon_nickname.full_moon_nickname_id) not in new_full_moon_nicknames:
+        elif str(user.alert.full_moon_nickname_id) not in new_full_moon_nicknames:
             user.alert.is_active = False
         
     db.session.commit()
@@ -186,5 +183,6 @@ if __name__ == "__main__":
 
     # Use the DebugToolbar
     DebugToolbarExtension(app)
+
 
     app.run(port=5000, host='0.0.0.0')
