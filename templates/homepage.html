@@ -4,10 +4,8 @@
 <h1>Moon Phase Tracker</h1>
 
 <div id="ex1"></div>
-<div id="ex2"></div>
-<div id="ex3"></div>
 
-<iframe src="https://calendar.google.com/calendar/embed?src=7l7hv2l37l5t7s4sfmpkce1etg%40group.calendar.google.com&ctz=America%2FLos_Angeles" style="border: 0" width="800" height="600" frameborder="0" scrolling="yes"></iframe>
+<div id='calendar'></div>
 
 <script type="text/javascript">     
     
@@ -22,8 +20,6 @@ function load_moon_phases(obj){
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var moon  = JSON.parse(xmlhttp.responseText)
             example_1(moon)
-            example_2(moon)
-            example_3(moon) 
         }
     }
     xmlhttp.open("GET", url, true)
@@ -60,5 +56,6 @@ function example_1(moon){
     document.getElementById("ex1").innerHTML=html
 }
 </script>
+
 
 {% endblock %}
