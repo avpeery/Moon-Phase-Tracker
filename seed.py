@@ -11,7 +11,7 @@ MOON_PHASE_TYPES = ["New Moon", "First Quarter", "Full Moon", "Last Quarter"]
 FULL_MOON_NICKNAMES = ["Wolf Moon", "Snow Moon", "Worm Moon", "Pink Moon", "Flower Moon", "Strawberry Moon", "Buck Moon", "Sturgeon Moon", "Corn Moon", "Hunter's Moon", "Beaver Moon", "Cold Moon"]
 MOON_EMOJIS = ["🌚","🌛", "🌝","🌜"]
 TS = api.load.timescale(builtin=True)
-E = api.load('de421.bsp')
+E = api.load('seed_files/de421.bsp')
 
 
 def load_moon_phase_types():
