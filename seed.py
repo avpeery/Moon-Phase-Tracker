@@ -103,11 +103,8 @@ def updates_full_moon_nickname_for_full_moon_occurences_to_blue_moon():
     blue_moon_nickname = FullMoonNickname.query.filter(FullMoonNickname.title == "Blue Moon").first()
 
     for idx, full_moon_occurence in enumerate(full_moon.moon_phase_occurences):
-
         if idx+1 < len(full_moon.moon_phase_occurences):
-
             if full_moon_occurence.start_date.month == full_moon.moon_phase_occurences[idx+1].start_date.month:
-
                 full_moon.moon_phase_occurences[idx+1].full_moon_nickname_id = blue_moon_nickname.full_moon_nickname_id
 
     db.session.commit()
@@ -123,15 +120,10 @@ def updates_full_moon_nickname_for_full_moon_occurences_to_harvest_moon():
     for autumn_equinox in autumn_equinoxes:
 
         this_years_full_moons = [full_moon_occurence for full_moon_occurence in full_moon.moon_phase_occurences if full_moon_occurence.start_date.year == autumn_equinox.date.year]
-
-
         full_moon_dates = [this_years_full_moon.start_date for this_years_full_moon in this_years_full_moons] 
-
-
+        
         closest_full_moon_date = min(full_moon_dates, key=lambda x: abs(x - autumn_equinox.date))
-
         closest_full_moon = MoonPhaseOccurence.query.filter(MoonPhaseOccurence.start_date == closest_full_moon_date).first()
-
         closest_full_moon.full_moon_nickname_id = harvest_moon.full_moon_nickname_id
 
     db.session.commit()
