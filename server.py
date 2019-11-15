@@ -1,7 +1,7 @@
 
 from jinja2 import StrictUndefined
 
-from flask import (Flask, g, render_template, redirect, request, flash, session)
+from flask import (Flask, render_template, redirect, request, flash, session)
 
 from flask_debugtoolbar import DebugToolbarExtension
 
@@ -13,21 +13,20 @@ from helpers import *
 
 
 app = Flask(__name__)
-
-# Required to use Flask sessions and the debug toolbar
 app.secret_key = "ABC"
-
 app.jinja_env.undefined = StrictUndefined
 
 @app.route('/')
 def index():
-    """Homepage."""
+    """Homepage"""
+
     return render_template('homepage.html')
 
 
 @app.route('/register')
 def register_user():
-    """Dislay registration form"""
+    """Displays registration form"""
+
     all_moon_phase_types = MoonPhaseType.query.all()
     all_full_moon_nicknames = FullMoonNickname.query.all()
 
@@ -36,7 +35,7 @@ def register_user():
 
 @app.route("/register", methods= ["POST"])
 def register_process():
-    """gets post request from html registration"""
+    """Gets post request from html registration, and adds to database"""
 
     fname, lname, phone, email, password = form_get_request('fname', 'lname', 'phone', 'email', 'password')
 
@@ -46,7 +45,7 @@ def register_process():
         flash("Account with that email already exists!")
         return redirect("/register")
 
-    phone = "+1" + phone
+    phone = lookup_phone_number(phone)
 
     user = User(fname=fname, lname=lname, phone= phone, email = email, password = password)
     db.session.add(user)
@@ -88,11 +87,14 @@ def register_process():
 
 @app.route('/login')
 def login_user():
+    """Displays login form"""
+
     return render_template('login.html')
 
 
 @app.route("/login", methods=['POST'])
 def login_process():
+    """Gets post request from login, and adds to session"""
 
     email, password = form_get_request("email", "password")
 
@@ -105,11 +107,13 @@ def login_process():
         return redirect("/")
 
     flash("That is not a valid email and password")
+
     return redirect('/login')
 
 
 @app.route("/display-settings")
 def user_settings():
+    """Displays user's settings"""
 
     email = session['email']
     user = User.query.filter_by(email = email).first()
@@ -128,12 +132,13 @@ def user_settings():
         elif alert.is_active == True and alert.full_moon_nickname_id != None:
             full_moon_nickname_alerts.add(alert.full_moon_nickname_id)
 
-
     return render_template("settings.html", user = user, moon_phases = all_moon_phase_types, full_moon_nicknames = all_full_moon_nicknames, moon_phase_type_alerts = moon_phase_type_alerts, full_moon_nickname_alerts = full_moon_nickname_alerts)
 
 
 @app.route("/change-settings", methods=['POST'])
 def  change_settings():
+    """Gets post requests from change-settings and updates database"""
+
     fname, lname, phone, email = form_get_request('fname', 'lname', 'phone', 'email')
     new_moon_phases, new_full_moon_nicknames = form_get_list('moon_phases', 'full_moon_nicknames')
 
@@ -164,13 +169,16 @@ def  change_settings():
     db.session.commit()
     return redirect("/display-settings")
 
+
 @app.route("/logout")
 def logout_user():
+    """Logs user out of session"""
 
     del session['email']
     flash('Succesfully logged out!')
 
     return redirect('/')
+
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
