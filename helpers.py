@@ -21,6 +21,9 @@ def form_get_list(*argv):
 
     return form_get_nested_list
 
+def 
+full_moon = MoonPhaseType.query.filter(MoonPhaseType.title == "Full Moon").first()
+blue_moon_nickname = FullMoonNickname.query.filter(FullMoonNickname.title == "Blue Moon").first()
 
 if __name__ == "__main__":
     

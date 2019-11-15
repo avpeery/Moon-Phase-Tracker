@@ -59,24 +59,20 @@ def register_process():
     for moon_phase_type in all_moon_phase_types:
 
         if moon_phase_type.title in user_moon_phase_types:
-            
             moon_phase_alert = Alert(user_id = user.user_id, moon_phase_type_id = moon_phase_type.moon_phase_type_id, is_active=True)
             db.session.add(moon_phase_alert)
 
         else:
-
             moon_phase_alert = Alert(user_id = user.user_id, moon_phase_type_id = moon_phase_type.moon_phase_type_id, is_active=False)
             db.session.add(moon_phase_alert)
 
     for full_moon_nickname in all_full_moon_nicknames:
 
         if full_moon_nickname.title in user_full_moon_nicknames:
-
             full_moon_alert = Alert(user_id = user.user_id, full_moon_nickname_id = full_moon_nickname.full_moon_nickname_id, is_active=True)
             db.session.add(full_moon_alert)
         
         else:
-
             full_moon_alert = Alert(user_id = user.user_id, full_moon_nickname_id = full_moon_nickname.full_moon_nickname_id, is_active=False)
             db.session.add(full_moon_alert)
 

@@ -13,8 +13,6 @@ MOON_EMOJIS = ["🌚","🌛", "🌝","🌜"]
 TS = api.load.timescale(builtin=True)
 E = api.load('de421.bsp')
 
-#Add in for blue moons (if two full moons occur in one month, latest is a blue moon)and harvest moon (full moon closest to the autumn solistice - either Sept or Oct)
-
 
 def load_moon_phase_types():
     """adds moon phase types to moon phase types table"""
@@ -36,6 +34,7 @@ def load_full_moon_nicknames():
 
 def load_solstices():
     """uses skyfield library to calculate season solstices, and add to database"""
+
     t0 = TS.utc(2000, 1, 1)
     t1 = TS.utc(2050, 12, 31)
     t, y = almanac.find_discrete(t0, t1, almanac.seasons(E))
@@ -82,11 +81,23 @@ def load_moon_phase_occurences():
     db.session.commit()
 
 
-def is_blue_moon():
-    """checks to see if full phase occurence is a blue moon"""
+def load_blue_moon():
+    """Adds Blue Moon to FullMoonNickname"""
+
     blue_moon = FullMoonNickname(title="Blue Moon")
     db.session.add(blue_moon)
     db.session.commit()
+
+
+def load_harvest_moon():
+    """Adds Harvest Moon to FullMoonNickname"""
+    harvest_moon = FullMoonNickname(title="Harvest Moon")
+    db.session.add(harvest_moon)
+    db.session.commit()
+
+
+def updates_full_moon_nickname_for_full_moon_occurences_to_blue_moon():
+    """Checks to see if full phase occurence is a blue moon and updates database"""
 
     full_moon = MoonPhaseType.query.filter(MoonPhaseType.title == "Full Moon").first()
     blue_moon_nickname = FullMoonNickname.query.filter(FullMoonNickname.title == "Blue Moon").first()
@@ -102,11 +113,8 @@ def is_blue_moon():
     db.session.commit()
 
 
-def is_harvest_moon():
-    """checks to see if full phase occurence is a harvest moon"""
-    harvest_moon = FullMoonNickname(title="Harvest Moon")
-    db.session.add(harvest_moon)
-    db.session.commit()
+def updates_full_moon_nickname_for_full_moon_occurences_to_harvest_moon():
+    """Checks to see if full phase occurence is a harvest moon and updates database"""
 
     harvest_moon = FullMoonNickname.query.filter(FullMoonNickname.title == "Harvest Moon").first()
     autumn_equinoxes = Solstice.query.filter(Solstice.title == "Autumnal Equinox").all()
