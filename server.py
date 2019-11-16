@@ -6,7 +6,7 @@ from flask import (Flask, render_template, redirect, request, flash, session)
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import User, MoonPhaseOccurence, MoonPhaseType, Alert, FullMoonNickname, connect_to_db, db
-
+from lookup_phone import lookup_phone_number
 import itertools
 
 from helpers import *
