@@ -3,13 +3,11 @@
 
 <h1>Moon Phase Tracker</h1>
 
-<script src='/static/calendar.js'></script>
 <div id="ex1"></div>
-<div id='calendar'>
-</div>
+<div id='calendar'></div>
 
 <script type="text/javascript">     
-    
+
 function load_moon_phases(obj){
     var gets=[]
     for (var i in obj){
@@ -56,6 +54,16 @@ function example_1(moon){
     html+="</div>"
     document.getElementById("ex1").innerHTML=html
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        plugins: [ 'dayGrid' ]
+    });
+    calendar.render();
+});
+
 </script>
 
 
