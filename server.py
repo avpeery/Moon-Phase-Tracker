@@ -2,7 +2,7 @@
 from jinja2 import StrictUndefined
 
 from flask import (Flask, jsonify, render_template, redirect, request, flash, session)
-
+import json
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import User, MoonPhaseOccurence, MoonPhaseType, Solstice, Alert, FullMoonNickname, connect_to_db, db
@@ -26,13 +26,22 @@ def get_moon_phases_from_database():
     """Gets moon phase occurences from database and turns into json object"""
 
     all_moon_phase_occurences = MoonPhaseOccurence.query.all()
+    all_seasonal_solstices = Solstice.query.all()
     list_of_dict_items =[]
+
     for row in all_moon_phase_occurences:
-        list_of_dict_items.append({'title': row.moon_phase_type.title, 'start': row.start})
+        start_date = row.start.isoformat()
+        if row.full_moon_nickname_id != None:
+            list_of_dict_items.append({'id': row.moon_phase_occurence_id, 'title': row.moon_phase_type.title, 'start': start_date})
+            list_of_dict_items.append({'id': row.moon_phase_occurence_id, 'title': row.full_moon_nickname.title, 'start': start_date})
+        else:
+            list_of_dict_items.append({'id': row.moon_phase_occurence_id, 'title': row.moon_phase_type.title, 'start': start_date})
 
-    all_moon_phase_occurences = {'Nested':list_of_dict_items}
-
-    return jsonify(all_moon_phase_occurences)
+    for row in all_seasonal_solstices:
+        start_date = row.start.isoformat()
+        list_of_dict_items.append({'id': row.solstice_id, 'title': row.title, 'start': start_date})
+ 
+    return jsonify(list_of_dict_items)
 
 @app.route('/register')
 def register_user():
