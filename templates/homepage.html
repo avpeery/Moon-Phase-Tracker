@@ -5,6 +5,7 @@
 
 <div id="ex1"></div>
 <div id='calendar'></div>
+<script src='static/calendar.js'></script>
 
 <script type="text/javascript">     
 
@@ -55,14 +56,6 @@ function example_1(moon){
     document.getElementById("ex1").innerHTML=html
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
-
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        plugins: [ 'dayGrid' ]
-    });
-    calendar.render();
-});
 
 </script>
 

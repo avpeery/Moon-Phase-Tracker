@@ -46,7 +46,7 @@ def load_solstices():
         date = date[:10]
         date = datetime.strptime(date, "%Y-%m-%d")
 
-        solstice_occurence = Solstice(title = solstice_name, date = date)      
+        solstice_occurence = Solstice(title = solstice_name, start = date)      
         
         db.session.add(solstice_occurence)
 
@@ -72,9 +72,9 @@ def load_moon_phase_occurences():
         if moon_phase_type.title == "Full Moon":
             full_moon_nickname = FullMoonNickname.query.filter(FullMoonNickname.nickname_month == date.month).first()
 
-            moon_phase_occurence = MoonPhaseOccurence(start_date = date, moon_phase_type_id = moon_phase_type.moon_phase_type_id, full_moon_nickname_id = full_moon_nickname.full_moon_nickname_id)
+            moon_phase_occurence = MoonPhaseOccurence(start = date, moon_phase_type_id = moon_phase_type.moon_phase_type_id, full_moon_nickname_id = full_moon_nickname.full_moon_nickname_id)
         else:
-            moon_phase_occurence = MoonPhaseOccurence(start_date = date, moon_phase_type_id = moon_phase_type.moon_phase_type_id)         
+            moon_phase_occurence = MoonPhaseOccurence(start = date, moon_phase_type_id = moon_phase_type.moon_phase_type_id)         
         
         db.session.add(moon_phase_occurence)
 
@@ -104,7 +104,7 @@ def updates_full_moon_nickname_for_full_moon_occurences_to_blue_moon():
 
     for idx, full_moon_occurence in enumerate(full_moon.moon_phase_occurences):
         if idx+1 < len(full_moon.moon_phase_occurences):
-            if full_moon_occurence.start_date.month == full_moon.moon_phase_occurences[idx+1].start_date.month:
+            if full_moon_occurence.start.month == full_moon.moon_phase_occurences[idx+1].start.month:
                 full_moon.moon_phase_occurences[idx+1].full_moon_nickname_id = blue_moon_nickname.full_moon_nickname_id
 
     db.session.commit()
@@ -119,11 +119,11 @@ def updates_full_moon_nickname_for_full_moon_occurences_to_harvest_moon():
 
     for autumn_equinox in autumn_equinoxes:
 
-        this_years_full_moons = [full_moon_occurence for full_moon_occurence in full_moon.moon_phase_occurences if full_moon_occurence.start_date.year == autumn_equinox.date.year]
-        full_moon_dates = [this_years_full_moon.start_date for this_years_full_moon in this_years_full_moons] 
+        this_years_full_moons = [full_moon_occurence for full_moon_occurence in full_moon.moon_phase_occurences if full_moon_occurence.start.year == autumn_equinox.start.year]
+        full_moon_dates = [this_years_full_moon.start for this_years_full_moon in this_years_full_moons] 
         
-        closest_full_moon_date = min(full_moon_dates, key=lambda x: abs(x - autumn_equinox.date))
-        closest_full_moon = MoonPhaseOccurence.query.filter(MoonPhaseOccurence.start_date == closest_full_moon_date).first()
+        closest_full_moon_date = min(full_moon_dates, key=lambda x: abs(x - autumn_equinox.start))
+        closest_full_moon = MoonPhaseOccurence.query.filter(MoonPhaseOccurence.start == closest_full_moon_date).first()
         closest_full_moon.full_moon_nickname_id = harvest_moon.full_moon_nickname_id
 
     db.session.commit()

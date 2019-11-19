@@ -56,7 +56,7 @@ class MoonPhaseOccurence(db.Model):
     __tablename__ = "moon_phase_occurences"
 
     moon_phase_occurence_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    start_date = db.Column(db.DateTime)
+    start = db.Column(db.DateTime)
     moon_phase_type_id = db.Column(db.Integer, db.ForeignKey('moon_phase_types.moon_phase_type_id'))
     full_moon_nickname_id = db.Column(db.Integer, db.ForeignKey('full_moon_nicknames.full_moon_nickname_id'))
 
@@ -93,7 +93,7 @@ class Solstice(db.Model):
 
     solstice_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     title = db.Column(db.String(64))
-    date = db.Column(db.DateTime)
+    start = db.Column(db.DateTime)
 
     def __repr__(self):
 

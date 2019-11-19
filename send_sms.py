@@ -20,7 +20,7 @@ def write_text(user, moon_phase_title, moon_emoji):
 def find_tonights_moon():
     """Returns tonight's moon phase if exists in database"""
     today = date.today()
-    moon_phase_tonight = MoonPhaseOccurence.query.filter(MoonPhaseOccurence.start_date == today).first()
+    moon_phase_tonight = MoonPhaseOccurence.query.filter(MoonPhaseOccurence.start == today).first()
     return moon_phase_tonight
 
 

@@ -1,14 +1,13 @@
 
 from jinja2 import StrictUndefined
 
-from flask import (Flask, render_template, redirect, request, flash, session)
+from flask import (Flask, jsonify, render_template, redirect, request, flash, session)
 
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import User, MoonPhaseOccurence, MoonPhaseType, Alert, FullMoonNickname, connect_to_db, db
+from model import User, MoonPhaseOccurence, MoonPhaseType, Solstice, Alert, FullMoonNickname, connect_to_db, db
 from lookup_phone import lookup_phone_number
 import itertools
-
 from helpers import *
 
 
@@ -22,6 +21,18 @@ def index():
 
     return render_template('homepage.html')
 
+@app.route('/get-moon-phases.json')
+def get_moon_phases_from_database():
+    """Gets moon phase occurences from database and turns into json object"""
+
+    all_moon_phase_occurences = MoonPhaseOccurence.query.all()
+    list_of_dict_items =[]
+    for row in all_moon_phase_occurences:
+        list_of_dict_items.append({'title': row.moon_phase_type.title, 'start': row.start})
+
+    all_moon_phase_occurences = {'Nested':list_of_dict_items}
+
+    return jsonify(all_moon_phase_occurences)
 
 @app.route('/register')
 def register_user():
