@@ -8,7 +8,8 @@ document.addEventListener('DOMContentLoaded', function() {
             displayEventTime: false,
             eventRender: function(info) {
               var tooltip = new Tooltip(info.el, {
-                title: info.event.title,
+                title: '<a href="/authorize">Add to your calendar</a>',
+                html: true,
                 placement: 'top',
                 trigger: 'hover',
                 container: 'body'

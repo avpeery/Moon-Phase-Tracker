@@ -4,22 +4,40 @@ from jinja2 import StrictUndefined
 from flask import (Flask, jsonify, render_template, redirect, request, flash, session)
 import json
 from flask_debugtoolbar import DebugToolbarExtension
-
+import google.oauth2.credentials
+import google_auth_oauthlib.flow
 from model import User, MoonPhaseOccurence, MoonPhaseType, Solstice, Alert, FullMoonNickname, connect_to_db, db
 from lookup_phone import lookup_phone_number
 import itertools
 from helpers import *
 
 
+CLIENT_SECRETS_FILE = "client_secret.json"
+SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly']
+API_SERVICE_NAME = 'drive'
+API_VERSION = 'v2'
+
 app = Flask(__name__)
 app.secret_key = "ABC"
 app.jinja_env.undefined = StrictUndefined
+
 
 @app.route('/')
 def index():
     """Homepage"""
 
     return render_template('homepage.html')
+
+@app.route('/authorize')
+def authorize():
+    """Gets google oauth for google calendar"""
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file('client_secret.json', ['https://www.googleapis.com/auth/drive.metadata.readonly'])
+    flow.redirect_uri = 'http://localhost:5000/'
+
+    authorization_url, state = flow.authorization_url(access_type='offline', include_granted_scopes='true')
+    session['state'] = state
+
+    return redirect(authorization_url)
 
 @app.route('/get-moon-phases.json')
 def get_moon_phases_from_database():
