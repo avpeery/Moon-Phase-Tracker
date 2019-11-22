@@ -3,11 +3,11 @@ from jinja2 import StrictUndefined
 
 from flask import (Flask, jsonify, render_template, redirect, request, flash, session)
 import json
-from apiclient import discovery
+from apiclient.discovery import build
 import httplib2
 from flask_debugtoolbar import DebugToolbarExtension
 import google.oauth2.credentials
-import google_auth_oauthlib.flow
+from google_auth_oauthlib.flow import InstalledAppFlow
 from model import User, MoonPhaseOccurence, MoonPhaseType, Solstice, Alert, FullMoonNickname, connect_to_db, db
 from lookup_phone import lookup_phone_number
 import itertools
@@ -15,7 +15,7 @@ from helpers import *
 
 
 CLIENT_SECRETS_FILE = "client_secret.json"
-SCOPES = ['https://www.googleapis.com/auth/calendar.events']
+SCOPES = ['https://www.googleapis.com/auth/calendar']
 API_SERVICE_NAME = 'drive'
 API_VERSION = 'v2'
 
@@ -33,8 +33,6 @@ def index():
 @app.route('/authorize')
 def authorize():
     """Gets google oauth for google calendar"""
-
-    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file('client_secret.json', ['https://www.googleapis.com/auth/calendar.events'])
     moon_phase_title = request.args['title']
     moon_phase_date = request.args['date']
 
@@ -43,13 +41,31 @@ def authorize():
         'date': moon_phase_date
     }
 
-    flow.redirect_uri = 'http://localhost:5000/'
+    flow = InstalledAppFlow.from_client_secrets_file('client_secret.json', ['https://www.googleapis.com/auth/calendar'])
+
+    flow.redirect_uri = 'localhost:5000/'
 
     authorization_url, state = flow.authorization_url(access_type='offline', include_granted_scopes='true')
 
     session['state'] = state
 
-    event_to_add = service.events().insert(calendarId='primary', sendNotifications=True, body=event).execute()
+    authorization_response = request.url
+
+
+    flow.fetch_token(authorization_response=authorization_response)
+
+    creds = flow.credentials
+
+    session['credentials'] = {
+        'token': credentials.token,
+        'refresh_token': credentials.refresh_token,
+        'token_uri': credentials.token_uri,
+        'client_id': credentials.client_id,
+        'client_secret': credentials.client_secret,
+        'scopes': credentials.scopes}
+
+    service = build("calendar", API_VERSION, credentials=creds)
+    event = service.events().insert(calendarId='primary', sendNotifications=True, body=event).execute()
 
 
     return redirect(authorization_url)
