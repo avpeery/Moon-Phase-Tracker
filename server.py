@@ -3,6 +3,8 @@ from jinja2 import StrictUndefined
 
 from flask import (Flask, jsonify, render_template, redirect, request, flash, session)
 import json
+from apiclient import discovery
+import httplib2
 from flask_debugtoolbar import DebugToolbarExtension
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
@@ -31,11 +33,24 @@ def index():
 @app.route('/authorize')
 def authorize():
     """Gets google oauth for google calendar"""
+
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file('client_secret.json', ['https://www.googleapis.com/auth/calendar.events'])
+    moon_phase_title = request.args['title']
+    moon_phase_date = request.args['date']
+
+    event = {
+        'title': moon_phase_title,
+        'date': moon_phase_date
+    }
+
     flow.redirect_uri = 'http://localhost:5000/'
 
     authorization_url, state = flow.authorization_url(access_type='offline', include_granted_scopes='true')
+
     session['state'] = state
+
+    event_to_add = service.events().insert(calendarId='primary', sendNotifications=True, body=event).execute()
+
 
     return redirect(authorization_url)
 
