@@ -13,7 +13,7 @@ from helpers import *
 
 
 CLIENT_SECRETS_FILE = "client_secret.json"
-SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly']
+SCOPES = ['https://www.googleapis.com/auth/calendar.events']
 API_SERVICE_NAME = 'drive'
 API_VERSION = 'v2'
 
@@ -31,7 +31,7 @@ def index():
 @app.route('/authorize')
 def authorize():
     """Gets google oauth for google calendar"""
-    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file('client_secret.json', ['https://www.googleapis.com/auth/drive.metadata.readonly'])
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file('client_secret.json', ['https://www.googleapis.com/auth/calendar.events'])
     flow.redirect_uri = 'http://localhost:5000/'
 
     authorization_url, state = flow.authorization_url(access_type='offline', include_granted_scopes='true')
