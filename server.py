@@ -7,7 +7,7 @@ from apiclient.discovery import build
 import httplib2
 from flask_debugtoolbar import DebugToolbarExtension
 import google.oauth2.credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
+import google_auth_oauthlib.flow
 from model import User, MoonPhaseOccurence, MoonPhaseType, Solstice, Alert, FullMoonNickname, connect_to_db, db
 from lookup_phone import lookup_phone_number
 import itertools
@@ -41,19 +41,14 @@ def authorize():
         'date': moon_phase_date
     }
 
-    flow = InstalledAppFlow.from_client_secrets_file('client_secret.json', ['https://www.googleapis.com/auth/calendar'])
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file('client_secret.json', ['https://www.googleapis.com/auth/calendar'])
 
     flow.redirect_uri = 'localhost:5000/'
 
     authorization_url, state = flow.authorization_url(access_type='offline', include_granted_scopes='true')
 
     session['state'] = state
-
-    authorization_response = request.url
-
-
-    flow.fetch_token(authorization_response=authorization_response)
-
+    flow.fetch_token()
     creds = flow.credentials
 
     session['credentials'] = {
@@ -65,6 +60,7 @@ def authorize():
         'scopes': credentials.scopes}
 
     service = build("calendar", API_VERSION, credentials=creds)
+
     event = service.events().insert(calendarId='primary', sendNotifications=True, body=event).execute()
 
 
