@@ -1,9 +1,10 @@
 
 from jinja2 import StrictUndefined
-
-from flask import (Flask, jsonify, render_template, redirect, request, flash, session)
+import os
+from flask import (Flask, jsonify, url_for, render_template, redirect, request, flash, session)
 import json
 from apiclient.discovery import build
+import googleapiclient.discovery
 import httplib2
 from flask_debugtoolbar import DebugToolbarExtension
 import google.oauth2.credentials
@@ -15,9 +16,9 @@ from helpers import *
 
 
 CLIENT_SECRETS_FILE = "client_secret.json"
-SCOPES = ['https://www.googleapis.com/auth/calendar']
+SCOPES = ['https://www.googleapis.com/auth/calendar.events']
 API_SERVICE_NAME = 'drive'
-API_VERSION = 'v2'
+API_VERSION = 'v3'
 
 app = Flask(__name__)
 app.secret_key = "ABC"
@@ -30,41 +31,72 @@ def index():
 
     return render_template('homepage.html')
 
+
 @app.route('/authorize')
 def authorize():
     """Gets google oauth for google calendar"""
-    moon_phase_title = request.args['title']
-    moon_phase_date = request.args['date']
 
-    event = {
-        'title': moon_phase_title,
-        'date': moon_phase_date
-    }
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
+      CLIENT_SECRETS_FILE, scopes=SCOPES)
 
-    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file('client_secret.json', ['https://www.googleapis.com/auth/calendar'])
-
-    flow.redirect_uri = 'localhost:5000/'
+    flow.redirect_uri = url_for('oauth2callback', _external=True)
 
     authorization_url, state = flow.authorization_url(access_type='offline', include_granted_scopes='true')
 
     session['state'] = state
-    flow.fetch_token()
-    creds = flow.credentials
-
-    session['credentials'] = {
-        'token': credentials.token,
-        'refresh_token': credentials.refresh_token,
-        'token_uri': credentials.token_uri,
-        'client_id': credentials.client_id,
-        'client_secret': credentials.client_secret,
-        'scopes': credentials.scopes}
-
-    service = build("calendar", API_VERSION, credentials=creds)
-
-    event = service.events().insert(calendarId='primary', sendNotifications=True, body=event).execute()
-
 
     return redirect(authorization_url)
+
+
+@app.route("/oauth2callback")
+def oauth2callback():
+  state = session['state']
+
+  flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
+      CLIENT_SECRETS_FILE, scopes=SCOPES, state=state)
+  flow.redirect_uri = url_for('oauth2callback', _external=True)
+
+  authorization_response = request.url
+  flow.fetch_token(authorization_response=authorization_response)
+
+  credentials = flow.credentials
+  session['credentials'] = credentials_to_dict(credentials)
+
+  return redirect(url_for('test_api_request'))
+
+
+@app.route('/test')
+def test_api_request():
+    moon_phase_title = request.args['title']
+    moon_phase_date = request.args['date']
+    moon_phase_date = datetime.strptime(moon_phase_date[4:15], "%b %d %Y")
+    moon_phase_date = moon_phase_date.strftime("%Y-%m-%d")
+    event = {
+        'summary': moon_phase_title,
+        'start': {
+            'date': moon_phase_date,
+            },
+        'end': {
+            'date': moon_phase_date
+            }
+        }
+
+    if 'credentials' not in session:
+        return redirect('authorize')
+
+    credentials = google.oauth2.credentials.Credentials(**session['credentials'])
+
+    session['event'] = event
+
+    drive = googleapiclient.discovery.build(
+      "calendar", API_VERSION, credentials=credentials)
+
+    event_to_add = drive.events().insert(calendarId='primary', sendNotifications=True, body=event).execute()
+
+    session['credentials'] = credentials_to_dict(credentials)
+
+    return redirect("/")
+
 
 @app.route('/get-moon-phases.json')
 def get_moon_phases_from_database():
@@ -242,8 +274,11 @@ def logout_user():
 
 
 if __name__ == "__main__":
+
+    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
     # We have to set debug=True here, since it has to be True at the
     # point that we invoke the DebugToolbarExtension
+
     app.debug = True
     # make sure templates, etc. are not cached in debug mode
     app.jinja_env.auto_reload = app.debug

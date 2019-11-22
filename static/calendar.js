@@ -5,10 +5,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         function tooltip(info) {
               var tooltip = new Tooltip(info.el, {
-                title: `<a class="sendAuthorization" href="/authorize?title=${info.event.title}&date=${info.event.start}">Add to your calendar</a>`,
+                title: `<a href="/test?title=${info.event.title}&date=${info.event.start}">Add to your calendar</a>`,
                 html: true,
                 placement: 'top',
-                trigger: 'hover',
+                trigger: 'click',
                 container: 'body'
               })
         };
@@ -21,10 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
              })   
     
         calendar.render();
-
     });
 
 })
-
-
-
