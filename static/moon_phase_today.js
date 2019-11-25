@@ -40,5 +40,5 @@ function example_1(moon){
     html+=moon.phase[day].svg
     html+="<div>"+moon.phase[day].phaseName + " "+ Math.round(moon.phase[day].lighting)+"%</div>"
     html+="</div>"
-    document.getElementById("ex1").innerHTML=html
+    document.getElementById("moonphasetoday").innerHTML=html
 }

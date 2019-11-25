@@ -1,0 +1,21 @@
+#signup {
+    display: inline-block;
+    margin-left: 80px;
+    margin-right: 200px;
+}
+
+#login {
+    display: inline-block;
+}
+
+#moonphasetoday {
+    text-align: center;
+}
+
+.moonphasetodaytitle {
+    text-align: center;
+}
+
+#subheading {
+    font-style: italic;
+}

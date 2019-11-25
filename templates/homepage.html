@@ -2,12 +2,37 @@
 {% block content %}
 
 <h1>Moon Phase Tracker</h1>
+<h4 id="subheading">Receive personalized text alerts for moon phases</h4>
+<br>
+<h4 class="moonphasetodaytitle">Today's moon phase:</h4>
+<div id="moonphasetoday"></div>
 
-<div id="ex1"></div>
-<div id='calendar'></div>
+<br>
+
+<div id="signup">
+    <h5> New user? Sign up!</h5>
+    <form action='/register' method="POST">
+        Create a username (Email):
+        <input type='text' name ='email'><br>
+        Create a password:
+        <input type='text' name = 'password'><br>
+    <input type="submit">
+    </form>
+</div>
+
+<div id = "login">
+    <h5> Returning user? Log in </h5>
+    <form action='/login'  method="POST">
+        Username:
+        <input type='text' name ='email'>
+        <br>
+        Password:
+        <input type='text' name = 'password'><br>
+        <input type="submit">
+    </form>
+</div>
 
 <script src='static/moon_phase_today.js'></script>
-<script src='static/calendar.js'></script>
 
 
 

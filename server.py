@@ -95,7 +95,7 @@ def test_api_request():
 
     session['credentials'] = credentials_to_dict(credentials)
 
-    return redirect("/")
+    return redirect("/calendar")
 
 
 @app.route('/get-moon-phases.json')
@@ -120,31 +120,37 @@ def get_moon_phases_from_database():
  
     return jsonify(list_of_dict_items)
 
-@app.route('/register')
+@app.route("/register", methods= ["POST"])
 def register_user():
-    """Displays registration form"""
+    """Gets post request from homepage sign up, and continues with registration html"""
+
+    email, password = form_get_request("email", "password")
+
+    if User.query.filter_by(email = email).first():
+        flash("Account with that email already exists!")
+        return redirect("/")
+
+    session['email'] = email
+    session['password'] = password
 
     all_moon_phase_types = MoonPhaseType.query.all()
     all_full_moon_nicknames = FullMoonNickname.query.all()
 
-    return render_template('registration.html', moon_phase_types=all_moon_phase_types, full_moon_nicknames=all_full_moon_nicknames)
+    return render_template("registration.html", moon_phase_types=all_moon_phase_types, full_moon_nicknames=all_full_moon_nicknames)
 
-
-@app.route("/register", methods= ["POST"])
-def register_process():
-    """Gets post request from html registration, and adds to database"""
-
-    fname, lname, phone, email, password = form_get_request('fname', 'lname', 'phone', 'email', 'password')
+@app.route("/process-registration", methods = ["POST"])
+def register_to_database():
+    fname, lname, phone = form_get_request('fname', 'lname', 'phone')
 
     moon_phase_types, full_moon_nicknames = form_get_list('moon_phases', 'full_moon_nicknames')
 
-    if User.query.filter_by(email = email).first():
-        flash("Account with that email already exists!")
-        return redirect("/register")
-
     phone = lookup_phone_number(phone)
 
+    email = session["email"]
+    password = session["password"]
+
     user = User(fname=fname, lname=lname, phone= phone, email = email, password = password)
+
     db.session.add(user)
 
     user_moon_phase_types = set(moon_phase_types)
@@ -175,15 +181,7 @@ def register_process():
 
     db.session.commit()
 
-    return redirect("/")
-
-
-@app.route('/login')
-def login_user():
-    """Displays login form"""
-
-    return render_template('login.html')
-
+    return redirect("/calendar")
 
 @app.route("/login", methods=['POST'])
 def login_process():
@@ -197,12 +195,17 @@ def login_process():
         session['email'] = user.email
 
         flash("Succesfully logged in!")
-        return redirect("/")
+        return redirect("/calendar")
 
-    flash("That is not a valid email and password")
+    flash("That is not a valid email and/or password.")
 
-    return redirect('/login')
+    return redirect('/')
 
+@app.route("/calendar")
+def show_calendar():
+    """Displays calendar of moon phases"""
+
+    return render_template("calendar.html")
 
 @app.route("/display-settings")
 def user_settings():

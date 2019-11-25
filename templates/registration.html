@@ -4,18 +4,16 @@
 
 <h1>Register Form</h1>
 
-<form action='/register' method="POST">
+<form action="/process-registration" method="POST">
     Enter your first name:
     <input type='text' name ='fname'>
     Enter your last name:
     <input type='text' name ='lname'>
     Enter your phone number:
     <input type='text' name ='phone'>
-    Enter your email:
-    <input type='text' name ='email'>
-    Enter your password:
-    <input type='text' name = 'password'><br>
-    Which text alerts would you like to receive?<br>
+    <br>
+    Which text alerts would you like to receive?
+    <br>
     {% for moon_phase_type in moon_phase_types %}
         <input type="checkbox" name="moon_phases" value="{{ moon_phase_type.title }}"> {{ moon_phase_type.title }} <br>
     {% endfor %}
