@@ -50,10 +50,9 @@ def authorize():
 
 @app.route("/oauth2callback")
 def oauth2callback():
-  state = session['state']
 
   flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-      CLIENT_SECRETS_FILE, scopes=SCOPES, state=state)
+      CLIENT_SECRETS_FILE, scopes=SCOPES, state=session['state'])
   flow.redirect_uri = url_for('oauth2callback', _external=True)
 
   authorization_response = request.url
@@ -67,10 +66,25 @@ def oauth2callback():
 
 @app.route('/test')
 def test_api_request():
-    moon_phase_title = request.args['title']
-    moon_phase_date = request.args['date']
+    
+    if 'moon_phase_title' not in session:
+        session['moon_phase_title'] = request.args['title']
+        session['moon_phase_date'] = request.args['date']
+
+    if 'credentials' not in session:
+        return redirect('authorize')
+
+    credentials = google.oauth2.credentials.Credentials(**session['credentials'])
+
+    drive = googleapiclient.discovery.build(
+      "calendar", API_VERSION, credentials=credentials)
+
+    moon_phase_date = session['moon_phase_date']
+    moon_phase_title = session['moon_phase_title']
+
     moon_phase_date = datetime.strptime(moon_phase_date[4:15], "%b %d %Y")
     moon_phase_date = moon_phase_date.strftime("%Y-%m-%d")
+
     event = {
         'summary': moon_phase_title,
         'start': {
@@ -81,19 +95,14 @@ def test_api_request():
             }
         }
 
-    if 'credentials' not in session:
-        return redirect('authorize')
-
-    credentials = google.oauth2.credentials.Credentials(**session['credentials'])
-
     session['event'] = event
-
-    drive = googleapiclient.discovery.build(
-      "calendar", API_VERSION, credentials=credentials)
 
     event_to_add = drive.events().insert(calendarId='primary', sendNotifications=True, body=event).execute()
 
     session['credentials'] = credentials_to_dict(credentials)
+
+    del session['moon_phase_title']
+    del session['moon_phase_date']
 
     return redirect("/calendar")
 
@@ -270,6 +279,9 @@ def  change_settings():
 def logout_user():
     """Logs user out of session"""
 
+    if 'credentials' in session:
+        del session['credentials']
+
     del session['email']
     flash('Succesfully logged out!')
 
@@ -279,17 +291,14 @@ def logout_user():
 if __name__ == "__main__":
 
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
-    # We have to set debug=True here, since it has to be True at the
-    # point that we invoke the DebugToolbarExtension
 
     app.debug = True
-    # make sure templates, etc. are not cached in debug mode
+
     app.jinja_env.auto_reload = app.debug
 
     connect_to_db(app)
 
-    # Use the DebugToolbar
     DebugToolbarExtension(app)
 
 
-    app.run(port=5000, host='0.0.0.0')
+    app.run(port=5000, host='localhost')
