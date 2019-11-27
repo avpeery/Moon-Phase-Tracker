@@ -20,17 +20,22 @@ def write_text(user, moon_phase_title, moon_emoji):
 def find_tonights_moon():
     """Returns tonight's moon phase if exists in database"""
     today = date.today()
+
     moon_phase_tonight = MoonPhaseOccurence.query.filter(MoonPhaseOccurence.start == today).first()
+    
     return moon_phase_tonight
 
 
 def check_alerts(tonights_moon):
     """Returns list of alerts for current moon phase"""
     if tonights_moon != None:
+
         alerts = Alert.query.filter(Alert.moon_phase_type_id == tonights_moon.moon_phase_type.moon_phase_type_id).all()
+        
         return alerts
 
     else:
+
         return None
 
 
@@ -46,14 +51,13 @@ def send_text():
         for alert in alerts:
 
             if alert.is_active == True:  
+                
                 text = write_text(alert.user.fname, tonights_moon_phase.moon_phase_type.title, tonights_moon_phase.moon_phase_type.emoji)
                 phone = alert.user.phone
                 message = client.messages.create(body=text, from_=TWILIO_NUMBER, to=phone)
-           
-            else:
-                pass
 
     else:
+
         return None
 
 

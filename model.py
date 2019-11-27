@@ -23,7 +23,7 @@ class User(db.Model):
 
 
 class MoonPhaseType(db.Model):
-    """Types of Moon Phases"""
+    """Types of moon phases"""
 
     __tablename__ = "moon_phase_types"
 
@@ -51,7 +51,7 @@ class FullMoonNickname(db.Model):
 
 
 class MoonPhaseOccurence(db.Model):
-    """Moon Phases with date and time occurences"""
+    """Moon phases with date occurences"""
 
     __tablename__ = "moon_phase_occurences"
 
@@ -88,16 +88,35 @@ class Alert(db.Model):
 
         return f"<Alert alert_id={self.alert_id} user_id={self.user_id} moon_phase_type_id={self.moon_phase_type_id}>"
 
+
+class SolsticeType(db.Model):
+    """Types of seasonal solstices and equinoxes"""
+    
+    __tablename__ = "solstice_types"
+
+    solstice_type_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    title = db.Column(db.String(64))
+
+    def __repr__(self):
+
+        return f"<SolsticeType solstice_type_id={self.solstice_type_id} title={self.title}>"
+
+
 class Solstice(db.Model):
+    """Seasonal solstice and equinox occurences with dates"""
+
     __tablename__ = "solstices"
 
     solstice_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    title = db.Column(db.String(64))
     start = db.Column(db.DateTime)
+    solstice_type_id = db.Column(db.Integer, db.ForeignKey('solstice_types.solstice_type_id'))
+
+    solstice_type = db.relationship("SolsticeType", backref=db.backref("solstices"))
 
     def __repr__(self):
 
         return f"<Solstice solstice_id={self.solstice_id} title={self.title}>"
+
 
 def connect_to_db(app):
     """Connect the database to our Flask app."""

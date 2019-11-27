@@ -140,7 +140,7 @@ if __name__ == "__main__":
     load_blue_moon()
     load_harvest_moon()
 
-    updates_full_moon_nickname_for_full_moon_occurences_to_blue_moon() #updating existing full_moon_nicknames_to_blue_moon - find_and_update_for_blue_moons #resource links in the code #testing #s
+    updates_full_moon_nickname_for_full_moon_occurences_to_blue_moon() 
     updates_full_moon_nickname_for_full_moon_occurences_to_harvest_moon()
 
     
