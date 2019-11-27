@@ -33,7 +33,7 @@ def index():
 
 @app.route('/authorize')
 def authorize():
-    """Get google oauth for google calendar"""
+    """Asks user for authorization to google calendar account"""
 
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=SCOPES)
 
@@ -48,6 +48,7 @@ def authorize():
 
 @app.route('/oauth2callback')
 def oauth2callback():
+    """Processes response for google calendar authorization"""
 
   flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
       CLIENT_SECRETS_FILE, scopes=SCOPES)
@@ -55,21 +56,28 @@ def oauth2callback():
   flow.redirect_uri = 'http://me.mydomain.com:5000/oauth2callback'
 
   authorization_response = request.url
+
   flow.fetch_token(authorization_response=authorization_response)
 
   credentials = flow.credentials
+
   session['credentials'] = credentials_to_dict(credentials)
 
   flash("Succesfully logged in to Google Calendar! Try adding again.")
+
   return redirect("/calendar")
 
 
 @app.route('/add-to-calendar', methods=['GET'])
 def make_calendar_event():
+    """Adds moon phase event to user's google calendar with OAUTH"""
+
     if 'credentials' not in session:
+
         return redirect('/authorize')
 
     session['moon_phase_title'] = request.args['title']
+
     session['moon_phase_date'] = request.args['date']
 
     credentials = google.oauth2.credentials.Credentials(**session['credentials'])
@@ -81,10 +89,8 @@ def make_calendar_event():
 
     event_to_add = drive.events().insert(calendarId='primary', sendNotifications=True, body=session['event']).execute()
 
-    del session['moon_phase_title']
-    del session['moon_phase_date']
-
     flash("Event added to calendar!")
+
     return redirect("/calendar")
 
 
@@ -93,7 +99,9 @@ def get_moon_phases_from_database():
     """Gets moon phase occurences from database and turns into json object"""
 
     all_moon_phase_occurences = MoonPhaseOccurence.query.all()
+
     all_seasonal_solstices = Solstice.query.all()
+
     list_of_moon_phase_dict_items =[]
 
     list_of_moon_phase_dict_items = append_moon_phase_occurences(list_of_moon_phase_dict_items, all_moon_phase_occurences)
@@ -110,13 +118,17 @@ def register_user():
     email, password = form_get_request("email", "password")
 
     if User.query.filter_by(email = email).first():
+
         flash("Account with that email already exists!")
+
         return redirect("/")
 
     session['email'] = email
+
     session['password'] = password
 
     all_moon_phase_types = MoonPhaseType.query.all()
+
     all_full_moon_nicknames = FullMoonNickname.query.all()
 
     return render_template("registration.html", moon_phase_types=all_moon_phase_types, full_moon_nicknames=all_full_moon_nicknames)
@@ -124,16 +136,22 @@ def register_user():
 
 @app.route("/process-registration", methods = ["POST"])
 def register_to_database():
+    """receives post request from registration.html form, and adds new user/alerts to database"""
+
     fname, lname, phone = form_get_request('fname', 'lname', 'phone')
 
     moon_phase_types, full_moon_nicknames = form_get_list('moon_phases', 'full_moon_nicknames')
 
     phone = lookup_phone_number(phone)
+
     if phone == False:
+
         flash("Not a valid phone number!")
+
         return redirect("/")
 
     email = session["email"]
+
     password = session["password"]
 
     user = User(fname=fname, lname=lname, phone= phone, email = email, password = password)
@@ -141,6 +159,7 @@ def register_to_database():
     db.session.add(user)
 
     user_moon_phase_types = set(moon_phase_types)
+
     user_full_moon_nicknames = set(full_moon_nicknames)
 
     set_new_alerts_for_user(user_moon_phase_types, user_full_moon_nicknames, user)
@@ -159,9 +178,11 @@ def login_process():
     user = User.query.filter((User.email == email), (User.password == password)).first()
 
     if user: 
+
         session['email'] = user.email
 
         flash("Succesfully logged in!")
+
         return redirect("/calendar")
 
     flash("That is not a valid email and/or password.")
@@ -181,16 +202,18 @@ def user_settings():
     """Displays user's settings"""
 
     email = session['email']
+
     user = User.query.filter_by(email = email).first()
 
     moon_phase_type_alerts = set()
+
     full_moon_nickname_alerts = set()
 
     all_moon_phase_types = MoonPhaseType.query.all()
+
     all_full_moon_nicknames = FullMoonNickname.query.all()
 
     moon_phase_type_alerts, full_moon_nickname_alerts = add_active_alerts_to_sets(user, moon_phase_type_alerts, full_moon_nickname_alerts)
-
 
     return render_template("settings.html", user = user, moon_phases = all_moon_phase_types, full_moon_nicknames = all_full_moon_nicknames, moon_phase_type_alerts = moon_phase_type_alerts, full_moon_nickname_alerts = full_moon_nickname_alerts)
 
@@ -200,22 +223,29 @@ def  change_settings():
     """Gets post requests from change-settings and updates database"""
 
     fname, lname, phone, email = form_get_request('fname', 'lname', 'phone', 'email')
+
     new_moon_phases, new_full_moon_nicknames = form_get_list('moon_phases', 'full_moon_nicknames')
 
     new_moon_phases = set(new_moon_phases)
+
     new_full_moon_nicknames = set(new_full_moon_nicknames)
 
     email = session['email']
+
     user = User.query.filter_by(email = email).first()
 
     user.fname = fname
+
     user.lname = lname
+
     user.phone = phone
+    
     user.email = email
   
     change_alerts_for_user(user)
         
     db.session.commit()
+
     return redirect("/display-settings")
 
 
@@ -224,9 +254,11 @@ def logout_user():
     """Logs user out of session"""
 
     if 'credentials' in session:
+
         del session['credentials']
 
     del session['email']
+
     flash('Succesfully logged out!')
 
     return redirect('/')
