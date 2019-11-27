@@ -94,21 +94,13 @@ def get_moon_phases_from_database():
 
     all_moon_phase_occurences = MoonPhaseOccurence.query.all()
     all_seasonal_solstices = Solstice.query.all()
-    list_of_dict_items =[]
+    list_of_moon_phase_dict_items =[]
 
-    for row in all_moon_phase_occurences:
-        start_date = row.start.isoformat()
-        if row.full_moon_nickname_id != None:
-            list_of_dict_items.append({'id': row.moon_phase_occurence_id, 'title': row.moon_phase_type.title, 'start': start_date})
-            list_of_dict_items.append({'id': row.moon_phase_occurence_id, 'title': row.full_moon_nickname.title, 'start': start_date})
-        else:
-            list_of_dict_items.append({'id': row.moon_phase_occurence_id, 'title': row.moon_phase_type.title, 'start': start_date})
+    list_of_moon_phase_dict_items = append_moon_phase_occurences(list_of_moon_phase_dict_items, all_moon_phase_occurences)
 
-    for row in all_seasonal_solstices:
-        start_date = row.start.isoformat()
-        list_of_dict_items.append({'id': row.solstice_id, 'title': row.title, 'start': start_date})
+    list_of_all_dict_items = append_seasonal_solstices(list_of_moon_phase_dict_items, all_seasonal_solstices)
  
-    return jsonify(list_of_dict_items)
+    return jsonify(list_of_all_dict_items)
 
 
 @app.route("/register", methods= ["POST"])
@@ -151,28 +143,7 @@ def register_to_database():
     user_moon_phase_types = set(moon_phase_types)
     user_full_moon_nicknames = set(full_moon_nicknames)
 
-    all_moon_phase_types = MoonPhaseType.query.all()
-    all_full_moon_nicknames = FullMoonNickname.query.all()
-
-    for moon_phase_type in all_moon_phase_types:
-
-        if moon_phase_type.title in user_moon_phase_types:
-            moon_phase_alert = Alert(user_id = user.user_id, moon_phase_type_id = moon_phase_type.moon_phase_type_id, is_active=True)
-            db.session.add(moon_phase_alert)
-
-        else:
-            moon_phase_alert = Alert(user_id = user.user_id, moon_phase_type_id = moon_phase_type.moon_phase_type_id, is_active=False)
-            db.session.add(moon_phase_alert)
-
-    for full_moon_nickname in all_full_moon_nicknames:
-
-        if full_moon_nickname.title in user_full_moon_nicknames:
-            full_moon_alert = Alert(user_id = user.user_id, full_moon_nickname_id = full_moon_nickname.full_moon_nickname_id, is_active=True)
-            db.session.add(full_moon_alert)
-        
-        else:
-            full_moon_alert = Alert(user_id = user.user_id, full_moon_nickname_id = full_moon_nickname.full_moon_nickname_id, is_active=False)
-            db.session.add(full_moon_alert)
+    set_new_alerts_for_user(user_moon_phase_types, user_full_moon_nicknames, user)
 
     db.session.commit()
 
@@ -247,18 +218,7 @@ def  change_settings():
     user.phone = phone
     user.email = email
   
-    for user.alert in user.alerts:
-        if str(user.alert.moon_phase_type_id) in new_moon_phases:
-            user.alert.is_active = True
-  
-        elif str(user.alert.full_moon_nickname_id) in new_full_moon_nicknames:
-            user.alert.is_active = True
-
-        elif str(user.alert.moon_phase_type_id) not in new_moon_phases:
-            user.alert.is_active = False 
-
-        elif str(user.alert.full_moon_nickname_id) not in new_full_moon_nicknames:
-            user.alert.is_active = False
+    change_alerts_for_user(user)
         
     db.session.commit()
     return redirect("/display-settings")
