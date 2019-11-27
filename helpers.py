@@ -22,6 +22,7 @@ def form_get_list(*argv):
     return form_get_nested_list
 
 def credentials_to_dict(credentials):
+
   return {'token': credentials.token,
           'refresh_token': credentials.refresh_token,
           'token_uri': credentials.token_uri,
@@ -30,7 +31,13 @@ def credentials_to_dict(credentials):
           'scopes': credentials.scopes}
 
 
-if __name__ == "__main__":
-    
-    connect_to_db(app)
-    app.debug=True
+def create_google_calendar_event(title, date):
+  date = datetime.strptime(date[4:15], "%b %d %Y")
+  date = date.strftime("%Y-%m-%d")
+
+  event = {'summary': title,
+            'start': {'date': date,},
+            'end': {'date': date}
+        }
+
+  return event

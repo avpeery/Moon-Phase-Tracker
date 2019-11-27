@@ -1,5 +1,5 @@
 from twilio.rest import Client
-from flask import Flask
+from twilio.base.exceptions import TwilioRestException
 import os
 
 
@@ -9,13 +9,17 @@ AUTH_TOKEN = os.environ['TWILIO_AUTH_TOKEN']
 
 def lookup_phone_number(phone):
     """Uses Twilio API to look up phone number, returns number as string"""
+    
     client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
-    phone_number = client.lookups \
+    try:
+        phone_number = client.lookups \
                          .phone_numbers(phone) \
                          .fetch(type=['carrier'])
+        return phone_number.phone_number
 
-    return phone_number.phone_number
-
-#dummy data in brand new route get the calendar js to render 
-
+    except TwilioRestException as e:
+        if e.code == 20404:
+            return False
+        else:
+            raise e

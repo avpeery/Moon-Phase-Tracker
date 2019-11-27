@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         function tooltip(info) {
               var tooltip = new Tooltip(info.el, {
-                title: `<a href="/test?title=${info.event.title}&date=${info.event.start}">Add to your calendar</a>`,
+                title: `<a href="/add-to-calendar?title=${info.event.title}&date=${info.event.start}">Add to your calendar</a>`,
                 html: true,
                 placement: 'top',
                 trigger: 'click',

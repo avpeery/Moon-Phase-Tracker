@@ -3,17 +3,16 @@ from jinja2 import StrictUndefined
 import os
 from flask import (Flask, jsonify, url_for, render_template, redirect, request, flash, session)
 import json
+from flask_debugtoolbar import DebugToolbarExtension
 from apiclient.discovery import build
 import googleapiclient.discovery
-import httplib2
-from flask_debugtoolbar import DebugToolbarExtension
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
+import httplib2
 from model import User, MoonPhaseOccurence, MoonPhaseType, Solstice, Alert, FullMoonNickname, connect_to_db, db
-from lookup_phone import lookup_phone_number
+from lookup_phone import *
 import itertools
 from helpers import *
-
 
 CLIENT_SECRETS_FILE = "client_secret.json"
 SCOPES = ['https://www.googleapis.com/auth/calendar.events']
@@ -34,12 +33,11 @@ def index():
 
 @app.route('/authorize')
 def authorize():
-    """Gets google oauth for google calendar"""
+    """Get google oauth for google calendar"""
 
-    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-      CLIENT_SECRETS_FILE, scopes=SCOPES)
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=SCOPES)
 
-    flow.redirect_uri = url_for('oauth2callback', _external=True)
+    flow.redirect_uri = 'http://me.mydomain.com:5000/oauth2callback'
 
     authorization_url, state = flow.authorization_url(access_type='offline', include_granted_scopes='true')
 
@@ -48,12 +46,13 @@ def authorize():
     return redirect(authorization_url)
 
 
-@app.route("/oauth2callback")
+@app.route('/oauth2callback')
 def oauth2callback():
 
   flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-      CLIENT_SECRETS_FILE, scopes=SCOPES, state=session['state'])
-  flow.redirect_uri = url_for('oauth2callback', _external=True)
+      CLIENT_SECRETS_FILE, scopes=SCOPES)
+
+  flow.redirect_uri = 'http://me.mydomain.com:5000/oauth2callback'
 
   authorization_response = request.url
   flow.fetch_token(authorization_response=authorization_response)
@@ -61,49 +60,31 @@ def oauth2callback():
   credentials = flow.credentials
   session['credentials'] = credentials_to_dict(credentials)
 
-  return redirect(url_for('test_api_request'))
+  flash("Succesfully logged in to Google Calendar! Try adding again.")
+  return redirect("/calendar")
 
 
-@app.route('/test')
-def test_api_request():
-    
-    if 'moon_phase_title' not in session:
-        session['moon_phase_title'] = request.args['title']
-        session['moon_phase_date'] = request.args['date']
-
+@app.route('/add-to-calendar', methods=['GET'])
+def make_calendar_event():
     if 'credentials' not in session:
-        return redirect('authorize')
+        return redirect('/authorize')
+
+    session['moon_phase_title'] = request.args['title']
+    session['moon_phase_date'] = request.args['date']
 
     credentials = google.oauth2.credentials.Credentials(**session['credentials'])
 
     drive = googleapiclient.discovery.build(
       "calendar", API_VERSION, credentials=credentials)
 
-    moon_phase_date = session['moon_phase_date']
-    moon_phase_title = session['moon_phase_title']
+    session['event'] = create_google_calendar_event(session['moon_phase_title'], session['moon_phase_date'])
 
-    moon_phase_date = datetime.strptime(moon_phase_date[4:15], "%b %d %Y")
-    moon_phase_date = moon_phase_date.strftime("%Y-%m-%d")
-
-    event = {
-        'summary': moon_phase_title,
-        'start': {
-            'date': moon_phase_date,
-            },
-        'end': {
-            'date': moon_phase_date
-            }
-        }
-
-    session['event'] = event
-
-    event_to_add = drive.events().insert(calendarId='primary', sendNotifications=True, body=event).execute()
-
-    session['credentials'] = credentials_to_dict(credentials)
+    event_to_add = drive.events().insert(calendarId='primary', sendNotifications=True, body=session['event']).execute()
 
     del session['moon_phase_title']
     del session['moon_phase_date']
 
+    flash("Event added to calendar!")
     return redirect("/calendar")
 
 
@@ -129,6 +110,7 @@ def get_moon_phases_from_database():
  
     return jsonify(list_of_dict_items)
 
+
 @app.route("/register", methods= ["POST"])
 def register_user():
     """Gets post request from homepage sign up, and continues with registration html"""
@@ -147,6 +129,7 @@ def register_user():
 
     return render_template("registration.html", moon_phase_types=all_moon_phase_types, full_moon_nicknames=all_full_moon_nicknames)
 
+
 @app.route("/process-registration", methods = ["POST"])
 def register_to_database():
     fname, lname, phone = form_get_request('fname', 'lname', 'phone')
@@ -154,6 +137,9 @@ def register_to_database():
     moon_phase_types, full_moon_nicknames = form_get_list('moon_phases', 'full_moon_nicknames')
 
     phone = lookup_phone_number(phone)
+    if phone == False:
+        flash("Not a valid phone number!")
+        return redirect("/")
 
     email = session["email"]
     password = session["password"]
@@ -192,6 +178,7 @@ def register_to_database():
 
     return redirect("/calendar")
 
+
 @app.route("/login", methods=['POST'])
 def login_process():
     """Gets post request from login, and adds to session"""
@@ -210,11 +197,13 @@ def login_process():
 
     return redirect('/')
 
+
 @app.route("/calendar")
 def show_calendar():
     """Displays calendar of moon phases"""
 
     return render_template("calendar.html")
+
 
 @app.route("/display-settings")
 def user_settings():
@@ -294,11 +283,8 @@ if __name__ == "__main__":
 
     app.debug = True
 
-    app.jinja_env.auto_reload = app.debug
-
     connect_to_db(app)
 
     DebugToolbarExtension(app)
 
-
-    app.run(port=5000, host='localhost')
+    app.run(port=5000, host='0.0.0.0')
