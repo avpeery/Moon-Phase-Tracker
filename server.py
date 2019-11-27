@@ -189,13 +189,8 @@ def user_settings():
     all_moon_phase_types = MoonPhaseType.query.all()
     all_full_moon_nicknames = FullMoonNickname.query.all()
 
-    for alert in user.alerts:
+    moon_phase_type_alerts, full_moon_nickname_alerts = add_active_alerts_to_sets(user, moon_phase_type_alerts, full_moon_nickname_alerts)
 
-        if alert.is_active == True and alert.moon_phase_type_id != None:
-            moon_phase_type_alerts.add(alert.moon_phase_type_id)
-
-        elif alert.is_active == True and alert.full_moon_nickname_id != None:
-            full_moon_nickname_alerts.add(alert.full_moon_nickname_id)
 
     return render_template("settings.html", user = user, moon_phases = all_moon_phase_types, full_moon_nicknames = all_full_moon_nicknames, moon_phase_type_alerts = moon_phase_type_alerts, full_moon_nickname_alerts = full_moon_nickname_alerts)
 

@@ -98,3 +98,13 @@ def append_seasonal_solstices(given_list, seasonal_solstices):
     given_list.append({'id': row.solstice_id, 'title': row.title, 'start': start_date})
   return given_list
 
+
+def add_active_alerts_to_sets(user, moon_phase_set, full_moon_nickname_set):
+  for alert in user.alerts:
+    if alert.is_active == True and alert.moon_phase_type_id != None:
+      moon_phase_set.add(alert.moon_phase_type_id)
+
+    elif alert.is_active == True and alert.full_moon_nickname_id != None:
+      full_moon_nickname_set.add(alert.full_moon_nickname_id)
+
+      return [moon_phase_set, full_moon_nickname_set]
