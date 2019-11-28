@@ -134,3 +134,4 @@ def add_active_alerts_to_sets(user, moon_phase_set, full_moon_nickname_set):
       full_moon_nickname_set.add(alert.full_moon_nickname_id)
 
       return [moon_phase_set, full_moon_nickname_set]
+

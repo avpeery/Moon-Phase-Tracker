@@ -50,22 +50,20 @@ def authorize():
 def oauth2callback():
     """Processes response for google calendar authorization"""
 
-  flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-      CLIENT_SECRETS_FILE, scopes=SCOPES)
+    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=SCOPES)
+    flow.redirect_uri = 'http://me.mydomain.com:5000/oauth2callback'
 
-  flow.redirect_uri = 'http://me.mydomain.com:5000/oauth2callback'
+    authorization_response = request.url
 
-  authorization_response = request.url
+    flow.fetch_token(authorization_response=authorization_response)
 
-  flow.fetch_token(authorization_response=authorization_response)
+    credentials = flow.credentials
 
-  credentials = flow.credentials
+    session['credentials'] = credentials_to_dict(credentials)
 
-  session['credentials'] = credentials_to_dict(credentials)
+    flash('Succesfully logged in to Google Calendar! Try adding again.')
 
-  flash('Succesfully logged in to Google Calendar! Try adding again.')
-
-  return redirect('/calendar')
+    return redirect('/calendar')
 
 
 @app.route('/add-to-calendar', methods=['GET'])
