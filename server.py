@@ -187,14 +187,14 @@ def user_settings():
     user = User.query.filter_by(email = email).first()
 
     moon_phase_type_alerts = set()
-    full_moon_nickname_alerts = set()
+    full_moon_nickname_alets = set()
 
     all_moon_phase_types = MoonPhaseType.query.all()
     all_full_moon_nicknames = FullMoonNickname.query.all()
 
-    moon_phase_type_alerts, full_moon_nickname_alerts = add_active_alerts_to_sets(user, moon_phase_type_alerts, full_moon_nickname_alerts)
+    moon_phase_type_alerts, full_moon_nickname_alerts = add_active_alerts_to_sets(user, all_moon_phase_types, all_full_moon_nicknames)
 
-    return render_template('settings.html', user = user, moon_phases = all_moon_phase_types, full_moon_nicknames = all_full_moon_nicknames, moon_phase_type_alerts = moon_phase_type_alerts, full_moon_nickname_alerts = full_moon_nickname_alerts)
+    return render_template('settings.html', user=user, moon_phases=all_moon_phase_types, full_moon_nicknames=all_full_moon_nicknames, moon_phase_type_alerts=moon_phase_type_alerts, full_moon_nickname_alerts=full_moon_nickname_alerts)
 
 
 @app.route('/change-settings', methods=['POST'])
@@ -215,7 +215,7 @@ def  change_settings():
     user.fname, user.lname, user.phone, user.email = fname, lname, phone, email
   
     change_alerts_for_user(user, new_moon_phases, new_full_moon_nicknames)
-        
+    
     db.session.commit()
 
     return redirect('/display-settings')

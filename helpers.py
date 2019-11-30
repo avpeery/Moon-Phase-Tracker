@@ -121,16 +121,21 @@ def append_seasonal_solstices(given_list, seasonal_solstices):
   return given_list
 
 
-def add_active_alerts_to_sets(user, moon_phase_set, full_moon_nickname_set):
+def add_active_alerts_to_sets(user, moon_phases, full_moon_nicknames):
+  """Checks user's alerts for if is_active is true, then adds active alerts to corresponding sets"""
+  moon_phase_set = set()
+  full_moon_nickname_set = set()
 
   for alert in user.alerts:
 
     if alert.is_active == True and alert.moon_phase_type_id != None:
 
       moon_phase_set.add(alert.moon_phase_type_id)
+      print(moon_phase_set)
 
     elif alert.is_active == True and alert.full_moon_nickname_id != None:
 
       full_moon_nickname_set.add(alert.full_moon_nickname_id)
+      print(full_moon_nickname_set)
 
-      return [moon_phase_set, full_moon_nickname_set]
+  return [moon_phase_set, full_moon_nickname_set]

@@ -1,44 +1,80 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Settings</h1>
+<h1>Manage Settings</h1>
+<br>
 
 
 <form action='/change-settings' method="POST">
-
+    <h4>Personal Information</h4>
     First name:
     <input type='text' name ='fname' value = '{{ user.fname }}' disabled>
     Last name:
     <input type='text' name ='lname' value = '{{ user.lname }}' disabled>
+    <br>
     Phone number:
     <input type='text' name ='phone' value = '{{ user.phone }}' disabled>
     Email address:
     <input type='text' name ='email' value = '{{ user.email }}' disabled>
-    Texts:<br>
+    <br>
+    <br>
+    <h4>Text subscriptions</h4>
+    <br>
+    <h5>Moon Phases</h5>
     {% for moon_phase in moon_phases %}
         {% if moon_phase.moon_phase_type_id in moon_phase_type_alerts %}
-            <input type="checkbox" name="moon_phases" value="{{ moon_phase.moon_phase_type_id }}" checked disabled>{{ moon_phase.title }}<br>
+            <input type="checkbox" name="moon_phases" value="{{ moon_phase.moon_phase_type_id }}" checked disabled>{{ moon_phase.title }}
+            <button type="button" class="btn" data-toggle="popover" title="{{ moon_phase.title }}" data-content="{{ moon_phase.description }}">
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </button>
+            <br>
         {% else %}
-            <input type="checkbox" name="moon_phases" value="{{ moon_phase.moon_phase_type_id }}" disabled>{{ moon_phase.title }}<br>
+            <input type="checkbox" name="moon_phases" value="{{ moon_phase.moon_phase_type_id }}" disabled>{{ moon_phase.title }}
+            <button type="button" class="btn" data-toggle="popover" title="{{ moon_phase.title }}" data-content="{{ moon_phase.description }}">
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </button>
+            <br>
         {% endif %}
     {% endfor %}
+    <br>
+    <h5>Specific Full Moons</h5>
     {% for full_moon_nickname in full_moon_nicknames %}
         {% if full_moon_nickname.full_moon_nickname_id in full_moon_nickname_alerts %}
-            <input type="checkbox" name="full_moon_nicknames" value="{{ full_moon_nickname.full_moon_nickname_id }}" checked disabled>{{ full_moon_nickname.title }}<br>
+            <input type="checkbox" name="full_moon_nicknames" value="{{ full_moon_nickname.full_moon_nickname_id }}" checked disabled>{{ full_moon_nickname.title }}
+            <button type="button" class="btn" data-toggle="popover" title="{{ full_moon_nickname.title }}" data-content="{{ full_moon_nickname.description }}">
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </button>
+            <br>
         {% else %}
-            <input type="checkbox" name="full_moon_nicknames" value="{{ full_moon_nickname.full_moon_nickname_id }}" disabled>{{ full_moon_nickname.title }}<br>
+            <input type="checkbox" name="full_moon_nicknames" value="{{ full_moon_nickname.full_moon_nickname_id }}" disabled>{{ full_moon_nickname.title }}
+            <button type="button" class="btn" data-toggle="popover" title="{{ full_moon_nickname.title }}" data-content="{{ full_moon_nickname.description }}">
+                <span class="glyphicon glyphicon-question-sign"></span>
+            </button>
+            <br>
         {% endif %}
     {% endfor %}
 <button type="button" class="change-settings">Change settings</button>
 </form>
 
 
+<style>
+    .popover.show {
+        opacity: 1;
+    }
+</style>
 
 <script>
-    $('button').on('click', () => {
+    $('.change-settings').on('click', () => {
         $('input').removeAttr('disabled');
-        $('button').replaceWith($('<input type=submit>'));
+        $('.change-settings').replaceWith($('<input type=submit>'));
     })
+
+
+    $(document).ready(function() {
+        $('[data-toggle="popover"]').popover({
+            trigger:'click',
+        });
+    });
 </script>
 {% endblock %}
 
