@@ -4,4 +4,5 @@ Users interested in tracking moon phases can sign up to receive text alerts for 
 
 
 Tech stack: Python & JavaScript (Core Languages), Flask, SQLAlchemy, PostgreSQL, JQuery, AJAX,  OAuth, Bootstrap, Jinja, HTML, & CSS
+<br>
 APIs: Skyfield API, Twilio API, FullCalendar API, Google Calendar API
