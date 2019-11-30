@@ -11,6 +11,6 @@ SQLAlchemy==1.2.8
 Werkzeug==0.14.1
 
 #skyfield
-#yarn
 #fullcalendar
 #twilio
+#https://developers.google.com/identity/protocols/OAuth2WebServer?hl=en_US

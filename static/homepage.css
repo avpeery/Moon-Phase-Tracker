@@ -20,7 +20,18 @@
     font-style: italic;
 }
 
+.navbar {
+    background-color: #403854;
+    margin: 0px;
+}
+
+.nav-custom > ul {
+    display: inline;
+    white-space: nowrap;
+}
+
 body {
     margin-left: 50px;
     margin-right: 50px;
 }
+

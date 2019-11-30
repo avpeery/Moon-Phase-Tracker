@@ -1,8 +1,8 @@
-from server import app
+from moon_phase_tracker.server import app
 from unittest import TestCase
 from flask import session
-from model import *
-from helpers import *
+from moon_phase_tracker.model import *
+from moon_phase_tracker.helpers import *
 from seed_test import *
 
 

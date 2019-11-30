@@ -18,27 +18,23 @@
     <script src='https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js'></script>
 
 <body>
-<header>
-    {% if "email" in session%}
-        <div class = "container">
-            <nav>
-                <ul>
-                    <li>
-                        <a href="/calendar">Moon phase calendar</a>
-                    </li>
-                    <li>
-                        <a href="/display-settings">Manage settings</a>
-                    </li>
-                    <li> {% if "email" not in session %}
-                            <a href="/login">Log in</a>
-                        {% else %}
-                            <a href="/logout">Log out</a>
-                        {% endif %}
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    {% endif %}
+<header class="navbar">
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <ul>
+            <li>
+                <a class="navbar-item" href="/calendar">Moon phase calendar</a>
+            </li>
+            <li>
+                <a class="navbar-item" href="/display-settings">Manage settings</a>
+            </li>
+            <li> {% if "email" not in session %}
+                <a class="navbar-item" href="/">Log in</a>
+            {% else %}
+                <a class="navbar-item" href="/logout">Log out</a>
+            {% endif %}
+            </li>
+        </ul>
+    </nav>
 </header>
 
     {% with messages = get_flashed_messages() %}

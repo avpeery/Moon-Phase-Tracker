@@ -1,6 +1,6 @@
 from sqlalchemy import func
-from model import *
-from server import app
+from moon_phase_tracker.model import *
+from moon_phase_tracker.server import app
 
 from datetime import datetime
 from skyfield import api, almanac

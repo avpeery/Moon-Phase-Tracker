@@ -5,8 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 import schedule
 from datetime import date, timedelta
 import time
-from server import app
-from model import *
+from moon_phase_tracker.server import app
+from moon_phase_tracker.model import *
 
 ACCOUNT_SID = os.environ['TWILIO_ACCOUNT_SID']
 AUTH_TOKEN = os.environ['TWILIO_AUTH_TOKEN']
