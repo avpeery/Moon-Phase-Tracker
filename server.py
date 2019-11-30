@@ -212,10 +212,7 @@ def  change_settings():
 
     user = User.query.filter_by(email = email).first()
 
-    user.fname = fname
-    user.lname = lname
-    user.phone = phone
-    user.email = email
+    user.fname, user.lname, user.phone, user.email = fname, lname, phone, email
   
     change_alerts_for_user(user, new_moon_phases, new_full_moon_nicknames)
         
