@@ -134,4 +134,7 @@ def add_active_alerts_to_sets(user, moon_phase_set, full_moon_nickname_set):
       full_moon_nickname_set.add(alert.full_moon_nickname_id)
 
       return [moon_phase_set, full_moon_nickname_set]
-
+      
+            # <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="right" title="Hi">
+            #     <span class="glyphicon glyphicon-question-sign"></span>
+            # </button>

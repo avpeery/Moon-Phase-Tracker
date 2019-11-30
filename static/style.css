@@ -2,6 +2,10 @@
   opacity: 1;
 }
 
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
 .popper,
 .tooltip {
   position: absolute;

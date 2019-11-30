@@ -57,7 +57,7 @@ class TestMoonPhaseLoggedIn(TestCase):
 
     def setUp(self):
         """Code to run before every test."""
-        
+
         app.config['TESTING'] = True
         self.client = app.test_client()
 
