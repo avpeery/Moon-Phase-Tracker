@@ -6,6 +6,7 @@ from server import app
 from datetime import datetime
 from skyfield import api, almanac
 import itertools
+from seed_files.moon_phase_descriptions import moon_phases_dict
 
 MOON_PHASE_TYPES = ["New Moon", "First Quarter", "Full Moon", "Last Quarter"]
 FULL_MOON_NICKNAMES = ["Wolf Moon", "Snow Moon", "Worm Moon", "Pink Moon", "Flower Moon", "Strawberry Moon", "Buck Moon", "Sturgeon Moon", "Corn Moon", "Hunter's Moon", "Beaver Moon", "Cold Moon"]
@@ -18,7 +19,7 @@ def load_moon_phase_types():
     """adds moon phase types to moon phase types table"""
 
     for moon_phase, moon_emoji in zip(MOON_PHASE_TYPES, MOON_EMOJIS):
-        moon_phase_type = MoonPhaseType(title=moon_phase, emoji=moon_emoji)
+        moon_phase_type = MoonPhaseType(title=moon_phase, description=moon_phases_dict[moon_phase], emoji=moon_emoji)
         db.session.add(moon_phase_type)
 
     db.session.commit
@@ -27,7 +28,7 @@ def load_full_moon_nicknames():
     """adds full moon nicknames to moon phase nicknames table"""
 
     for (nickname, month) in zip(FULL_MOON_NICKNAMES, range(1, 13)):
-        full_moon_nickname = FullMoonNickname(title=nickname, nickname_month=month)
+        full_moon_nickname = FullMoonNickname(title=nickname, nickname_month=month, description=moon_phases_dict[nickname])
         db.session.add(full_moon_nickname)
 
     db.session.commit
@@ -46,7 +47,7 @@ def load_solstices():
         date = date[:10]
         date = datetime.strptime(date, "%Y-%m-%d")
 
-        solstice_occurence = Solstice(title = solstice_name, start = date)      
+        solstice_occurence = Solstice(title=solstice_name, start=date)      
         
         db.session.add(solstice_occurence)
 
@@ -72,9 +73,9 @@ def load_moon_phase_occurences():
         if moon_phase_type.title == "Full Moon":
             full_moon_nickname = FullMoonNickname.query.filter(FullMoonNickname.nickname_month == date.month).first()
 
-            moon_phase_occurence = MoonPhaseOccurence(start = date, moon_phase_type_id = moon_phase_type.moon_phase_type_id, full_moon_nickname_id = full_moon_nickname.full_moon_nickname_id)
+            moon_phase_occurence = MoonPhaseOccurence(start=date, moon_phase_type_id=moon_phase_type.moon_phase_type_id, full_moon_nickname_id=full_moon_nickname.full_moon_nickname_id)
         else:
-            moon_phase_occurence = MoonPhaseOccurence(start = date, moon_phase_type_id = moon_phase_type.moon_phase_type_id)         
+            moon_phase_occurence = MoonPhaseOccurence(start=date, moon_phase_type_id=moon_phase_type.moon_phase_type_id)         
         
         db.session.add(moon_phase_occurence)
 
@@ -84,14 +85,14 @@ def load_moon_phase_occurences():
 def load_blue_moon():
     """Adds Blue Moon to FullMoonNickname"""
 
-    blue_moon = FullMoonNickname(title="Blue Moon")
+    blue_moon = FullMoonNickname(title="Blue Moon", description=moon_phases_dict["Blue Moon"])
     db.session.add(blue_moon)
     db.session.commit()
 
 
 def load_harvest_moon():
     """Adds Harvest Moon to FullMoonNickname"""
-    harvest_moon = FullMoonNickname(title="Harvest Moon")
+    harvest_moon = FullMoonNickname(title="Harvest Moon", description=moon_phases_dict["Harvest Moon"])
     db.session.add(harvest_moon)
     db.session.commit()
 

@@ -217,7 +217,7 @@ def  change_settings():
     user.phone = phone
     user.email = email
   
-    change_alerts_for_user(user)
+    change_alerts_for_user(user, new_moon_phases, new_full_moon_nicknames)
         
     db.session.commit()
 

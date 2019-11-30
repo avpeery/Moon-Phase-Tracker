@@ -26,7 +26,7 @@ def test_data():
 def test_moon_phase_type():
     """Creates Full Moon moon phase type for testing"""
 
-    moon_phase_type = MoonPhaseType(title="Full Moon", emoji="🌝")
+    moon_phase_type = MoonPhaseType(title="Full Moon", description="A full moon is when we can see the entire lit portion of the Moon. The full moon phase occurs when the Moon is on the opposite side of the Earth from the Sun, called opposition. A lunar eclipse can only happen at full moon.", emoji="🌝")
     db.session.add(moon_phase_type)
     db.session.commit()
 
@@ -34,7 +34,7 @@ def test_moon_phase_type():
 def test_full_moon_nickname():
     """Creates a full moon nickname for testing"""
 
-    full_moon_nickname = FullMoonNickname(title="Wolf Moon", nickname_month= 1)
+    full_moon_nickname = FullMoonNickname(title="Wolf Moon", nickname_month=1, description="Amid the cold and deep snows of midwinter, the wolf packs howled hungrily outside Indian villages. Thus, the name for January’s Full Moon. Also referred to as the Old Moon, or the Moon After Yule.")
     db.session.add(full_moon_nickname)
     db.session.commit()
 

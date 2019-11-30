@@ -23,7 +23,7 @@
         <h5>Moon Phases</h5>
         {% for moon_phase_type in moon_phase_types %}
             <input type="checkbox" name="moon_phases" value="{{ moon_phase_type.title }}"> {{ moon_phase_type.title }}
-            <button type="button" class="btn" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?">
+            <button type="button" class="btn" data-toggle="popover" title="{{ moon_phase_type.title }}" data-content="{{ moon_phase_type.description }}">
                 <span class="glyphicon glyphicon-question-sign"></span>
             </button>
             <br>
@@ -31,7 +31,7 @@
         <h5>Specific Full Moons</h5>
         {% for full_moon_nickname in full_moon_nicknames %}
             <input type="checkbox" name="full_moon_nicknames" value="{{ full_moon_nickname.title }}"> {{ full_moon_nickname.title }}
-            <button type="button" class="btn" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?">
+            <button type="button" class="btn" data-toggle="popover" title="{{ full_moon_nickname.title }}" data-content="{{ full_moon_nickname.description }}">
                 <span class="glyphicon glyphicon-question-sign"></span>
             </button>
             <br>

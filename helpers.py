@@ -75,7 +75,7 @@ def set_new_alerts_for_user(user_moon_phase_choices, user_full_moon_nickname_cho
       db.session.add(full_moon_alert)
 
 
-def change_alerts_for_user(user):
+def change_alerts_for_user(user, new_moon_phases, new_full_moon_nicknames):
 
   for user.alert in user.alerts:
 
@@ -134,7 +134,3 @@ def add_active_alerts_to_sets(user, moon_phase_set, full_moon_nickname_set):
       full_moon_nickname_set.add(alert.full_moon_nickname_id)
 
       return [moon_phase_set, full_moon_nickname_set]
-      
-            # <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="right" title="Hi">
-            #     <span class="glyphicon glyphicon-question-sign"></span>
-            # </button>

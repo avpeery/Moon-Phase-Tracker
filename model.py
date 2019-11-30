@@ -29,6 +29,7 @@ class MoonPhaseType(db.Model):
 
     moon_phase_type_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     title = db.Column(db.String(64))
+    description = db.Column(db.String(250))
     emoji = db.Column(db.String(20))
 
     def __repr__(self):
@@ -44,6 +45,7 @@ class FullMoonNickname(db.Model):
     full_moon_nickname_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     title = db.Column(db.String(64))
     nickname_month = db.Column(db.Integer)
+    description = db.Column(db.String(470))
 
     def __repr__(self):
 
@@ -121,20 +123,5 @@ if __name__ == "__main__":
     from server import app
     connect_to_db(app)
     print("Connected to DB.")
-
-
-
-# class SolsticeType(db.Model):
-#     """Types of seasonal solstices and equinoxes"""
-    
-#     __tablename__ = "solstice_types"
-
-#     solstice_type_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-#     title = db.Column(db.String(64))
-
-#     def __repr__(self):
-
-#         return f"<SolsticeType solstice_type_id={self.solstice_type_id} title={self.title}>"
-
 
 
