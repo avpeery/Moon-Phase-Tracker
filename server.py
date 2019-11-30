@@ -10,7 +10,7 @@ import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import httplib2
 from model import User, MoonPhaseOccurence, MoonPhaseType, Solstice, Alert, FullMoonNickname, connect_to_db, db
-from lookup_phone import *
+from twilio_texts.lookup_phone import *
 import itertools
 from helpers import *
 
