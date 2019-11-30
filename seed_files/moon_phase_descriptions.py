@@ -1,0 +1,21 @@
+
+moon_phases_dict = {
+    "New Moon": "A new moon is when the Moon cannot be seen because we are looking at the unlit half of the Moon. The new moon phase occurs when the Moon is directly between the Earth and Sun. A solar eclipse can only happen at new moon.",
+    "First Quarter": "The first quarter moon (or a half moon) is when half of the lit portion of the Moon is visible after the waxing crescent phase. It comes a week after new moon.",
+    'Full Moon': 'A full moon is when we can see the entire lit portion of the Moon. The full moon phase occurs when the Moon is on the opposite side of the Earth from the Sun, called opposition. A lunar eclipse can only happen at full moon.',
+    'Last Quarter': 'The last quarter moon (or a half moon) is when half of the lit portion of the Moon is visible after the waning gibbous phase.',
+    'Blue Moon': 'A second full moon in one calendar month is usually called a "blue moon" and this occurs approximately every 3 years. The idiom "Once in a blue moon" refers to something that does not happen often (like a blue moon).',
+    'Harvest Moon': 'The "harvest moon" is the full moon nearest the autumnal equinox, occurring anytime within two weeks before or after that date.',
+    'Wolf Moon': 'Amid the cold and deep snows of midwinter, the wolf packs howled hungrily outside Indian villages. Thus, the name for January’s Full Moon. Also referred to as the Old Moon, or the Moon After Yule.',
+    'Snow Moon': 'Since the heaviest snow usually falls during this month, native tribes of the north and east most often called February’s Full Moon as the Snow Moon. Also referred to as the Hunger Moon.',
+    'Worm Moon': 'The Worm Moon refers to the Full Moon of March as the temperature begins to warm and the ground begins to thaw, earthworm casts appear, heralding the return of the robins. Also known as the Crow Moon, Crust Moon, Lenten Moon, and Sap Moon.',
+    'Pink Moon': 'The Pink Moon refers to the Full Moon of April, which came from the herb moss pink, or wild ground phlox (one of the earliest widespread flowers of the spring). Also known as the Sprounting Grass Moon, Egg Moon, and Fish Moon.',
+    'Flower Moon': 'Flowers are abundant in May - thus the name for the Full Moon of May is Flower Moon. Also referred to as the Corn Planting Moon and Milk Moon.',
+    'Strawberry Moon': 'Due the the relatively short season of harvesting strawberries during this month, the Full Moon of June is also called the Strawberry Moon. Also known as the Rose Moon in Europe.',
+    'Buck Moon': 'July is normally the month when the new antlers of buck deer push out of their foreheads in coatings of velvety fur, which is why the Full Moon of July is also known as the Buck Moon. It is also referred to as the Hay Moon.',
+    'Sturgeon Moon': 'The Sturgeon Moon refers to the Full Moon of August. The fishing tribes are given credit for the naming of this Moon, since sturgeon, a large fish of the Great Lakes and other major bodies of water, were most readily caught during this month.',
+    'Corn Moon': 'When it is not the Harvest Moon, the Full Moon of September is also called the Corn Moon. This Full Moon name is attributed to Native Americans because it marked when corn was supposed to be harvested.',
+    "Hunter's Moon": "The Full Moon of October is also known as the Hunter's Moon. Because the fields were traditionally reaped in late September or early October, hunters could easily see fox and other animals that come out to glean from the fallen grains. Probably because of the threat of winter looming close, the Hunter’s Moon is generally accorded with special honor, historically serving as an important feast day in both Western Europe and among many Native American tribes.",
+    "Beaver Moon": "The Full Moon of November is also referred to as the Beaver Moon. This was the time to set beaver traps before the swamps froze, to ensure a supply of warm winter furs. Another interpretation suggests that the name Beaver Moon comes from the fact that the beavers are now actively preparing for winter. Also known as the Frosty Moon.",
+    "Cold Moon": "The Full Moon of December is also referred to as the Cold Moon. During this month the winter cold fastens its grip, and nights are at their longest and darkest. It is also sometimes called the Moon before Yule, and the Long Night's Moon."
+}

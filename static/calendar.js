@@ -14,13 +14,20 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
+            header: {
+                left: 'today',
+                center: 'title',
+                right: 'prev,next'
+            },
+            navLinks: true,
             plugins: [ 'dayGrid' ],
             events: res,
             displayEventTime: false,
             eventRender: tooltip
              })   
-    
-        calendar.render();
-    });
 
-})
+        calendar.render();
+
+    });
+});
+

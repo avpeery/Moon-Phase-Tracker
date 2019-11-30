@@ -16,10 +16,11 @@
     text-align: center;
 }
 
-#subheading {
+.subheading {
     font-style: italic;
 }
 
 body {
     margin-left: 50px;
+    margin-right: 50px;
 }
