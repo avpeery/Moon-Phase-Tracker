@@ -106,15 +106,15 @@ def get_moon_phases_from_database():
     return jsonify(list_of_all_dict_items)
 
 
-@app.route('/register', methods= ['POST'])
+@app.route('/register', methods= ['GET', 'POST'])
 def register_user():
     """Gets post request from homepage sign up, and continues with registration html"""
 
-    email, password = form_get_request('email', 'password')
-
-    if User.query.filter_by(email = email).first():
-        flash('Account with that email already exists!')
-        return redirect('/')
+    if request.method == "POST":
+        email, password = form_get_request('email', 'password')
+        if User.query.filter_by(email = email).first():
+            flash('Account with that email already exists!')
+            return redirect('/')
 
     session['email'] = email
     session['password'] = password
@@ -149,6 +149,8 @@ def register_to_database():
     set_new_alerts_for_user(user_moon_phase_types, user_full_moon_nicknames, user)
 
     db.session.commit()
+
+    session['fname'] = fname
 
     return redirect('/calendar')
 

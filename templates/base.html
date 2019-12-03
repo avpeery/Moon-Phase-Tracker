@@ -3,11 +3,12 @@
 <head>
     <title>Moon Phase Tracker</title>
 
-   
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href='static/fullcalendar/packages/core/main.css' rel='stylesheet'/>
     <link href='static/fullcalendar/packages/daygrid/main.css' rel='stylesheet'/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link href='static/homepage.css' rel='stylesheet'/>
+    <link href="https://fonts.googleapis.com/css?family=Changa|Electrolize|Jura|Nanum+Gothic+Coding|Press+Start+2P|Tomorrow|Turret+Road|Ubuntu+Mono&display=swap" rel="stylesheet">
+    <link href='static/style.css' rel='stylesheet'/>
     <link href="/static/favicon.ico" rel="icon" type="image/x-icon"/>
 
 
@@ -19,24 +20,40 @@
     <script src='https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js'></script>
 
 <body>
-<header class="navbar">
-    <nav class="navbar navbar-expand-lg navbar-custom">
-        <ul>
-            <li>
-                <a class="navbar-item" href="/calendar">Moon phase calendar</a>
-            </li>
-            <li>
-                <a class="navbar-item" href="/display-settings">Manage settings</a>
-            </li>
-            <li> {% if "email" not in session %}
-                <a class="navbar-item" href="/">Log in</a>
-            {% else %}
-                <a class="navbar-item" href="/logout">Log out</a>
-            {% endif %}
-            </li>
+  <!-- Static navbar -->
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button"
+                class="navbar-toggle collapsed"
+                data-toggle="collapse"
+                data-target="#navbar"
+                aria-expanded="false"
+                aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Moon Phase Tracker</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+            <li><a href="/calendar">Moon Phase Calendar</a></li>
+        {% if 'fname' in session %}
+            <li><a href="/display-settings">Manage Settings</a></li>
         </ul>
-    </nav>
-</header>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/logout">Log Out</a></li>
+        {% else %}
+            <li><a href="/login">Log In</a></li>
+        </ul>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+
 
     {% with messages = get_flashed_messages() %}
         {% if messages %}

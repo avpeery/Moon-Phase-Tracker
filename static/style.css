@@ -1,104 +1,41 @@
-.tooltip[aria-hidden="false"] {
-  opacity: 1;
+.navbar {
+  background: transparent;
+  border: none;
+  color: rgba(217, 217, 217);
+  font-family: 'Tomorrow', sans-serif;
 }
 
-.tooltip:hover .tooltiptext {
-  visibility: visible;
+.navbar-default .navbar-brand, .navbar-default .navbar-nav li a {
+  color: rgba(217, 217, 217);
+  font-family: 'Tomorrow', sans-serif;
+
 }
 
-.popper,
-.tooltip {
-  position: absolute;
-  z-index: 9999;
-  background: #FFC107;
-  color: black;
-  width: 150px;
-  border-radius: 3px;
-  box-shadow: 0 0 2px rgba(0,0,0,0.5);
-  padding: 10px;
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-nav li a:hover {
+  color: rgba(217, 217, 217);
+}
+
+#moonphasetoday {
   text-align: center;
-}
-.style5 .tooltip {
-  background: #1E252B;
-  color: #FFFFFF;
-  max-width: 200px;
-  width: auto;
-  font-size: .8rem;
-  padding: .5em 1em;
-}
-.popper .popper__arrow,
-.tooltip .tooltip-arrow {
-  width: 0;
-  height: 0;
-  border-style: solid;
-  position: absolute;
-  margin: 5px;
+  font-family: 'Tomorrow', sans-serif;
 }
 
-.tooltip .tooltip-arrow,
-.popper .popper__arrow {
-  border-color: #FFC107;
+.moonphasetodaytitle {
+  text-align: center;
+  font-family: 'Tomorrow', sans-serif;
 }
-.style5 .tooltip .tooltip-arrow {
-  border-color: #1E252B;
+
+.subheading {
+  font-family: 'Tomorrow', sans-serif;
 }
-.popper[x-placement^="top"],
-.tooltip[x-placement^="top"] {
-  margin-bottom: 5px;
+
+calendar {
+  font-family: 'Tomorrow', sans-serif;
 }
-.popper[x-placement^="top"] .popper__arrow,
-.tooltip[x-placement^="top"] .tooltip-arrow {
-  border-width: 5px 5px 0 5px;
-  border-left-color: transparent;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
-  bottom: -5px;
-  left: calc(50% - 5px);
-  margin-top: 0;
-  margin-bottom: 0;
-}
-.popper[x-placement^="bottom"],
-.tooltip[x-placement^="bottom"] {
-  margin-top: 5px;
-}
-.tooltip[x-placement^="bottom"] .tooltip-arrow,
-.popper[x-placement^="bottom"] .popper__arrow {
-  border-width: 0 5px 5px 5px;
-  border-left-color: transparent;
-  border-right-color: transparent;
-  border-top-color: transparent;
-  top: -5px;
-  left: calc(50% - 5px);
-  margin-top: 0;
-  margin-bottom: 0;
-}
-.tooltip[x-placement^="right"],
-.popper[x-placement^="right"] {
-  margin-left: 5px;
-}
-.popper[x-placement^="right"] .popper__arrow,
-.tooltip[x-placement^="right"] .tooltip-arrow {
-  border-width: 5px 5px 5px 0;
-  border-left-color: transparent;
-  border-top-color: transparent;
-  border-bottom-color: transparent;
-  left: -5px;
-  top: calc(50% - 5px);
-  margin-left: 0;
-  margin-right: 0;
-}
-.popper[x-placement^="left"],
-.tooltip[x-placement^="left"] {
-  margin-right: 5px;
-}
-.popper[x-placement^="left"] .popper__arrow,
-.tooltip[x-placement^="left"] .tooltip-arrow {
-  border-width: 5px 0 5px 5px;
-  border-top-color: transparent;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
-  right: -5px;
-  top: calc(50% - 5px);
-  margin-left: 0;
-  margin-right: 0;
+
+body {
+    margin-left: 50px;
+    margin-right: 100px;
+    background-color: rgba(13, 13, 13);
+    color: rgba(217, 217, 217);
 }

@@ -1,26 +1,29 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Moon Phase Tracker</h1>
-<h4 class="subheading">Receive personalized text alerts for moon phases</h4>
-<br>
-<h4 class="moonphasetodaytitle">Today's moon phase:</h4>
-<div id="moonphasetoday"></div>
 
-<br>
+<div class="container-fluid">
+    <div class="row">
+        <section class="col-xs-12 col-sm-12 col-md-6 col-lg-6 left">
+            <p>Track the moon with</p>
+            <p>personalized text alerts</p>
+        </section>
 
-<div id="signup">
-    <h5> New user? Sign up!</h5>
-    <form action='/register' method="POST">
-        Create a username (Email):
-        <input type='text' name ='email'><br>
-        Create a password:
-        <input type='text' name = 'password'><br>
-    <input type="submit">
-    </form>
+        <section class="col-xs-12 col-sm-12 col-md-6 col-lg-6 right">
+            <div class="col-md-4 col-md-offset-3">
+                <h2 id="signup">Sign Up</h2>
+                <form>
+                    <input name="username" type="text" class="form-control" placeholder="Your Username">
+                    <input name="password" type="password" class="form-control" placeholder="Your Password">
+                </form>
+                <div>
+                    <a href="#" class="btn">Sign Up</a>
+                </div>
+            </div>
+        </section>
+    </div>
 </div>
-
-<div id = "login">
+<!-- <div id = "login">
     <h5> Returning user? Log in </h5>
     <form action='/login'  method="POST">
         Username:
@@ -30,8 +33,9 @@
         <input type='text' name = 'password'><br>
         <input type="submit">
     </form>
-</div>
+</div> -->
 
+<link href='static/homepage.css' rel='stylesheet'/>
 <script src='static/moon_phase_today.js'></script>
 
 

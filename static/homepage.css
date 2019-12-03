@@ -1,37 +1,94 @@
-#signup {
-    display: inline-block;
-    margin-left: 80px;
-    margin-right: 200px;
-}
-
-#login {
-    display: inline-block;
-}
-
-#moonphasetoday {
-    text-align: center;
-}
-
-.moonphasetodaytitle {
-    text-align: center;
-}
-
-.subheading {
-    font-style: italic;
-}
-
-.navbar {
-    background-color: #403854;
-    margin: 0px;
-}
-
-.nav-custom > ul {
-    display: inline;
-    white-space: nowrap;
-}
 
 body {
-    margin-left: 50px;
-    margin-right: 50px;
+  background-image: url(nasa-moon.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  color: rgba(13, 13, 13);
+  line-height: 1.3;
+  -webkit-font-smoothing: antialiased;
 }
+
+
+.left {
+  margin-top: 150px;
+  font-family: 'Press Start 2P', cursive;
+  padding: 20px;
+}
+
+form {
+  margin-top: 25px;
+}
+
+#signup {
+    color: rgba(13, 13, 13);
+    font-family: 'Tomorrow', sans-serif;
+    font-weight: 400;
+    text-align: center;
+    margin-top: 115px;
+}
+
+.btn {
+  margin: 25px;
+  display: inline-block;
+  padding: 15px 15px;
+  border: 1px solid rgba(13, 13, 13);
+  text-transform: uppercase;
+  letter-spacing: 0.015em;
+  font-family: 'Tomorrow', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1;
+  color: rgba(13, 13, 13);
+  text-decoration: none;
+  -webkit-transition: all 0.4s;
+     -moz-transition: all 0.4s;
+       -o-transition: all 0.4s;
+          transition: all 0.4s;
+}
+.btn:hover {
+  color: #fff;
+  border-color: #BFFF97;
+}
+
+
+input[type="text"], input[type="password"] {
+  width: 350px;
+  background: transparent;
+  border: 0;
+  border-bottom: 1.5px solid rgba(13, 13, 13);
+  outline: none;
+  color: rgba(217, 217, 217);
+  font-size: 16px;
+  text-align: center;
+  font-family: 'Tomorrow', sans-serif;
+  margin-bottom: 50px;
+}
+
+input[type="text"]::placeholder, input[type="password"]::placeholder {
+    color: rgba(72, 72, 72);
+    opacity: 1;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: rgba(89, 88, 87);
+}
+
+input[type="submit"] {
+  background: #ccc;
+  border: 0;
+  width: 350px;
+  height: 40px;
+  border-radius: 0px;
+  color: rgba(13, 13, 13);
+  font-size: 12px;
+  font-weight: 400px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+}
+input[type="submit"]:hover {
+  background: #cccccc;
+  animation-name: shake;
+}
+
 
