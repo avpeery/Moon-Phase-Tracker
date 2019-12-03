@@ -1,3 +1,10 @@
+body {
+    margin-left: 50px;
+    margin-right: 100px;
+    background-color: rgba(13, 13, 13);
+    color: rgba(217, 217, 217);
+}
+
 .navbar {
   background: transparent;
   border: none;
@@ -25,17 +32,33 @@
   font-family: 'Tomorrow', sans-serif;
 }
 
+#calendar, .subheading {
+  font-family: 'Tomorrow', sans-serif;
+}
+
 .subheading {
-  font-family: 'Tomorrow', sans-serif;
+  font-style: italic;
 }
 
-calendar {
-  font-family: 'Tomorrow', sans-serif;
+.fc-day-number, .fc-event-container, .fc-today-button, .fc-prev-button, .fc-next-button {
+  color: rgba(166, 165, 164);
+  background-color: rgba(13, 13, 13);
+  border-color: rgba(166, 165, 164);
 }
 
-body {
-    margin-left: 50px;
-    margin-right: 100px;
-    background-color: rgba(13, 13, 13);
-    color: rgba(217, 217, 217);
+.fc-unthemed td.fc-today {
+  background: rgba(115, 114, 114);
+}
+
+.fc-button-primary:disabled, .fc-prev-button:hover, .fc-next-button:hover{
+  background-color: rgba(166, 165, 164);
+  border-color: transparent;
+}
+
+.flashes {
+  background-color: rgba(166, 165, 164);
+}
+
+h2 {
+  font-family:'Press Start 2P', cursive;
 }

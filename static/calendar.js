@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         function tooltip(info) {
               var tooltip = new Tooltip(info.el, {
-                title: `<a href="/add-to-calendar?title=${info.event.title}&date=${info.event.start}">Add to your calendar</a>`,
+                title: `<a class="tooltip-text" href="/add-to-calendar?title=${info.event.title}&date=${info.event.start}">Add to your calendar</a>`,
                 html: true,
                 placement: 'top',
                 trigger: 'click',
@@ -21,7 +21,10 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             navLinks: true,
             plugins: [ 'dayGrid' ],
-            events: res,
+            events: res, 
+            eventColor: 'rgb(115, 114, 114)',
+            height: $(window).height()*0.83,
+            handleWindowResize: true,
             displayEventTime: false,
             eventRender: tooltip
              })   
