@@ -10,7 +10,7 @@ import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import httplib2
 from model import User, MoonPhaseOccurence, MoonPhaseType, Solstice, Alert, FullMoonNickname, connect_to_db, db
-from twilio_texts.lookup_phone import *
+from twilio_lookup_phone import *
 import itertools
 from helpers import *
 
@@ -165,6 +165,7 @@ def login_process():
 
     if user: 
         session['email'] = user.email
+        session['fname'] = user.fname
         flash('Succesfully logged in!')
         return redirect('/calendar')
 
@@ -183,7 +184,6 @@ def show_calendar():
 @app.route('/display-settings')
 def user_settings():
     """Displays user's settings"""
-
     email = session['email']
 
     user = User.query.filter_by(email = email).first()
@@ -231,6 +231,7 @@ def logout_user():
         del session['credentials']
 
     del session['email']
+    del session['fname']
 
     flash('Succesfully logged out!')
 

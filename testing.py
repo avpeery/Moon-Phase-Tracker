@@ -1,9 +1,9 @@
-from moon_phase_tracker.server import app
+from server import app
 from unittest import TestCase
 from flask import session
-from moon_phase_tracker.model import *
-from moon_phase_tracker.helpers import *
-from seed_test import *
+from model import *
+from helpers import *
+from testing_seed_data import *
 
 
 class MoonPhaseTrackerTests(TestCase):

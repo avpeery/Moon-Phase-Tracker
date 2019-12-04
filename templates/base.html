@@ -36,11 +36,12 @@
         <ul class="nav navbar-nav navbar-right">
             <li><a href="/logout" class="btn">Log Out</a></li>
         {% else %}
-            <li><form hidden>
-                <input name="username" type="text" class="form-login" placeholder="Your Username">
-                <input name="password" type="password" class="form-login" placeholder="Your Password">
-            </form></li>
-            <li><a class="btn btn-link try" href="/login" role="button">Log In</a></li>
+            <li>
+                <form action="/login" method="POST">
+                    <input name="email" type="text" class="form-login" placeholder="Your Email" hidden>
+                    <input name="password" type="password" class="form-login" placeholder="Your Password" hidden>
+                    <button class="btn btn-link try" data-is-clicked="false" role="button">Log In</button>
+            </form>
         </ul>
         {% endif %}
       </div>
@@ -66,10 +67,15 @@
 
 <script>
     $('.try').on('click', (evt) => {
-        evt.preventDefault();
-        $('form').removeAttr('hidden');
-        $('.btn btn-link try').removeClass('try');
-        console.log('hi')
+        const btn = $(evt.target);
+        console.log(btn.data("isClicked"));
+
+        if (btn.data('isClicked') === false) {
+            evt.preventDefault();
+            $('.form-login').removeAttr('hidden');
+            btn.data('isClicked', true);
+            console.log('hi')
+        }
     })
 </script>
 

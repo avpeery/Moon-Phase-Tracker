@@ -11,9 +11,10 @@ body {
 
 
 .left {
-  margin-top: 150px;
+  margin-top: 200px;
   font-family: 'Press Start 2P', cursive;
   padding: 20px;
+  font-size: 20px;
 }
 
 form {
@@ -23,9 +24,10 @@ form {
 #signup {
     color: rgba(13, 13, 13);
     font-family: 'Tomorrow', sans-serif;
-    font-weight: 400;
+    font-weight: 300;
     text-align: center;
     margin-top: 115px;
+    font-size: 16px;
 }
 
 .special {
@@ -36,7 +38,7 @@ form {
   text-transform: uppercase;
   letter-spacing: 0.015em;
   font-family: 'Tomorrow', sans-serif;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 400;
   line-height: 1;
   color: rgba(13, 13, 13);
@@ -46,6 +48,7 @@ form {
        -o-transition: all 0.4s;
           transition: all 0.4s;
 }
+
 .btn:hover {
   color: #fff;
   border-color: #BFFF97;
@@ -63,6 +66,13 @@ form {
   text-align: center;
   font-family: 'Tomorrow', sans-serif;
   margin-bottom: 50px;
+}
+
+.form-login {
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid rgba(217, 217, 217);
+    border-bottom-length: 10px;
 }
 
 input[type="text"]::placeholder, input[type="password"]::placeholder {

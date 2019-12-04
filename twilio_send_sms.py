@@ -8,6 +8,8 @@ import time
 from server import app
 from model import *
 
+
+
 ACCOUNT_SID = os.environ['TWILIO_ACCOUNT_SID']
 AUTH_TOKEN = os.environ['TWILIO_AUTH_TOKEN']
 TWILIO_NUMBER = os.environ['TWILIO_NUMBER']

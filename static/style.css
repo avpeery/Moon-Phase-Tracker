@@ -9,12 +9,14 @@ body {
   background: transparent;
   border: none;
   color: rgba(217, 217, 217);
-  font-family: 'Tomorrow', sans-serif;
+  font-family: 'Press Start 2P', sans-serif;
+  font-size: 12px;
 }
 
 .navbar-default .navbar-brand, .navbar-default .navbar-nav li a {
   color: rgba(217, 217, 217);
-  font-family: 'Tomorrow', sans-serif;
+  font-family: 'Press Start 2P', sans-serif;
+  font-size: 12px;
 
 }
 
@@ -29,7 +31,7 @@ body {
 
 .moonphasetodaytitle {
   text-align: center;
-  font-family: 'Tomorrow', sans-serif;
+  font-family: 'Press Start 2P', sans-serif;
 }
 
 #calendar, .subheading {
@@ -53,6 +55,10 @@ body {
 .fc-button-primary:disabled, .fc-prev-button:hover, .fc-next-button:hover{
   background-color: rgba(166, 165, 164);
   border-color: transparent;
+}
+
+.fc-title {
+  color: #D9D9D9;
 }
 
 .flashes {
