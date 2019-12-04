@@ -24,17 +24,6 @@
   <nav class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
-        <button type="button"
-                class="navbar-toggle collapsed"
-                data-toggle="collapse"
-                data-target="#navbar"
-                aria-expanded="false"
-                aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
         <a class="navbar-brand" href="/">Moon Phase Tracker</a>
       </div>
       <div id="navbar" class="navbar-collapse collapse">
@@ -43,10 +32,15 @@
         {% if 'fname' in session %}
             <li><a href="/display-settings">Manage Settings</a></li>
         </ul>
+        <form>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="/logout">Log Out</a></li>
+            <li><a href="/logout" class="btn">Log Out</a></li>
         {% else %}
-            <li><a href="/login">Log In</a></li>
+            <li><form hidden>
+                <input name="username" type="text" class="form-login" placeholder="Your Username">
+                <input name="password" type="password" class="form-login" placeholder="Your Password">
+            </form></li>
+            <li><a class="btn btn-link try" href="/login" role="button">Log In</a></li>
         </ul>
         {% endif %}
       </div>
@@ -68,4 +62,15 @@
   {% block content %} put your content here {% endblock %}
 
 </body>
+
+
+<script>
+    $('.try').on('click', (evt) => {
+        evt.preventDefault();
+        $('form').removeAttr('hidden');
+        $('.btn btn-link try').removeClass('try');
+        console.log('hi')
+    })
+</script>
+
 </html>

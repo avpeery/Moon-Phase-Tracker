@@ -62,3 +62,7 @@ body {
 h2 {
   font-family:'Press Start 2P', cursive;
 }
+
+.tooltip-text:hover {
+  color: rgba(166, 165, 164)
+}

@@ -28,7 +28,7 @@ form {
     margin-top: 115px;
 }
 
-.btn {
+.special {
   margin: 25px;
   display: inline-block;
   padding: 15px 15px;
@@ -52,7 +52,7 @@ form {
 }
 
 
-input[type="text"], input[type="password"] {
+.form-control {
   width: 350px;
   background: transparent;
   border: 0;

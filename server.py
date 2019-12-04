@@ -116,8 +116,8 @@ def register_user():
             flash('Account with that email already exists!')
             return redirect('/')
 
-    session['email'] = email
-    session['password'] = password
+    email = session['email']
+    password = session['password']
 
     all_moon_phase_types = MoonPhaseType.query.all()
     all_full_moon_nicknames = FullMoonNickname.query.all()
