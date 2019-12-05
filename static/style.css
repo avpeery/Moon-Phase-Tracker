@@ -3,21 +3,17 @@ body {
     margin-right: 100px;
     background-color: rgba(13, 13, 13);
     color: rgba(217, 217, 217);
+    font-family: 'Tomorrow', sans-serif;
 }
 
 .navbar {
   background: transparent;
   border: none;
   color: rgba(217, 217, 217);
-  font-family: 'Press Start 2P', sans-serif;
-  font-size: 12px;
-}
-
-.navbar-default .navbar-brand, .navbar-default .navbar-nav li a {
-  color: rgba(217, 217, 217);
-  font-family: 'Press Start 2P', sans-serif;
-  font-size: 12px;
-
+  font-family: 'Tomorrow', sans-serif;
+  font-size: 14px;
+  padding: 0px;
+  align-items: center;
 }
 
 .navbar-default .navbar-brand:hover, .navbar-default .navbar-nav li a:hover {
@@ -31,7 +27,7 @@ body {
 
 .moonphasetodaytitle {
   text-align: center;
-  font-family: 'Press Start 2P', sans-serif;
+  font-family: 'Tomorrow', sans-serif;
 }
 
 #calendar, .subheading {
@@ -71,4 +67,30 @@ h2 {
 
 .tooltip-text:hover {
   color: rgba(166, 165, 164)
+}
+
+input, button.btn {
+  background: transparent;
+  color: rgba(217, 217, 217);
+}
+
+input[type="text"] {
+  border-left: transparent;
+  border-right: transparent;
+  border-top: transparent;
+}
+.change-settings {
+    border: 1px solid rgba(217, 217, 217);
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.full_moon_nicknames, .moon_phases {
+  margin-right: 180px;
+  margin-left:50px;
+}
+
+.btn:hover {
+  color: #fff;
+  border-color: #BFFF97;
 }

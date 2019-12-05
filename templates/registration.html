@@ -2,7 +2,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h3>Complete the form below to sign up for texts and gain access</h3>
+<h3>Complete the form below to sign up for texts</h3>
 <br>
 <form action="/process-registration" method="POST">
     First name:
@@ -17,20 +17,22 @@
     <input type='text' name ='phone'>
     <br>
     <br>
-    Which text alerts would you like to receive?
+    <i>Which text alerts would you like to receive?</i>
     <br>
-    <div class="moon_phase_checkboxes">
-        <h5>Moon Phases</h5>
+    <h5>Moon Phases</h5>
+    <div class="moon_phases">
         {% for moon_phase_type in moon_phase_types %}
-            <input type="checkbox" name="moon_phases" value="{{ moon_phase_type.title }}"> {{ moon_phase_type.title }}
+            <input type="checkbox" name="moon_phases" value="{{ moon_phase_type.title }}">  {{ moon_phase_type.title }}
             <button type="button" class="btn" data-toggle="popover" title="{{ moon_phase_type.title }}" data-content="{{ moon_phase_type.description }}">
                 <span class="glyphicon glyphicon-question-sign"></span>
             </button>
             <br>
         {% endfor %}
-        <h5>Specific Full Moons</h5>
+    </div>
+    <h5>Specific Full Moons</h5>
+    <div class="full_moon_nicknames">
         {% for full_moon_nickname in full_moon_nicknames %}
-            <input type="checkbox" name="full_moon_nicknames" value="{{ full_moon_nickname.title }}"> {{ full_moon_nickname.title }}
+            <input type="checkbox" name="full_moon_nicknames" value="{{ full_moon_nickname.title }}">  {{ full_moon_nickname.title }}
             <button type="button" class="btn" data-toggle="popover" title="{{ full_moon_nickname.title }}" data-content="{{ full_moon_nickname.description }}">
                 <span class="glyphicon glyphicon-question-sign"></span>
             </button>

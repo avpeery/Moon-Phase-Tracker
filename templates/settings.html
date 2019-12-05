@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Manage Settings</h1>
+<h3>Manage Settings</h3>
 <br>
 
 
@@ -21,39 +21,44 @@
     <h4>Text subscriptions</h4>
     <br>
     <h5>Moon Phases</h5>
+    <div class='moon_phases'>
     {% for moon_phase in moon_phases %}
         {% if moon_phase.moon_phase_type_id in moon_phase_type_alerts %}
-            <input type="checkbox" name="moon_phases" value="{{ moon_phase.moon_phase_type_id }}" checked disabled>{{ moon_phase.title }}
-            <button type="button" class="btn" data-toggle="popover" title="{{ moon_phase.title }}" data-content="{{ moon_phase.description }}">
+            <input type="checkbox" name="moon_phases" value="{{ moon_phase.moon_phase_type_id }}" checked disabled>   {{ moon_phase.title }}
+            <button type="button" class="btn popover-info" data-toggle="popover" title="{{ moon_phase.title }}" data-content="{{ moon_phase.description }}">
                 <span class="glyphicon glyphicon-question-sign"></span>
             </button>
             <br>
         {% else %}
-            <input type="checkbox" name="moon_phases" value="{{ moon_phase.moon_phase_type_id }}" disabled>{{ moon_phase.title }}
-            <button type="button" class="btn" data-toggle="popover" title="{{ moon_phase.title }}" data-content="{{ moon_phase.description }}">
+            <input type="checkbox" name="moon_phases" value="{{ moon_phase.moon_phase_type_id }}" disabled>   {{ moon_phase.title }}
+            <button type="button" class="btn popover-info" data-toggle="popover" title="{{ moon_phase.title }}" data-content="{{ moon_phase.description }}">
                 <span class="glyphicon glyphicon-question-sign"></span>
             </button>
             <br>
         {% endif %}
     {% endfor %}
+    </div>
     <br>
     <h5>Specific Full Moons</h5>
+    <div class="full_moon_nicknames">
     {% for full_moon_nickname in full_moon_nicknames %}
         {% if full_moon_nickname.full_moon_nickname_id in full_moon_nickname_alerts %}
-            <input type="checkbox" name="full_moon_nicknames" value="{{ full_moon_nickname.full_moon_nickname_id }}" checked disabled>{{ full_moon_nickname.title }}
+            <input type="checkbox" name="full_moon_nicknames" value="{{ full_moon_nickname.full_moon_nickname_id }}" checked disabled>   {{ full_moon_nickname.title }}
             <button type="button" class="btn" data-toggle="popover" title="{{ full_moon_nickname.title }}" data-content="{{ full_moon_nickname.description }}">
                 <span class="glyphicon glyphicon-question-sign"></span>
             </button>
             <br>
         {% else %}
-            <input type="checkbox" name="full_moon_nicknames" value="{{ full_moon_nickname.full_moon_nickname_id }}" disabled>{{ full_moon_nickname.title }}
+            <input type="checkbox" name="full_moon_nicknames" value="{{ full_moon_nickname.full_moon_nickname_id }}" disabled>   {{ full_moon_nickname.title }}
             <button type="button" class="btn" data-toggle="popover" title="{{ full_moon_nickname.title }}" data-content="{{ full_moon_nickname.description }}">
                 <span class="glyphicon glyphicon-question-sign"></span>
             </button>
             <br>
         {% endif %}
     {% endfor %}
-<button type="button" class="change-settings">Change settings</button>
+    </div>
+    <br>
+    <button class="btn btn-link change-settings" data-is-clicked="false" role="button">Change settings</button>
 </form>
 
 

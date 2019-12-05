@@ -106,18 +106,18 @@ def get_moon_phases_from_database():
     return jsonify(list_of_all_dict_items)
 
 
-@app.route('/register', methods= ['GET', 'POST'])
+@app.route('/register', methods= ['POST'])
 def register_user():
     """Gets post request from homepage sign up, and continues with registration html"""
 
-    if request.method == "POST":
-        email, password = form_get_request('email', 'password')
-        if User.query.filter_by(email = email).first():
-            flash('Account with that email already exists!')
-            return redirect('/')
+    email, password = form_get_request('email', 'password')
 
-    email = session['email']
-    password = session['password']
+    if User.query.filter_by(email = email).first():
+        flash('Account with that email already exists!')
+        return redirect('/')
+
+    session['email'] = email
+    session['password'] = password
 
     all_moon_phase_types = MoonPhaseType.query.all()
     all_full_moon_nicknames = FullMoonNickname.query.all()

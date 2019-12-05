@@ -16,7 +16,7 @@ TWILIO_NUMBER = os.environ['TWILIO_NUMBER']
 
 def write_text(user, moon_phase_title, moon_emoji):
     """Returns string for user's text message"""
-    return f"""Good morning { user }. There will be a { moon_phase_title } tonight. Enjoy! {moon_emoji}"""
+    return f"""Good afternoon { user }. There will be a { moon_phase_title } tonight. Enjoy! {moon_emoji}"""
 
 
 def find_tonights_moon():
@@ -63,7 +63,7 @@ def send_text():
         return None
 
 
-schedule.every().day.at("18:14").do(send_text)
+schedule.every().day.at("22:35").do(send_text)
 
 
 if __name__ == "__main__":

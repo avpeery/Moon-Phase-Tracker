@@ -2,6 +2,26 @@
   opacity: 1;
 }
 
+.popover {
+  position: absolute;
+  z-index: 9999;
+  background: #D9D9D9;
+  color: Black;
+  width: 150px;
+  border-radius: 3px;
+  border-color: rgb(115, 114, 114);
+  box-shadow: 0 0 2px Black;
+  padding: 5px;
+  text-align: center;
+  font-family: 'Tomorrow', sans-serif;
+  font-size: 10px;
+}
+
+.popover-header {
+  font-size: 14px;
+  margin: 0px;
+}
+
 .popper,
 .tooltip {
   position: absolute;
@@ -14,7 +34,6 @@
   box-shadow: 0 0 2px Black;
   padding: 5px;
   text-align: center;
-  font-family: 'Tomorrow', sans-serif;
 }
 
 .tooltip .tooltip-arrow,
@@ -39,11 +58,11 @@
   margin-bottom: 0;
 }
 
-.tooltip-inner {
+.tooltip-inner, .popover {
   background: #D9D9D9;
-  color: #D9D9D9;
 }
 
 .tooltip-text {
   color: rgba(13, 13, 13)
 }
+
