@@ -22,6 +22,13 @@ class MoonPhaseTrackerTests(TestCase):
         self.assertEqual(result.status_code, 200)
         self.assertIn(b"<h1>Moon Phase Tracker</h1>", result.data)
 
+    def test_calendar(self):
+        """Tests page that displays calendar"""
+
+        result = self.client.get("/calendar")
+        self.assertEqual(result.status_code, 200)
+        self.assertIn(b"<h5 class='subheading'>Click on any moon phase", result.data)
+
 
 class TestMoonPhaseDatabase(TestCase):
     """Tests moon phase database"""
