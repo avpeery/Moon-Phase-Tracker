@@ -84,6 +84,15 @@ input[type="text"]::placeholder, input[type="password"]::placeholder {
   font-size: 16px;
   font-weight: 400;
   line-height: 1;
+  background: transparent;
+}
+
+input[type="text"], input[type='password'] {
+  border-left: transparent;
+  border-right: transparent;
+  border-top: transparent;
+  background-color: transparent;
+  border-color: rgba(13, 13, 13);
 }
 
 input[type="submit"] {
