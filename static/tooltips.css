@@ -18,8 +18,10 @@
 }
 
 .popover-header {
-  font-size: 14px;
+  font-size: 12px;
   margin: 0px;
+  text-transform: uppercase;
+  letter-spacing: 0.015em;
 }
 
 .popper,
@@ -27,6 +29,9 @@
   position: absolute;
   z-index: 9999;
   background: #D9D9D9;
+  text-transform: uppercase;
+  letter-spacing: 0.015em;
+  font-family: 'Tomorrow', sans-serif;
   color: Black;
   width: 150px;
   border-radius: 3px;

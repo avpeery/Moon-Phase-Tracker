@@ -4,14 +4,17 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
+  text-transform: uppercase;
+  letter-spacing: 0.015em;
   color: rgba(13, 13, 13);
+  font-style: 'Tomorrow', sans-serif;
   line-height: 1.3;
   -webkit-font-smoothing: antialiased;
 }
 
 
 .left {
-  margin-top: 200px;
+  margin-top: 170px;
   font-family: 'Press Start 2P', cursive;
   padding: 20px;
   font-size: 20px;
@@ -24,15 +27,19 @@ form {
 #signup {
     color: rgba(13, 13, 13);
     font-family: 'Tomorrow', sans-serif;
-    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.015em;
+    font-weight: 400;
+    line-height: 1;
     text-align: center;
     margin-top: 115px;
-    font-size: 16px;
+    font-size: 24px;
 }
 
-.special {
-  margin: 25px;
+.special, .btn-link.try, input[type='submit'] {
+  margin: 0px;
   display: inline-block;
+  background-color: transparent;
   padding: 15px 15px;
   border: 1px solid rgba(13, 13, 13);
   text-transform: uppercase;
@@ -41,7 +48,7 @@ form {
   font-size: 16px;
   font-weight: 400;
   line-height: 1;
-  color: rgba(13, 13, 13);
+  color: rgba(13, 13, 13);             
   text-decoration: none;
   -webkit-transition: all 0.4s;
      -moz-transition: all 0.4s;
@@ -50,7 +57,7 @@ form {
 }
 
 .btn:hover {
-  color: #fff;
+  color: rgba(13, 13, 13);;
   border-color: #BFFF97;
 }
 
@@ -68,20 +75,15 @@ form {
   margin-bottom: 50px;
 }
 
-.form-login {
-    background: transparent;
-    border: 0;
-    border-bottom: 1px solid rgba(217, 217, 217);
-    border-bottom-length: 10px;
-}
-
 input[type="text"]::placeholder, input[type="password"]::placeholder {
-    color: rgba(72, 72, 72);
-    opacity: 1;
-}
-
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
-  color: rgba(89, 88, 87);
+  color: rgba(72, 72, 72);
+  opacity: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.015em;
+  font-family: 'Tomorrow', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1;
 }
 
 input[type="submit"] {
@@ -96,9 +98,13 @@ input[type="submit"] {
   cursor: pointer;
   transition: background 0.3s ease-in-out;
 }
+
 input[type="submit"]:hover {
   background: #cccccc;
   animation-name: shake;
 }
 
+.col-xs-12 .left {
+  margin: 0px;
+}
 

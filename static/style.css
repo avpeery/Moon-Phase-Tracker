@@ -1,19 +1,31 @@
+.flashes, ul.flashes {
+  background-color: White;
+  color: rgba(13, 13, 13);
+  margin-right:700px;
+  margin-left:75px;
+}
+
 body {
-    margin-left: 50px;
-    margin-right: 100px;
-    background-color: rgba(13, 13, 13);
-    color: rgba(217, 217, 217);
-    font-family: 'Tomorrow', sans-serif;
+  margin-left: 50px;
+  margin-right: 100px;
+  background-color: rgba(13, 13, 13);
+  color: rgba(217, 217, 217);
+  font-family: 'Tomorrow', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.015em;
 }
 
 .navbar {
   background: transparent;
   border: none;
   color: rgba(217, 217, 217);
+  text-transform: uppercase;
+  letter-spacing: 0.015em;
   font-family: 'Tomorrow', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1;
   padding: 0px;
-  align-items: center;
 }
 
 .navbar-default .navbar-brand:hover, .navbar-default .navbar-nav li a:hover {
@@ -40,6 +52,8 @@ body {
 
 .fc-day-number, .fc-event-container, .fc-today-button, .fc-prev-button, .fc-next-button {
   color: rgba(166, 165, 164);
+  text-transform: uppercase;
+  letter-spacing: 0.015em;
   background-color: rgba(13, 13, 13);
   border-color: rgba(166, 165, 164);
 }
@@ -57,9 +71,7 @@ body {
   color: #D9D9D9;
 }
 
-.flashes {
-  background-color: rgba(166, 165, 164);
-}
+
 
 h2 {
   font-family:'Press Start 2P', cursive;
@@ -69,20 +81,19 @@ h2 {
   color: rgba(166, 165, 164)
 }
 
-input, button.btn {
-  background: transparent;
-  color: rgba(217, 217, 217);
-}
-
 input[type="text"] {
   border-left: transparent;
   border-right: transparent;
   border-top: transparent;
+  background-color: transparent;
 }
 .change-settings {
-    border: 1px solid rgba(217, 217, 217);
-    padding: 10px;
-    margin-bottom: 20px;
+  border: 1px solid rgba(217, 217, 217);
+  padding: 10px;
+  margin-bottom: 20px;
+  color: rgba(217, 217, 217);
+  text-transform: uppercase;
+  letter-spacing: 0.015em;
 }
 
 .full_moon_nicknames, .moon_phases {
@@ -90,7 +101,61 @@ input[type="text"] {
   margin-left:50px;
 }
 
-.btn:hover {
-  color: #fff;
+.btn:hover, .btn-link.try:hover {
+  color: rgba(13, 13, 13);
   border-color: #BFFF97;
+  text-transform: uppercase;
+  letter-spacing: 0.015em;
+  font-family: 'Tomorrow', sans-serif;
+}
+
+.btn-link.try {
+  color: rgba(13, 13, 13);
+  text-transform: uppercase;
+  letter-spacing: 0.015em;
+  font-family: 'Tomorrow', sans-serif;
+}
+
+.form-login {
+  background: transparent;
+  border: 0;
+  border-bottom: 1.5px solid rgba(13, 13, 13);
+  border-bottom-length: 10px;
+  color: rgba(13, 13, 13);
+  text-transform: uppercase;
+  letter-spacing: 0.015em;
+  font-family: 'Tomorrow', sans-serif;
+}
+
+.btn.popover-info, .btn {
+  background: transparent;
+}
+
+input[type='checkbox'] {
+  margin: 8px;
+  -webkit-transform: scale(1.4); /* Safari and Chrome */
+  transform: scale(1.2);
+  padding: 10px;
+}
+
+input[type="submit"] {
+  border: 1;
+  border-radius: 1px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+  margin: 0px;
+  display: inline-block;
+  background-color: transparent;
+  padding: 15px 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.015em;
+  font-family: 'Tomorrow', sans-serif;
+  font-size: 16px;
+  line-height: 1;           
+  -webkit-transition: all 0.4s;
+}
+
+input[type="submit"]:hover {
+  border-color: #BFFF97;
+  animation-name: shake;
 }

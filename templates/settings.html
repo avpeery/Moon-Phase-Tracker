@@ -4,18 +4,30 @@
 <h3>Manage Settings</h3>
 <br>
 
+<h4>Personal Information</h4>
+<br>
+<table>
+    <form action='/change-settings' method="POST">
+        <tr>
+            <td>First name:
+            <input type='text' name ='fname' value = '{{ user.fname }}' disabled></td>
+            <td>Last name:
+            <input type='text' name ='lname' value = '{{ user.lname }}' disabled></td>
+        </tr>
+        <tr>
+            <td><br></td>
+        </tr>
+        <tr>
+            <td>Phone number:
+            <input type='text' name ='phone' value = '{{ user.phone }}' disabled></td>
+            <td>Email address:
+            <input type='text' name ='email' value = '{{ user.email }}' disabled></td>
+        </tr>
+    </form>
+</table>
 
-<form action='/change-settings' method="POST">
-    <h4>Personal Information</h4>
-    First name:
-    <input type='text' name ='fname' value = '{{ user.fname }}' disabled>
-    Last name:
-    <input type='text' name ='lname' value = '{{ user.lname }}' disabled>
+
     <br>
-    Phone number:
-    <input type='text' name ='phone' value = '{{ user.phone }}' disabled>
-    Email address:
-    <input type='text' name ='email' value = '{{ user.email }}' disabled>
     <br>
     <br>
     <h4>Text subscriptions</h4>
@@ -58,6 +70,7 @@
     {% endfor %}
     </div>
     <br>
+    <br>
     <button class="btn btn-link change-settings" data-is-clicked="false" role="button">Change settings</button>
 </form>
 
@@ -72,8 +85,23 @@
     $('.change-settings').on('click', () => {
         $('input').removeAttr('disabled');
         $('.change-settings').replaceWith($('<input type=submit>'));
+        $('.change-settings').addClass($('fancy'))
     })
 
+    $(".fancy").click(function(event){
+        event.preventDefault(); //prevent default action 
+        var post_url = $(this).attr("action"); //get form action url
+        var request_method = $(this).attr("method"); //get form GET/POST method
+        var form_data = $(this).serialize(); //Encode form elements for submission
+    
+        $.ajax({
+            url : post_url,
+            type: request_method,
+            data : form_data
+        }).done(function(response){ //
+            $("#server-results").html(response);
+        });
+    });
 
     $(document).ready(function() {
         $('[data-toggle="popover"]').popover({
@@ -82,5 +110,4 @@
     });
 </script>
 {% endblock %}
-
 
