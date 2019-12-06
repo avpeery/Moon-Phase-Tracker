@@ -11,6 +11,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+a.btn.logout {
+  color: #0D0D0D;
+}
+
 .left {
   margin-top: 170px;
   font-family: "Press Start 2P", cursive;
@@ -114,3 +118,4 @@ input[type="submit"]:hover {
 .col-xs-12 .left {
   margin: 0px;
 }
+

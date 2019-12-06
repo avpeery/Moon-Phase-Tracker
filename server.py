@@ -244,11 +244,7 @@ def  change_settings():
 def logout_user():
     """Logs user out of session"""
 
-    if 'credentials' in session or 'fname' in session:
-        del session['credentials']
-        del session['fname']
-
-    del session['email']
+    session.clear()
 
     flash('Succesfully logged out!')
 
