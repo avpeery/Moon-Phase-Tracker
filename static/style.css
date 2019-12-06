@@ -71,8 +71,6 @@ body {
   color: #D9D9D9;
 }
 
-
-
 h2 {
   font-family:'Press Start 2P', cursive;
 }
@@ -128,7 +126,6 @@ input[type="text"], input[type='password'] {
      -moz-transition: all 0.4s;
        -o-transition: all 0.4s;
           transition: all 0.4s;
-}
 }
 
 .form-login {
