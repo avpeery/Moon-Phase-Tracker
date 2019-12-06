@@ -12,7 +12,6 @@ import httplib2
 from urllib.parse import parse_qs
 from model import *
 from twilio_lookup_phone import *
-import itertools
 from helpers import *
 
 CLIENT_SECRETS_FILE = 'client_secret.json'
@@ -227,12 +226,12 @@ def  change_settings():
     new_moon_phases = []
 
     if 'full_moon_nickname_choices' in data_dict:
-        for number in data_dict['full_moon_nickname_choices']:
-            new_full_moon_nicknames.append(int(number))
+        for full_moon_nickname_id in data_dict['full_moon_nickname_choices']:
+            new_full_moon_nicknames.append(int(full_moon_nickname_id))
 
     if 'moon_phase_choices' in data_dict:
-        for number in data_dict['moon_phase_choices']:
-            new_moon_phases.append(int(number))
+        for moon_phase_id in data_dict['moon_phase_choices']:
+            new_moon_phases.append(int(moon_phase_id))
 
     change_alerts_for_user(user, new_moon_phases, new_full_moon_nicknames)
 
