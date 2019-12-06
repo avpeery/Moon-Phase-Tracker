@@ -2,8 +2,9 @@
 from flask_sqlalchemy import SQLAlchemy  
 from datetime import datetime
 
-#initialize SQL Alchemy object
+
 db = SQLAlchemy()
+
 
 class User(db.Model):
     """User of Moon Phase Tracker Web App"""
@@ -17,12 +18,6 @@ class User(db.Model):
     password = db.Column(db.String(64))
     phone = db.Column(db.String(64))
 
-    # def set_password(self, password):
-    #     self.password_hash = generate_password_hash(password)
-
-    # def check_password(self, password):
-    #     return check_password_hash(self.password_hash, password)
-        
     def __repr__(self):
 
         return f"<User user_id={self.user_id} email={self.email}>"
@@ -124,7 +119,6 @@ def connect_to_db(app, db_uri = 'postgresql:///moon_phases'):
 
 
 if __name__ == "__main__":
-    # to work with interactively
 
     from server import app
     connect_to_db(app)

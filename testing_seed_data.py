@@ -92,9 +92,3 @@ def test_user():
     test_user = User(fname = 'Sally', lname = 'Sample', email = 'sample@sample.com', password = 'password', phone = '+14147913665')
     db.session.add(test_user)
     db.session.commit()
-
-
-
-
- 
-

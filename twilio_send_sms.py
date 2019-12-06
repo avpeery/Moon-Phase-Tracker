@@ -16,11 +16,13 @@ TWILIO_NUMBER = os.environ['TWILIO_NUMBER']
 
 def write_text(user, moon_phase_title, moon_emoji):
     """Returns string for user's text message"""
+
     return f"""Good afternoon { user }. There will be a { moon_phase_title } tonight. Enjoy! {moon_emoji}"""
 
 
 def find_tonights_moon():
     """Returns tonight's moon phase if exists in database"""
+
     today = date.today()
 
     moon_phase_tonight = MoonPhaseOccurence.query.filter(MoonPhaseOccurence.start == today).first()
@@ -30,6 +32,7 @@ def find_tonights_moon():
 
 def check_alerts(tonights_moon):
     """Returns list of alerts for current moon phase"""
+
     if tonights_moon != None:
 
         alerts = Alert.query.filter(Alert.moon_phase_type_id == tonights_moon.moon_phase_type.moon_phase_type_id).all()
@@ -43,6 +46,7 @@ def check_alerts(tonights_moon):
 
 def send_text():
     """Sends text alerts to user subscribers for current moon phase"""
+    
     client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
     tonights_moon_phase = find_tonights_moon()

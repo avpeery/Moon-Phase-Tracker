@@ -16,7 +16,7 @@ E = api.load('seed_data/de421.bsp')
 
 
 def load_moon_phase_types():
-    """adds moon phase types to moon phase types table"""
+    """Adds moon phase types to moon phase types table"""
 
     for moon_phase, moon_emoji in zip(MOON_PHASE_TYPES, MOON_EMOJIS):
         moon_phase_type = MoonPhaseType(title=moon_phase, description=moon_phases_dict[moon_phase], emoji=moon_emoji)
@@ -25,7 +25,7 @@ def load_moon_phase_types():
     db.session.commit
 
 def load_full_moon_nicknames():
-    """adds full moon nicknames to moon phase nicknames table"""
+    """Adds full moon nicknames to moon phase nicknames table"""
 
     for (nickname, month) in zip(FULL_MOON_NICKNAMES, range(1, 13)):
         full_moon_nickname = FullMoonNickname(title=nickname, nickname_month=month, description=moon_phases_dict[nickname])
@@ -34,7 +34,7 @@ def load_full_moon_nicknames():
     db.session.commit
 
 def load_solstices():
-    """uses skyfield library to calculate season solstices, and add to database"""
+    """Uses skyfield library to calculate season solstices, and add to database"""
 
     t0 = TS.utc(2000, 1, 1)
     t1 = TS.utc(2050, 12, 31)
@@ -55,7 +55,7 @@ def load_solstices():
 
 
 def load_moon_phase_occurences():
-    """adds specific moon phase occurences from file to moon phase occurences table"""
+    """Adds specific moon phase occurences from file to moon phase occurences table"""
 
     t0 = TS.utc(2000, 1, 1)
     t1 = TS.utc(2050, 12, 31)
@@ -92,6 +92,7 @@ def load_blue_moon():
 
 def load_harvest_moon():
     """Adds Harvest Moon to FullMoonNickname"""
+    
     harvest_moon = FullMoonNickname(title="Harvest Moon", description=moon_phases_dict["Harvest Moon"])
     db.session.add(harvest_moon)
     db.session.commit()

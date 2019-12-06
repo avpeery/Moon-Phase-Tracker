@@ -3,6 +3,7 @@ from flask import Flask, request
 
 
 def form_get_request(*argv):
+  """Receives multiple items from post request, processes, and returns list"""
 
     form_get_request_list = []
 
@@ -13,6 +14,8 @@ def form_get_request(*argv):
 
 
 def form_get_list(*argv):
+  """Receives list items (ex: checkboxes) from post request, processes, and returns nested list"""
+
     form_get_nested_list = []
 
     for arg in argv:
@@ -22,6 +25,7 @@ def form_get_list(*argv):
 
 
 def credentials_to_dict(credentials):
+  """Takes in credentials from OAuth and returns in dictionary format"""
 
   return {'token': credentials.token,
           'refresh_token': credentials.refresh_token,
@@ -32,6 +36,8 @@ def credentials_to_dict(credentials):
 
 
 def create_google_calendar_event(title, date):
+  """Takes title and date of event from FullCalendar to turn into google calendar event"""
+
   date = datetime.strptime(date[4:15], "%b %d %Y")
   date = date.strftime("%Y-%m-%d")
 
@@ -44,6 +50,7 @@ def create_google_calendar_event(title, date):
 
 
 def set_new_alerts_for_user(user_moon_phase_choices, user_full_moon_nickname_choices, user):
+  """Takes in user from database, and user's requested moon phase/full moon nicnkname text alerts in sets, adds alerts as active or inactive in database accordingly"""
 
   all_moon_phase_types = MoonPhaseType.query.all()
   all_full_moon_nicknames = FullMoonNickname.query.all()
@@ -76,7 +83,8 @@ def set_new_alerts_for_user(user_moon_phase_choices, user_full_moon_nickname_cho
 
 
 def change_alerts_for_user(user, new_moon_phases, new_full_moon_nicknames):
-
+  """Takes in user, updated requests for moon phase/full moon nickname text alerts as sets and updates alerts active or inactive accordingly"""
+  
   for user.alert in user.alerts:
 
     if user.alert.moon_phase_type_id in new_moon_phases:
@@ -93,7 +101,8 @@ def change_alerts_for_user(user, new_moon_phases, new_full_moon_nicknames):
 
 
 def append_moon_phase_occurences(given_list, moon_phase_occurences):
-
+  """Takes in moon occurences and empty list, appends occurences as dictionaries to list, returns updated list"""
+  
   for row in moon_phase_occurences:
 
     start_date = row.start.isoformat()
@@ -111,6 +120,7 @@ def append_moon_phase_occurences(given_list, moon_phase_occurences):
 
 
 def append_seasonal_solstices(given_list, seasonal_solstices):
+  """Takes in list and seasonal solstices, appends solstices as dictionaries to list, returns updated list"""
 
   for row in seasonal_solstices:
 
@@ -122,7 +132,7 @@ def append_seasonal_solstices(given_list, seasonal_solstices):
 
 
 def add_active_alerts_to_sets(user, moon_phases, full_moon_nicknames):
-  """Checks user's alerts for if is_active is true, then adds active alerts to corresponding sets"""
+  """Checks user's alerts for if is_active is true, then adds active alerts to corresponding sets, returns sets in list"""
   
   moon_phase_set = set()
   full_moon_nickname_set = set()
@@ -138,9 +148,3 @@ def add_active_alerts_to_sets(user, moon_phases, full_moon_nicknames):
       full_moon_nickname_set.add(alert.full_moon_nickname_id)
 
   return [moon_phase_set, full_moon_nickname_set]
-
-def dict_to_string(item):
-  item = str(item).replace("{", "").replace("}", "")
-
-  return item
-

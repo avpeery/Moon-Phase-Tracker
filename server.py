@@ -10,7 +10,7 @@ import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import httplib2
 from urllib.parse import parse_qs
-from model import User, MoonPhaseOccurence, MoonPhaseType, Solstice, Alert, FullMoonNickname, connect_to_db, db
+from model import *
 from twilio_lookup_phone import *
 import itertools
 from helpers import *
@@ -27,7 +27,7 @@ app.jinja_env.undefined = StrictUndefined
 
 @app.route('/')
 def index():
-    """Homepage"""
+    """Displays homepage"""
 
     return render_template('homepage.html')
 
@@ -109,7 +109,7 @@ def get_moon_phases_from_database():
 
 @app.route('/register', methods= ['POST'])
 def register_user():
-    """Gets post request from homepage sign up, and continues with registration html"""
+    """Gets post request from sign-up form on homepage, and continues with registration.html"""
 
     email, password = form_get_request('email', 'password')
 
@@ -128,7 +128,7 @@ def register_user():
 
 @app.route('/process-registration', methods = ['POST'])
 def register_to_database():
-    """receives post request from registration.html form, and adds new user/alerts to database"""
+    """Receives post request from registration.html, and adds new user/alerts to database"""
 
     fname, lname, phone = form_get_request('fname', 'lname', 'phone')
 
@@ -153,7 +153,6 @@ def register_to_database():
 
     session['fname'] = fname
 
-
     flash('Signed up successfully!')
 
     return redirect('/calendar')
@@ -168,9 +167,12 @@ def login_process():
     user = User.query.filter((User.email == email), (User.password == password)).first()
 
     if user: 
+
         session['email'] = user.email
         session['fname'] = user.fname
+
         flash('Succesfully logged in!')
+
         return redirect('/calendar')
 
     flash('That is not a valid email and/or password.')
@@ -188,6 +190,7 @@ def show_calendar():
 @app.route('/display-settings')
 def user_settings():
     """Displays user's settings"""
+
     email = session['email']
 
     user = User.query.filter_by(email = email).first()
@@ -205,7 +208,7 @@ def user_settings():
 
 @app.route('/change-settings.json', methods=['GET'])
 def  change_settings():
-    """Gets post requests from change-settings and updates database"""
+    """Receives AJAX request from change-settings.html, and updates database"""
 
     data = request.args.get("data")
 
