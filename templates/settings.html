@@ -71,6 +71,7 @@
         <br>
         <br>
         <button class="btn btn-link change-settings" data-is-clicked="false" role="button">Change settings</button>
+        <button style="display: none" class="btn btn-link save-settings" data-is-clicked="false" role="button">Submit</button>
     </form>
 
 <style>
@@ -80,10 +81,15 @@
 </style>
 
 <script>
-    $('.change-settings').on('click', () => {
+    $('.change-settings').on('click', (evt) => {
+        evt.preventDefault();
+        evt.stopPropagation();
         $('input').removeAttr('disabled');
-        $('.change-settings').replaceWith($('<input type=submit>'));
-    })
+        // $('.change-settings').replaceWith($('<input type=submit>'));
+
+        $('.save-settings').show();
+        $('.change-settings').hide();
+    });
 
     $('#manage-settings-form').on('submit', (evt) => {
         evt.preventDefault();
@@ -93,6 +99,9 @@
         };
 
         $.get('/change-settings.json', formData, (res) => {
+            $('.change-settings').show();
+            $('.save-settings').hide();
+            $('input').attr('disabled', true);
         });
     });
 
@@ -104,7 +113,3 @@
 
 </script>
 {% endblock %}
-<!-- 
-            // $('<input type=submit>').replaceWith($'<button class="btn btn-link change-settings" data-is-clicked="false" role="button">Change settings</button>');
-            // $('input').attr('disabled');
-            // }; -->
