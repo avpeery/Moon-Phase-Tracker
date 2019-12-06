@@ -18,16 +18,16 @@ class MoonPhaseTrackerTests(TestCase):
     def test_homepage(self):
         """Tests homepage"""
 
-        result = self.client.get("/")
+        result = self.client.get('/')
         self.assertEqual(result.status_code, 200)
-        self.assertIn(b"<h3>Track the moon", result.data)
+        self.assertIn(b'<h3>Track the moon', result.data)
 
     def test_calendar(self):
         """Tests page that displays calendar"""
 
-        result = self.client.get("/calendar")
+        result = self.client.get('/calendar')
         self.assertEqual(result.status_code, 200)
-        self.assertIn(b"<title>Moon Phase Tracker</title>", result.data)
+        self.assertIn(b'<title>Moon Phase Tracker</title>', result.data)
 
 
 class TestMoonPhaseDatabase(TestCase):
@@ -39,7 +39,7 @@ class TestMoonPhaseDatabase(TestCase):
         self.client = app.test_client()
         app.config['TESTING'] = True
 
-        connect_to_db(app, db_uri="postgresql:///testdb")
+        connect_to_db(app, db_uri='postgresql:///testdb')
 
         db.create_all()
         test_data()
@@ -47,9 +47,9 @@ class TestMoonPhaseDatabase(TestCase):
     def test_homepage(self):
         """Tests homepage"""
 
-        result = self.client.get("/")
+        result = self.client.get('/')
         self.assertEqual(result.status_code, 200)
-        self.assertIn(b"<title>Moon Phase Tracker</title>", result.data)
+        self.assertIn(b'<title>Moon Phase Tracker</title>', result.data)
 
     def tearDown(self):
         """Code to run after every test"""
@@ -68,7 +68,7 @@ class TestMoonPhaseLoggedIn(TestCase):
         app.config['TESTING'] = True
         self.client = app.test_client()
 
-        connect_to_db(app, db_uri="postgresql:///testdb")
+        connect_to_db(app, db_uri='postgresql:///testdb')
 
         db.create_all()
         test_data()
@@ -86,7 +86,7 @@ class TestMoonPhaseLoggedIn(TestCase):
                             follow_redirects=True
                             )
             self.assertEqual(result.status_code, 200)
-            self.assertIn(b"<title>Moon Phase Tracker</title>", result.data)
+            self.assertIn(b'<title>Moon Phase Tracker</title>', result.data)
 
     def test_process_registration(self):
         """Tests continuation of registration with email in session"""
@@ -95,7 +95,7 @@ class TestMoonPhaseLoggedIn(TestCase):
             result = c.post('/register', follow_redirects=True)
 
         self.assertEqual(result.status_code, 200)
-        self.assertIn(b"<title>Moon Phase Tracker</title>", result.data)
+        self.assertIn(b'<title>Moon Phase Tracker</title>', result.data)
 
 
     def test_settings(self):
@@ -105,7 +105,7 @@ class TestMoonPhaseLoggedIn(TestCase):
             result = c.get('/display-settings', follow_redirects=True)
 
         self.assertEqual(result.status_code, 200)
-        self.assertIn(b"<title>Moon Phase Tracker</title>", result.data)
+        self.assertIn(b'<title>Moon Phase Tracker</title>', result.data)
 
 
     def test_logout(self):
@@ -118,7 +118,7 @@ class TestMoonPhaseLoggedIn(TestCase):
             result = self.client.get('/logout', follow_redirects=True)
 
             self.assertNotIn(b'email', sess)
-            self.assertIn(b"<title>Moon Phase Tracker</title>", result.data)
+            self.assertIn(b'<title>Moon Phase Tracker</title>', result.data)
 
     def tearDown(self):
         """Code to run after every test"""
@@ -130,6 +130,6 @@ class TestMoonPhaseLoggedIn(TestCase):
 
 
 
-if __name__ == "__main__": 
+if __name__ == '__main__': 
     import unittest
     unittest.main()

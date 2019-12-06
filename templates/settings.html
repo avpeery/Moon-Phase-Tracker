@@ -5,22 +5,22 @@
 <br>
 <h4>Personal Information</h4>
 <br>
-    <form action='/change-settings.json' method="GET" id="manage-settings-form">
+    <form action="/change-settings.json" method="GET" id="manage-settings-form">
         <table>
             <tr>
                 <td>First name:
-                <input type='text' name ='fname' value = '{{ user.fname }}' disabled></td>
+                <input type="text" name ="fname" value = "{{ user.fname }}" disabled></td>
                 <td>Last name:
-                <input type='text' name ='lname' value = '{{ user.lname }}' disabled></td>
+                <input type="text" name ="lname" value = "{{ user.lname }}"" disabled></td>
             </tr>
             <tr>
                 <td><br></td>
             </tr>
             <tr>
                 <td>Phone number:
-                <input type='text' name ='phone' value = '{{ user.phone }}' disabled></td>
+                <input type="text" name ="phone" value = "{{ user.phone }}" disabled></td>
                 <td>Email address:
-                <input type='text' name ='email' value = '{{ user.email }}' disabled></td>
+                <input type="text" name ="email" value = "{{ user.email }}" disabled></td>
             </tr>
         </table>
         <br>
@@ -29,7 +29,7 @@
         <h4>Text subscriptions</h4>
         <br>
         <h5>Moon Phases</h5>
-        <div class='moon_phases'>
+        <div class="moon_phases">
         {% for moon_phase in moon_phases %}
             {% if moon_phase.moon_phase_type_id in moon_phase_type_alerts %}
                 <input type="checkbox" name="moon_phase_choices" value="{{ moon_phase.moon_phase_type_id }}" checked disabled>   {{ moon_phase.title }}

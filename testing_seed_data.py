@@ -26,7 +26,7 @@ def test_data():
 def test_moon_phase_type():
     """Creates Full Moon moon phase type for testing"""
 
-    moon_phase_type = MoonPhaseType(title="Full Moon", description="A full moon is when we can see the entire lit portion of the Moon. The full moon phase occurs when the Moon is on the opposite side of the Earth from the Sun, called opposition. A lunar eclipse can only happen at full moon.", emoji="🌝")
+    moon_phase_type = MoonPhaseType(title='Full Moon', description='A full moon is when we can see the entire lit portion of the Moon. The full moon phase occurs when the Moon is on the opposite side of the Earth from the Sun, called opposition. A lunar eclipse can only happen at full moon.', emoji='🌝')
     db.session.add(moon_phase_type)
     db.session.commit()
 
@@ -34,7 +34,7 @@ def test_moon_phase_type():
 def test_full_moon_nickname():
     """Creates a full moon nickname for testing"""
 
-    full_moon_nickname = FullMoonNickname(title="Wolf Moon", nickname_month=1, description="Amid the cold and deep snows of midwinter, the wolf packs howled hungrily outside Indian villages. Thus, the name for January’s Full Moon. Also referred to as the Old Moon, or the Moon After Yule.")
+    full_moon_nickname = FullMoonNickname(title='Wolf Moon', nickname_month=1, description='Amid the cold and deep snows of midwinter, the wolf packs howled hungrily outside Indian villages. Thus, the name for January’s Full Moon. Also referred to as the Old Moon, or the Moon After Yule.')
     db.session.add(full_moon_nickname)
     db.session.commit()
 
@@ -51,7 +51,7 @@ def test_solstices():
 
     for (date, solstice_name) in zip(dates, solstice_names):
         date = date[:10]
-        date = datetime.strptime(date, "%Y-%m-%d")
+        date = datetime.strptime(date, '%Y-%m-%d')
 
         solstice_occurence = Solstice(title = solstice_name, start = date)      
         
@@ -74,9 +74,9 @@ def test_moon_phase_occurences():
     full_moon_nickname = FullMoonNickname.query.first()
 
     for (date, moon_phase_name) in zip(dates, moon_phase_names):
-        if moon_phase_name == "Full Moon":
+        if moon_phase_name == 'Full Moon':
             date = date[:10]
-            date = datetime.strptime(date, "%Y-%m-%d")
+            date = datetime.strptime(date, '%Y-%m-%d')
             if date.month == 1:
                 moon_phase_occurence = MoonPhaseOccurence(start = date, moon_phase_type_id = moon_phase_type.moon_phase_type_id, full_moon_nickname_id = full_moon_nickname.full_moon_nickname_id)
             else:

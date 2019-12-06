@@ -10,7 +10,7 @@ body {
   margin-right: 100px;
   background-color: rgba(13, 13, 13);
   color: rgba(217, 217, 217);
-  font-family: 'Tomorrow', sans-serif;
+  font-family: "Tomorrow", sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.015em;
 }
@@ -21,7 +21,7 @@ body {
   color: rgba(217, 217, 217);
   text-transform: uppercase;
   letter-spacing: 0.015em;
-  font-family: 'Tomorrow', sans-serif;
+  font-family: "Tomorrow", sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1;
@@ -34,16 +34,16 @@ body {
 
 #moonphasetoday {
   text-align: center;
-  font-family: 'Tomorrow', sans-serif;
+  font-family: "Tomorrow", sans-serif;
 }
 
 .moonphasetodaytitle {
   text-align: center;
-  font-family: 'Tomorrow', sans-serif;
+  font-family: "Tomorrow", sans-serif;
 }
 
 #calendar, .subheading {
-  font-family: 'Tomorrow', sans-serif;
+  font-family: "Tomorrow", sans-serif;
 }
 
 .subheading {
@@ -72,7 +72,7 @@ body {
 }
 
 h2 {
-  font-family:'Press Start 2P', cursive;
+  font-family: "Press Start 2P", cursive;
 }
 
 .tooltip-text:hover {
@@ -105,7 +105,7 @@ input[type="text"], input[type='password'] {
   border-color: #BFFF97;
   text-transform: uppercase;
   letter-spacing: 0.015em;
-  font-family: 'Tomorrow', sans-serif;
+  font-family: "Tomorrow", sans-serif;
 }
 
 .btn-link.try, a.btn {
@@ -116,7 +116,7 @@ input[type="text"], input[type='password'] {
   border: 1px solid rgba(13, 13, 13);
   text-transform: uppercase;
   letter-spacing: 0.015em;
-  font-family: 'Tomorrow', sans-serif;
+  font-family: "Tomorrow", sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1;
@@ -135,14 +135,14 @@ input[type="text"], input[type='password'] {
   color: rgba(13, 13, 13);
   text-transform: uppercase;
   letter-spacing: 0.015em;
-  font-family: 'Tomorrow', sans-serif;
+  font-family: "Tomorrow", sans-serif;
 }
 
 .btn.popover-info, .btn {
   background: transparent;
 }
 
-input[type='checkbox'] {
+input[type="checkbox"] {
   margin: 8px;
   -webkit-transform: scale(1.4); /* Safari and Chrome */
   transform: scale(1.2);
@@ -160,7 +160,7 @@ input[type="submit"] {
   padding: 15px 15px;
   text-transform: uppercase;
   letter-spacing: 0.015em;
-  font-family: 'Tomorrow', sans-serif;
+  font-family: "Tomorrow", sans-serif;
   font-size: 16px;
   line-height: 1;           
   -webkit-transition: all 0.4s;

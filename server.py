@@ -209,7 +209,7 @@ def user_settings():
 def  change_settings():
     """Receives AJAX request from change-settings.html, and updates database"""
 
-    data = request.args.get("data")
+    data = request.args.get('data')
 
     data_dict = parse_qs(data)
 

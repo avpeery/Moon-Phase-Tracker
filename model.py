@@ -9,7 +9,7 @@ db = SQLAlchemy()
 class User(db.Model):
     """User of Moon Phase Tracker Web App"""
 
-    __tablename__ = "users"
+    __tablename__ = 'users'
 
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     fname = db.Column(db.String(64), nullable = True)
@@ -20,13 +20,13 @@ class User(db.Model):
 
     def __repr__(self):
 
-        return f"<User user_id={self.user_id} email={self.email}>"
+        return f'<User user_id={self.user_id} email={self.email}>'
 
 
 class MoonPhaseType(db.Model):
     """Types of moon phases"""
 
-    __tablename__ = "moon_phase_types"
+    __tablename__ = 'moon_phase_types'
 
     moon_phase_type_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     title = db.Column(db.String(64))
@@ -35,13 +35,13 @@ class MoonPhaseType(db.Model):
 
     def __repr__(self):
 
-        return f"<MoonPhaseType moon_phase_type_id={self.moon_phase_type_id} title={self.title}>"
+        return f'<MoonPhaseType moon_phase_type_id={self.moon_phase_type_id} title={self.title}>'
 
 
 class FullMoonNickname(db.Model):
     """Nicknames for full moon phases"""
 
-    __tablename__ = "full_moon_nicknames"
+    __tablename__ = 'full_moon_nicknames'
 
     full_moon_nickname_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     title = db.Column(db.String(64))
@@ -50,31 +50,31 @@ class FullMoonNickname(db.Model):
 
     def __repr__(self):
 
-        return f"<FullMoonNickname full_moon_nickname_id={self.full_moon_nickname_id} title={self.title}>"
+        return f'<FullMoonNickname full_moon_nickname_id={self.full_moon_nickname_id} title={self.title}>'
 
 
 class MoonPhaseOccurence(db.Model):
     """Moon phases with date occurences"""
 
-    __tablename__ = "moon_phase_occurences"
+    __tablename__ = 'moon_phase_occurences'
 
     moon_phase_occurence_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     start = db.Column(db.DateTime)
     moon_phase_type_id = db.Column(db.Integer, db.ForeignKey('moon_phase_types.moon_phase_type_id'))
     full_moon_nickname_id = db.Column(db.Integer, db.ForeignKey('full_moon_nicknames.full_moon_nickname_id'))
 
-    moon_phase_type = db.relationship("MoonPhaseType", backref=db.backref("moon_phase_occurences"))
-    full_moon_nickname = db.relationship("FullMoonNickname", backref=db.backref("moon_phase_occurences"))
+    moon_phase_type = db.relationship('MoonPhaseType', backref=db.backref('moon_phase_occurences'))
+    full_moon_nickname = db.relationship('FullMoonNickname', backref=db.backref('moon_phase_occurences'))
 
     def __repr__(self):
 
-        return f"<MoonPhaseOccurence moon_phase_occurence_id={self.moon_phase_occurence_id} moon_phase_type_id ={self.moon_phase_type_id}>"
+        return f'<MoonPhaseOccurence moon_phase_occurence_id={self.moon_phase_occurence_id} moon_phase_type_id ={self.moon_phase_type_id}>'
 
 
 class Alert(db.Model):
     """User subscriptions for moon phase text alerts"""
 
-    __tablename__ = "alerts"
+    __tablename__ = 'alerts'
 
     alert_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
@@ -83,19 +83,19 @@ class Alert(db.Model):
     is_active = db.Column(db.Boolean(False))
     alert_type = db.Column(db.String(64))
 
-    user = db.relationship("User", backref=db.backref("alerts"))
-    moon_phase_type = db.relationship("MoonPhaseType", backref=db.backref("alerts"))
-    full_moon_nickname = db.relationship("FullMoonNickname", backref=db.backref("alerts"))
+    user = db.relationship('User', backref=db.backref('alerts'))
+    moon_phase_type = db.relationship('MoonPhaseType', backref=db.backref('alerts'))
+    full_moon_nickname = db.relationship('FullMoonNickname', backref=db.backref('alerts'))
 
     def __repr__(self):
 
-        return f"<Alert alert_id={self.alert_id} user_id={self.user_id} moon_phase_type_id={self.moon_phase_type_id}>"
+        return f'<Alert alert_id={self.alert_id} user_id={self.user_id} moon_phase_type_id={self.moon_phase_type_id}>'
 
 
 class Solstice(db.Model):
     """Seasonal solstice and equinox occurences with dates"""
 
-    __tablename__ = "solstices"
+    __tablename__ = 'solstices'
 
     solstice_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     title = db.Column(db.String(64))
@@ -103,7 +103,7 @@ class Solstice(db.Model):
     
     def __repr__(self):
 
-        return f"<Solstice solstice_id={self.solstice_id} title={self.title}>"
+        return f'<Solstice solstice_id={self.solstice_id} title={self.title}>'
 
 
 def connect_to_db(app, db_uri = 'postgresql:///moon_phases'):
@@ -118,10 +118,10 @@ def connect_to_db(app, db_uri = 'postgresql:///moon_phases'):
     db.init_app(app)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 
     from server import app
     connect_to_db(app)
-    print("Connected to DB.")
+    print('Connected to DB.')
 
 

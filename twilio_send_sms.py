@@ -80,10 +80,10 @@ def send_text():
         return None
 
 
-schedule.every().day.at("18:00").do(send_text)
+schedule.every().day.at('18:00').do(send_text)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     connect_to_db(app)
     schedule.run_continuously(1)
 

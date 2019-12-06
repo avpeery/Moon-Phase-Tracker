@@ -8,9 +8,9 @@ from skyfield import api, almanac
 import itertools
 from seed_data.moon_phase_descriptions import moon_phases_dict
 
-MOON_PHASE_TYPES = ["New Moon", "First Quarter", "Full Moon", "Last Quarter"]
-FULL_MOON_NICKNAMES = ["Wolf Moon", "Snow Moon", "Worm Moon", "Pink Moon", "Flower Moon", "Strawberry Moon", "Buck Moon", "Sturgeon Moon", "Corn Moon", "Hunter's Moon", "Beaver Moon", "Cold Moon"]
-MOON_EMOJIS = ["🌚","🌛", "🌝","🌜"]
+MOON_PHASE_TYPES = ['New Moon', 'First Quarter', 'Full Moon', 'Last Quarter']
+FULL_MOON_NICKNAMES = ['Wolf Moon', 'Snow Moon', 'Worm Moon', 'Pink Moon', 'Flower Moon', 'Strawberry Moon', 'Buck Moon', 'Sturgeon Moon', 'Corn Moon', "Hunter's Moon", 'Beaver Moon', 'Cold Moon']
+MOON_EMOJIS = ['🌚','🌛', '🌝','🌜']
 TS = api.load.timescale(builtin=True)
 E = api.load('seed_data/de421.bsp')
 
@@ -45,7 +45,7 @@ def load_solstices():
 
     for (date, solstice_name) in zip(dates, solstice_names):
         date = date[:10]
-        date = datetime.strptime(date, "%Y-%m-%d")
+        date = datetime.strptime(date, '%Y-%m-%d')
 
         solstice_occurence = Solstice(title=solstice_name, start=date)      
         
@@ -66,11 +66,11 @@ def load_moon_phase_occurences():
 
     for (date, moon_phase_name) in zip(dates, moon_phase_names):
         date = date[:10]
-        date = datetime.strptime(date, "%Y-%m-%d")
+        date = datetime.strptime(date, '%Y-%m-%d')
 
         moon_phase_type = MoonPhaseType.query.filter(MoonPhaseType.title == moon_phase_name).first()
 
-        if moon_phase_type.title == "Full Moon":
+        if moon_phase_type.title == 'Full Moon':
             full_moon_nickname = FullMoonNickname.query.filter(FullMoonNickname.nickname_month == date.month).first()
 
             moon_phase_occurence = MoonPhaseOccurence(start=date, moon_phase_type_id=moon_phase_type.moon_phase_type_id, full_moon_nickname_id=full_moon_nickname.full_moon_nickname_id)
@@ -85,15 +85,15 @@ def load_moon_phase_occurences():
 def load_blue_moon():
     """Adds Blue Moon to FullMoonNickname"""
 
-    blue_moon = FullMoonNickname(title="Blue Moon", description=moon_phases_dict["Blue Moon"])
+    blue_moon = FullMoonNickname(title='Blue Moon', description=moon_phases_dict['Blue Moon'])
     db.session.add(blue_moon)
     db.session.commit()
 
 
 def load_harvest_moon():
     """Adds Harvest Moon to FullMoonNickname"""
-    
-    harvest_moon = FullMoonNickname(title="Harvest Moon", description=moon_phases_dict["Harvest Moon"])
+
+    harvest_moon = FullMoonNickname(title='Harvest Moon', description=moon_phases_dict['Harvest Moon'])
     db.session.add(harvest_moon)
     db.session.commit()
 
@@ -101,8 +101,8 @@ def load_harvest_moon():
 def updates_full_moon_nickname_for_full_moon_occurences_to_blue_moon():
     """Checks to see if full phase occurence is a blue moon and updates database"""
 
-    full_moon = MoonPhaseType.query.filter(MoonPhaseType.title == "Full Moon").first()
-    blue_moon_nickname = FullMoonNickname.query.filter(FullMoonNickname.title == "Blue Moon").first()
+    full_moon = MoonPhaseType.query.filter(MoonPhaseType.title == 'Full Moon').first()
+    blue_moon_nickname = FullMoonNickname.query.filter(FullMoonNickname.title == 'Blue Moon').first()
 
     for idx, full_moon_occurence in enumerate(full_moon.moon_phase_occurences):
         if idx+1 < len(full_moon.moon_phase_occurences):
@@ -115,9 +115,9 @@ def updates_full_moon_nickname_for_full_moon_occurences_to_blue_moon():
 def updates_full_moon_nickname_for_full_moon_occurences_to_harvest_moon():
     """Checks to see if full phase occurence is a harvest moon and updates database"""
 
-    harvest_moon = FullMoonNickname.query.filter(FullMoonNickname.title == "Harvest Moon").first()
-    autumn_equinoxes = Solstice.query.filter(Solstice.title == "Autumnal Equinox").all()
-    full_moon = MoonPhaseType.query.filter(MoonPhaseType.title == "Full Moon").first()
+    harvest_moon = FullMoonNickname.query.filter(FullMoonNickname.title == 'Harvest Moon').first()
+    autumn_equinoxes = Solstice.query.filter(Solstice.title == 'Autumnal Equinox').all()
+    full_moon = MoonPhaseType.query.filter(MoonPhaseType.title == 'Full Moon').first()
 
     for autumn_equinox in autumn_equinoxes:
 
@@ -131,7 +131,7 @@ def updates_full_moon_nickname_for_full_moon_occurences_to_harvest_moon():
     db.session.commit()
     
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     connect_to_db(app)
 
     db.create_all()
