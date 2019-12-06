@@ -99,8 +99,8 @@ class TestMoonPhaseLoggedIn(TestCase):
 
 
     def test_settings(self):
-        """Tests display setttings"""
-        
+        """Tests display settings with email in session"""
+
         with self.client as c:
             result = c.get('/display-settings', follow_redirects=True)
 
@@ -109,7 +109,7 @@ class TestMoonPhaseLoggedIn(TestCase):
 
 
     def test_logout(self):
-        """Test logout route"""
+        """Tests logout route"""
 
         with self.client as c:
             with c.session_transaction() as sess:

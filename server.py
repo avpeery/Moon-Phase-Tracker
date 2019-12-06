@@ -240,6 +240,7 @@ def  change_settings():
 
     return jsonify(data_dict)
 
+
 @app.route('/logout')
 def logout_user():
     """Logs user out of session"""
