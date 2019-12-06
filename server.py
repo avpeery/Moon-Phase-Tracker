@@ -9,6 +9,7 @@ import googleapiclient.discovery
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import httplib2
+from urllib.parse import parse_qs
 from model import User, MoonPhaseOccurence, MoonPhaseType, Solstice, Alert, FullMoonNickname, connect_to_db, db
 from twilio_lookup_phone import *
 import itertools
@@ -152,6 +153,9 @@ def register_to_database():
 
     session['fname'] = fname
 
+
+    flash('Signed up successfully!')
+
     return redirect('/calendar')
 
 
@@ -199,29 +203,39 @@ def user_settings():
     return render_template('settings.html', user=user, moon_phases=all_moon_phase_types, full_moon_nicknames=all_full_moon_nicknames, moon_phase_type_alerts=moon_phase_type_alerts, full_moon_nickname_alerts=full_moon_nickname_alerts)
 
 
-@app.route('/change-settings', methods=['POST'])
+@app.route('/change-settings.json', methods=['GET'])
 def  change_settings():
     """Gets post requests from change-settings and updates database"""
 
-    fname, lname, phone, email = form_get_request('fname', 'lname', 'phone', 'email')
+    data = request.args.get("data")
 
-    new_moon_phases, new_full_moon_nicknames = form_get_list('moon_phases', 'full_moon_nicknames')
-
-    new_moon_phases = set(new_moon_phases)
-    new_full_moon_nicknames = set(new_full_moon_nicknames)
+    data_dict = parse_qs(data)
 
     email = session['email']
-
     user = User.query.filter_by(email = email).first()
 
-    user.fname, user.lname, user.phone, user.email = fname, lname, phone, email
-  
+    new_phone = lookup_phone_number(data_dict['phone'][0])
+
+    user.fname, user.lname, user.phone, user.email = data_dict['fname'][0], data_dict['lname'][0], new_phone, data_dict['email'][0]
+
+    session['email'] = email
+
+    new_full_moon_nicknames = []
+    new_moon_phases = []
+
+    if 'full_moon_nickname_choices' in data_dict:
+        for number in data_dict['full_moon_nickname_choices']:
+            new_full_moon_nicknames.append(int(number))
+
+    if 'moon_phase_choices' in data_dict:
+        for number in data_dict['moon_phase_choices']:
+            new_moon_phases.append(int(number))
+            
     change_alerts_for_user(user, new_moon_phases, new_full_moon_nicknames)
-    
+
     db.session.commit()
 
-    return redirect('/display-settings')
-
+    return jsonify(data_dict)
 
 @app.route('/logout')
 def logout_user():

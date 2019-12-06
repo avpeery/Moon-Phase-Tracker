@@ -7,7 +7,7 @@ from skyfield import api, almanac
 import itertools
 
 TS = api.load.timescale(builtin=True)
-E = api.load('seed_files/de421.bsp')
+E = api.load('seed_data/de421.bsp')
 
 
 def test_data():

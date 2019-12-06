@@ -79,16 +79,16 @@ def change_alerts_for_user(user, new_moon_phases, new_full_moon_nicknames):
 
   for user.alert in user.alerts:
 
-    if str(user.alert.moon_phase_type_id) in new_moon_phases:
+    if user.alert.moon_phase_type_id in new_moon_phases:
       user.alert.is_active = True
     
-    elif str(user.alert.full_moon_nickname_id) in new_full_moon_nicknames:
+    elif user.alert.full_moon_nickname_id in new_full_moon_nicknames:
       user.alert.is_active = True
 
-    elif str(user.alert.moon_phase_type_id) not in new_moon_phases:
+    elif user.alert.moon_phase_type_id not in new_moon_phases:
       user.alert.is_active = False 
 
-    elif str(user.alert.full_moon_nickname_id) not in new_full_moon_nicknames:
+    elif user.alert.full_moon_nickname_id not in new_full_moon_nicknames:
       user.alert.is_active = False
 
 
@@ -138,3 +138,9 @@ def add_active_alerts_to_sets(user, moon_phases, full_moon_nicknames):
       full_moon_nickname_set.add(alert.full_moon_nickname_id)
 
   return [moon_phase_set, full_moon_nickname_set]
+
+def dict_to_string(item):
+  item = str(item).replace("{", "").replace("}", "")
+
+  return item
+
