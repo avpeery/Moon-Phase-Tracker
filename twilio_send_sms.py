@@ -65,13 +65,13 @@ def send_text():
 
             if alert.moon_phase_type_id!= None and alert.is_active == True:  
                 
-                text = write_text(alert.user.fname, tonights_moon_phase.moon_phase_type.title, tonights_moon_phase.moon_phase_type.emoji)
+                text = write_moon_phase_text(alert.user.fname, tonights_moon_phase.moon_phase_type.title, tonights_moon_phase.moon_phase_type.emoji)
                 phone = alert.user.phone
                 message = client.messages.create(body=text, from_=TWILIO_NUMBER, to=phone)
 
             if alert.full_moon_nickname_id != None and alert.is_active == True:
 
-                text = write_text(alert.user.fname, tonights_moon_phase.full_moon_nickname.title)
+                text = write_full_moon_nickname_text(alert.user.fname, tonights_moon_phase.full_moon_nickname.title)
                 phone = alert.user.phone
                 message = client.messages.create(body=text, from_=TWILIO_NUMBER, to=phone)
 
