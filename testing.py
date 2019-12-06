@@ -49,7 +49,7 @@ class TestMoonPhaseDatabase(TestCase):
 
         result = self.client.get("/")
         self.assertEqual(result.status_code, 200)
-        self.assertIn(b"<h1>Moon Phase Tracker</h1>", result.data)
+        self.assertIn(b"<title>Moon Phase Tracker</title>", result.data)
 
     def tearDown(self):
         """Code to run after every test"""
@@ -86,7 +86,27 @@ class TestMoonPhaseLoggedIn(TestCase):
                             follow_redirects=True
                             )
             self.assertEqual(result.status_code, 200)
-            self.assertIn(b"<h1>Moon Phase Tracker</h1>", result.data)
+            self.assertIn(b"<title>Moon Phase Tracker</title>", result.data)
+
+    def test_process_registration(self):
+        """Tests continuation of registration with email in session"""
+
+        with self.client as c:
+            result = c.post('/register', follow_redirects=True)
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn(b"<title>Moon Phase Tracker</title>", result.data)
+
+
+    def test_settings(self):
+        """Tests display setttings"""
+        
+        with self.client as c:
+            result = c.get('/display-settings', follow_redirects=True)
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn(b"<title>Moon Phase Tracker</title>", result.data)
+
 
     def test_logout(self):
         """Test logout route"""
@@ -97,8 +117,8 @@ class TestMoonPhaseLoggedIn(TestCase):
 
             result = self.client.get('/logout', follow_redirects=True)
 
-            self.assertNotIn(b'email', session)
-            self.assertIn(b'<h1>Moon Phase Tracker</h1>', result.data)
+            self.assertNotIn(b'email', sess)
+            self.assertIn(b"<title>Moon Phase Tracker</title>", result.data)
 
     def tearDown(self):
         """Code to run after every test"""

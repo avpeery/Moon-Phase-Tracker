@@ -230,7 +230,7 @@ def  change_settings():
     if 'moon_phase_choices' in data_dict:
         for number in data_dict['moon_phase_choices']:
             new_moon_phases.append(int(number))
-            
+
     change_alerts_for_user(user, new_moon_phases, new_full_moon_nicknames)
 
     db.session.commit()
@@ -241,11 +241,11 @@ def  change_settings():
 def logout_user():
     """Logs user out of session"""
 
-    if 'credentials' in session:
+    if 'credentials' in session or 'fname' in session:
         del session['credentials']
+        del session['fname']
 
     del session['email']
-    del session['fname']
 
     flash('Succesfully logged out!')
 
@@ -256,7 +256,7 @@ if __name__ == '__main__':
 
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
-    app.debug = True
+    app.debug = False
 
     connect_to_db(app)
 
