@@ -1,15 +1,8 @@
 <head>
     <link href="https://fonts.googleapis.com/css?family=Changa|Electrolize|Jura|Nanum+Gothic+Coding|Press+Start+2P|Tomorrow|Turret+Road|Ubuntu+Mono&display=swap" rel="stylesheet">
+    <link href="static/readme.css" rel="stylesheet"/>
 </head>
 
-
-<style>
-
-    h4 {
-      font-family: "Tomorrow", sans-serif;    
-  }
-
-</style>
 
 <h4>Moon Phase Tracker</h4>
 
