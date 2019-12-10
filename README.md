@@ -7,3 +7,5 @@ Users interested in tracking moon phases can sign up to receive text alerts for 
 
 
 <strong>APIs:</strong> Skyfield API, Twilio API, FullCalendar API, Google Calendar API
+
+![Sign Up](static/img/registrationform.gif)
