@@ -17,7 +17,9 @@ Moon Phase Tracker was developed by Anna Peery. Anna's interest in astrology (Ta
 
 ## Tech stack 
 **Backend:** Python, Flask, PostgreSQL, SQLAlchemy, OAuth, Skyfield
+<br>
 **Frontend:** JavaScript, AJAX, jQuery, FullCalendar, HTML5, CSS, Jinja2, Bootstrap
+<br>
 **APIs:** Twilio, Google Calendar
 
 ## Features
