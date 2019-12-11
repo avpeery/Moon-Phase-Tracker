@@ -1,6 +1,7 @@
 
-![Title](static/img/title.jpg)
-<h4>Moon Phase Tracker</h4>
+<p align='center'>
+    ![Title](static/img/title.jpg)
+</p>
 
 Users interested in tracking moon phases can sign up to receive text alerts for specific moon phase events, or add moon phase events to their personal Google calendars. By using the Python astronomy library, Skyfield, and data from Jet Propulsions Laboratory, moon phase occurrences were calculated from years 2000 – 2050 and stored in the app’s database.
 
