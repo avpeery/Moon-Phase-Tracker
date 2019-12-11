@@ -9,8 +9,12 @@ Users interested in tracking moon phases can sign up to receive text alerts for 
     <img src='static/img/newmoon.png'>
 </p>
 
+## About the Developer
 
-<strong>Tech stack:</strong> Python & JavaScript (Core Languages), Flask, SQLAlchemy, PostgreSQL, JQuery, AJAX,  OAuth, Bootstrap, Jinja, HTML, & CSS
+Moon Phase Tracker was developed by Anna Peery. Anna's interest in astrology (Taurus sun, Scorpio moon) inspired her to build this app. This is her first fullstack web app project. Learn more about the developer on [LinkedIn](https://www.linkedin.com/in/avpeery/).
+
+##Tech stack 
+Python & JavaScript (Core Languages), Flask, SQLAlchemy, PostgreSQL, JQuery, AJAX,  OAuth, Bootstrap, Jinja, HTML, & CSS
 
 
 <strong>APIs:</strong> Skyfield API, Twilio API, FullCalendar API, Google Calendar API
