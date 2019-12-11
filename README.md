@@ -1,6 +1,5 @@
-<head>
-    [style](templates/readme2.html)
-</head>
+
+![style](templates/readme2.html)
 
 
 <h4>Moon Phase Tracker</h4>
