@@ -1,6 +1,5 @@
 <head>
-    <link href="https://fonts.googleapis.com/css?family=Changa|Electrolize|Jura|Nanum+Gothic+Coding|Press+Start+2P|Tomorrow|Turret+Road|Ubuntu+Mono&display=swap" rel="stylesheet">
-    <link href="static/readme.css" rel="stylesheet"/>
+    [style](templates/readme2.html)
 </head>
 
 
