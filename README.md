@@ -24,17 +24,21 @@ Moon Phase Tracker was developed by Anna Peery. Anna's interest in astrology (Ta
 
 ## User Flow
 
-Sign up for texts 
+Sign up for texts
+<br>
 ![Sign Up](static/img/registrationform.gif)
 <br>
 
 Change text subscriptions and manage user information
+<br>
 ![Settings](static/img/managesettings.gif)
 <br>
 
 Access moon phase occurences on the calendar and add calendar event's to personal google calendar
+<br>
 ![Calendar](static/img/oauth.gif)
 <br>
 
 Checking success of adding the moon phase occurence event to google calendar!
+<br>
 ![Oauth](static/img/coldmoon.gif)
