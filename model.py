@@ -1,13 +1,12 @@
-"""Models and database functions for Moon Phase Tracker project"""
 from flask_sqlalchemy import SQLAlchemy  
 from datetime import datetime
 
-
+#Instatiate a SQLAlchemy object
 db = SQLAlchemy()
 
 
 class User(db.Model):
-    """User of Moon Phase Tracker Web App"""
+    '''Data model for user'''
 
     __tablename__ = 'users'
 
@@ -19,12 +18,21 @@ class User(db.Model):
     phone = db.Column(db.String(64))
 
     def __repr__(self):
+        '''Returns human readable info about user object'''
 
         return f'<User user_id={self.user_id} email={self.email}>'
 
+    #hash password functions
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+
 
 class MoonPhaseType(db.Model):
-    """Types of moon phases"""
+    '''Data model for moon phase type'''
 
     __tablename__ = 'moon_phase_types'
 
@@ -34,12 +42,13 @@ class MoonPhaseType(db.Model):
     emoji = db.Column(db.String(20))
 
     def __repr__(self):
+        '''Returns human readable info about moon phase type object'''
 
         return f'<MoonPhaseType moon_phase_type_id={self.moon_phase_type_id} title={self.title}>'
 
 
 class FullMoonNickname(db.Model):
-    """Nicknames for full moon phases"""
+    """Data model for  full moon phase nicknames"""
 
     __tablename__ = 'full_moon_nicknames'
 
@@ -49,12 +58,13 @@ class FullMoonNickname(db.Model):
     description = db.Column(db.String(470))
 
     def __repr__(self):
+        '''Returns human readable info about full moon nickname object'''
 
         return f'<FullMoonNickname full_moon_nickname_id={self.full_moon_nickname_id} title={self.title}>'
 
 
 class MoonPhaseOccurence(db.Model):
-    """Moon phases with date occurences"""
+    '''Data model for moon phase occurences'''
 
     __tablename__ = 'moon_phase_occurences'
 
@@ -67,12 +77,13 @@ class MoonPhaseOccurence(db.Model):
     full_moon_nickname = db.relationship('FullMoonNickname', backref=db.backref('moon_phase_occurences'))
 
     def __repr__(self):
+        '''Returns human readable info about moon phase occurence object'''
 
         return f'<MoonPhaseOccurence moon_phase_occurence_id={self.moon_phase_occurence_id} moon_phase_type_id ={self.moon_phase_type_id}>'
 
 
 class Alert(db.Model):
-    """User subscriptions for moon phase text alerts"""
+    '''Data model for text alert subscriptions'''
 
     __tablename__ = 'alerts'
 
@@ -88,12 +99,13 @@ class Alert(db.Model):
     full_moon_nickname = db.relationship('FullMoonNickname', backref=db.backref('alerts'))
 
     def __repr__(self):
+        '''Returns human readable info about alert object'''
 
         return f'<Alert alert_id={self.alert_id} user_id={self.user_id} moon_phase_type_id={self.moon_phase_type_id}>'
 
 
 class Solstice(db.Model):
-    """Seasonal solstice and equinox occurences with dates"""
+    '''Seasonal solstice and equinox occurences with dates'''
 
     __tablename__ = 'solstices'
 
@@ -102,12 +114,13 @@ class Solstice(db.Model):
     start = db.Column(db.DateTime)
     
     def __repr__(self):
+        '''Returns human readable info about solstice object'''
 
         return f'<Solstice solstice_id={self.solstice_id} title={self.title}>'
 
 
 def connect_to_db(app, db_uri = 'postgresql:///moon_phases'):
-    """Connect the database to our Flask app."""
+    '''Connect the database to app'''
 
     app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 
@@ -122,6 +135,7 @@ if __name__ == '__main__':
 
     from server import app
     connect_to_db(app)
+    #for using interactively
     print('Connected to DB.')
 
 

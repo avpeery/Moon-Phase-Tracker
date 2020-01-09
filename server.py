@@ -26,14 +26,14 @@ app.jinja_env.undefined = StrictUndefined
 
 @app.route('/')
 def index():
-    """Displays homepage"""
+    '''Displays homepage'''
 
     return render_template('homepage.html')
 
 
 @app.route('/authorize')
 def authorize():
-    """Asks user for authorization to google calendar account"""
+    '''Asks user for authorization to google calendar account'''
 
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=SCOPES)
 
