@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy  
 from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
 
 #Instatiate a SQLAlchemy object
 db = SQLAlchemy()
@@ -14,8 +15,8 @@ class User(db.Model):
     fname = db.Column(db.String(64), nullable = True)
     lname = db.Column(db.String(64), nullable = True)
     email = db.Column(db.String(100))
-    password = db.Column(db.String(64))
-    phone = db.Column(db.String(64))
+    db.Column(db.String(128))
+    phone = db.Column(db.String(15))
 
     def __repr__(self):
         '''Returns human readable info about user object'''

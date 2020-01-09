@@ -20,7 +20,8 @@ API_SERVICE_NAME = 'drive'
 API_VERSION = 'v3'
 
 app = Flask(__name__)
-app.secret_key = 'ABC'
+#generate secret key
+app.secret_key = os.urandom(32)
 app.jinja_env.undefined = StrictUndefined
 
 
@@ -48,9 +49,10 @@ def authorize():
 
 @app.route('/oauth2callback')
 def oauth2callback():
-    """Processes response for google calendar authorization"""
+    '''Processes response for google calendar authorization'''
 
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=SCOPES)
+    
     flow.redirect_uri = 'http://me.mydomain.com:5000/oauth2callback'
 
     authorization_response = request.url
@@ -68,11 +70,13 @@ def oauth2callback():
 
 @app.route('/add-to-calendar', methods=['GET'])
 def make_calendar_event():
-    """Adds moon phase event to user's google calendar with OAUTH"""
+    '''Adds moon phase event to user's google calendar with OAUTH'''
 
+    #checks if credentials not already in session
     if 'credentials' not in session:
         return redirect('/authorize')
 
+    #gets information about moon phase type to add to calendar
     session['moon_phase_title'] = request.args['title']
     session['moon_phase_date'] = request.args['date']
 
@@ -81,8 +85,10 @@ def make_calendar_event():
     drive = googleapiclient.discovery.build(
       'calendar', API_VERSION, credentials=credentials)
 
+    #creates google calendar event with session stored moon phase info
     session['event'] = create_google_calendar_event(session['moon_phase_title'], session['moon_phase_date'])
 
+    #adds the calendar event to the google calendar
     event_to_add = drive.events().insert(calendarId='primary', sendNotifications=True, body=session['event']).execute()
 
     flash('Event added to calendar!')
@@ -92,7 +98,7 @@ def make_calendar_event():
 
 @app.route('/get-moon-phases.json')
 def get_moon_phases_from_database():
-    """Gets moon phase occurences from database and turns into json object"""
+    '''Gets moon phase occurences from database and turns into json object'''
 
     all_moon_phase_occurences = MoonPhaseOccurence.query.all()
     all_seasonal_solstices = Solstice.query.all()
@@ -108,14 +114,17 @@ def get_moon_phases_from_database():
 
 @app.route('/register', methods= ['POST'])
 def register_user():
-    """Gets post request from sign-up form on homepage, and continues with registration.html"""
+    '''Gets post request from sign-up form on homepage, and continues with registration.html'''
 
+    #gets form info for email and password
     email, password = form_get_request('email', 'password')
 
+    #checks if user already exists
     if User.query.filter_by(email = email).first():
         flash('Account with that email already exists!')
         return redirect('/')
 
+    #stores email and password in session to access in another route
     session['email'] = email
     session['password'] = password
 
@@ -127,29 +136,38 @@ def register_user():
 
 @app.route('/process-registration', methods = ['POST'])
 def register_to_database():
-    """Receives post request from registration.html, and adds new user/alerts to database"""
+    '''Receives post request from registration.html, and adds new user/alerts to database'''
 
     fname, lname, phone = form_get_request('fname', 'lname', 'phone')
 
     moon_phase_types, full_moon_nicknames = form_get_list('moon_phases', 'full_moon_nicknames')
 
+    #validates if phone number is a real number using Twilio
     phone = lookup_phone_number(phone)
 
+    #if phone number is not valid, redirects back to homepage
     if phone == False:
         flash('Not a valid phone number!')
         return redirect('/')
 
-    user = User(fname=fname, lname=lname, phone= phone, email = session['email'], password = session['password'])
+    #creates user
+    user = User(fname=fname, lname=lname, phone= phone, email = session['email'])
+
+    #sets password hash
+    user.set_password(session['password'])
 
     db.session.add(user)
 
+    #updated lists to sets for better runtime in helper function
     user_moon_phase_types = set(moon_phase_types)
     user_full_moon_nicknames = set(full_moon_nicknames)
 
+    #uses helper function to add alert subscriptions for user to database
     set_new_alerts_for_user(user_moon_phase_types, user_full_moon_nicknames, user)
 
     db.session.commit()
 
+    #stores user first name in session once registration is completed
     session['fname'] = fname
 
     flash('Signed up successfully!')
@@ -159,13 +177,15 @@ def register_to_database():
 
 @app.route('/login', methods=['POST'])
 def login_process():
-    """Gets post request from login, and adds to session"""
+    '''Gets post request from login, and adds to session'''
 
     email, password = form_get_request('email', 'password')
 
-    user = User.query.filter((User.email == email), (User.password == password)).first()
+    #finds user with corresponding email
+    user = User.query.filter_by(email == email).first()
 
-    if user: 
+    #logs in if user exists and user password hash is true
+    if user and user.check_password(password): 
 
         session['email'] = user.email
         session['fname'] = user.fname
@@ -181,14 +201,14 @@ def login_process():
 
 @app.route('/calendar')
 def show_calendar():
-    """Displays calendar of moon phases"""
+    '''Displays calendar of moon phases'''
 
     return render_template('calendar.html')
 
 
 @app.route('/display-settings')
 def user_settings():
-    """Displays user's settings"""
+    '''Displays user's settings'''
 
     email = session['email']
 
@@ -207,7 +227,7 @@ def user_settings():
 
 @app.route('/change-settings.json', methods=['GET'])
 def  change_settings():
-    """Receives AJAX request from change-settings.html, and updates database"""
+    '''Receives AJAX request from change-settings.html, and updates database'''
 
     data = request.args.get('data')
 
@@ -242,7 +262,7 @@ def  change_settings():
 
 @app.route('/logout')
 def logout_user():
-    """Logs user out of session"""
+    '''Logs user out of session'''
 
     session.clear()
 
