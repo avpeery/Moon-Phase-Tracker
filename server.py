@@ -182,7 +182,7 @@ def login_process():
     email, password = form_get_request('email', 'password')
 
     #finds user with corresponding email
-    user = User.query.filter_by(email == email).first()
+    user = User.query.filter_by(email=email).first()
 
     #logs in if user exists and user password hash is true
     if user and user.check_password(password): 

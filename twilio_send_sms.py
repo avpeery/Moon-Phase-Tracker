@@ -30,9 +30,10 @@ def write_full_moon_nickname_text(user, full_moon_nickname_title):
 def find_tonights_moon():
     """Returns tonight's moon phase or full moon nickname if exists in database"""
 
-    today = date.today()
+    #Since moon phases occur after midnight, exists in database as the day ahead
+    tomorrow = datetime.date.today() + datetime.timedelta(days=1)
 
-    moon_phase_tonight = MoonPhaseOccurence.query.filter(MoonPhaseOccurence.start == today).first()
+    moon_phase_tonight = MoonPhaseOccurence.query.filter(MoonPhaseOccurence.start == tomorrow).first()
     
     return moon_phase_tonight
 
