@@ -1,7 +1,8 @@
 from twilio.rest import Client
 import os
 import flask
-from flask_sqlalchemy import SQLAlchemy 
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import or_
 import schedule
 from datetime import date, timedelta
 import time
@@ -34,7 +35,7 @@ def find_tonights_moon():
 
     #Moon phase events occur after midnight
     #Alert should be looking for tomorrow's moon phase (to send text for †hat evening)
-    tomorrow = datetime.date.today() + datetime.timedelta(days=1)
+    tomorrow = date.today() + timedelta(days=1)
 
     #Query for moon phase occurence that occurs tomorrow
     moon_phase_tonight = MoonPhaseOccurence.query.filter(MoonPhaseOccurence.start == tomorrow).first()
@@ -97,13 +98,14 @@ def send_text():
         return None
 
 
-schedule.every().day.at('18:00').do(send_text)
+schedule.every().day.at('17:21').do(send_text)
 
 
 if __name__ == '__main__':
     connect_to_db(app)
-    schedule.run_pending()
-    time.sleep(1)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
 
 
