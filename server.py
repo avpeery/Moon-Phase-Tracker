@@ -1,4 +1,3 @@
-
 from jinja2 import StrictUndefined
 import os
 from flask import (Flask, jsonify, url_for, render_template, redirect, request, flash, session)
@@ -36,14 +35,18 @@ def index():
 def authorize():
     '''Asks user for authorization to google calendar account'''
 
+    #creates flow instance to manage OAuth grant access
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=SCOPES)
 
+    #uri configured in API Google console
     flow.redirect_uri = 'http://me.mydomain.com:5000/oauth2callback'
 
+    #finds authorization url
     authorization_url, state = flow.authorization_url(access_type='offline', include_granted_scopes='true')
 
     session['state'] = state
 
+    #redirect user through authorization url 
     return redirect(authorization_url)
 
 
@@ -51,14 +54,17 @@ def authorize():
 def oauth2callback():
     '''Processes response for google calendar authorization'''
 
+    #creates flow instance to manage OAuth grant access
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, scopes=SCOPES)
     
     flow.redirect_uri = 'http://me.mydomain.com:5000/oauth2callback'
 
     authorization_response = request.url
 
+    #fetch tocken for the authorization response
     flow.fetch_token(authorization_response=authorization_response)
 
+    #credentials stored
     credentials = flow.credentials
 
     session['credentials'] = credentials_to_dict(credentials)
@@ -80,8 +86,10 @@ def make_calendar_event():
     session['moon_phase_title'] = request.args['title']
     session['moon_phase_date'] = request.args['date']
 
+    #grabs stored OAuth credentials
     credentials = google.oauth2.credentials.Credentials(**session['credentials'])
 
+    #client a google api client to make google calendar event
     drive = googleapiclient.discovery.build(
       'calendar', API_VERSION, credentials=credentials)
 
@@ -100,13 +108,14 @@ def make_calendar_event():
 def get_moon_phases_from_database():
     '''Gets moon phase occurences from database and turns into json object'''
 
+    #query for all moon phase occcurence and seasonal solstices
     all_moon_phase_occurences = MoonPhaseOccurence.query.all()
     all_seasonal_solstices = Solstice.query.all()
 
     list_of_moon_phase_dict_items =[]
 
+    #uses helper function to turn items into dictionary to be jsonified
     list_of_moon_phase_dict_items = append_moon_phase_occurences(list_of_moon_phase_dict_items, all_moon_phase_occurences)
-
     list_of_all_dict_items = append_seasonal_solstices(list_of_moon_phase_dict_items, all_seasonal_solstices)
  
     return jsonify(list_of_all_dict_items)
@@ -128,6 +137,7 @@ def register_user():
     session['email'] = email
     session['password'] = password
 
+    #find all moon phases and full moon nicknames to pass onto frontend form
     all_moon_phase_types = MoonPhaseType.query.all()
     all_full_moon_nicknames = FullMoonNickname.query.all()
 
@@ -138,8 +148,8 @@ def register_user():
 def register_to_database():
     '''Receives post request from registration.html, and adds new user/alerts to database'''
 
+    #uses helper functions to get form information concisely
     fname, lname, phone = form_get_request('fname', 'lname', 'phone')
-
     moon_phase_types, full_moon_nicknames = form_get_list('moon_phases', 'full_moon_nicknames')
 
     #validates if phone number is a real number using Twilio
@@ -150,8 +160,8 @@ def register_to_database():
         flash('Not a valid phone number!')
         return redirect('/')
 
-    #creates user
-    user = User(fname=fname, lname=lname, phone= phone, email = session['email'])
+    #creates new user
+    user = User(fname=fname, lname=lname, phone=phone, email=session['email'])
 
     #sets password hash
     user.set_password(session['password'])
@@ -179,6 +189,7 @@ def register_to_database():
 def login_process():
     '''Gets post request from login, and adds to session'''
 
+    #uses helper functions to get form information concisely
     email, password = form_get_request('email', 'password')
 
     #finds user with corresponding email
@@ -194,6 +205,7 @@ def login_process():
 
         return redirect('/calendar')
 
+    #if login info not correct, user remains on homepage
     flash('That is not a valid email and/or password.')
 
     return redirect('/')
@@ -210,41 +222,53 @@ def show_calendar():
 def user_settings():
     '''Displays user's settings'''
 
+    #grab email to find current user
     email = session['email']
 
-    user = User.query.filter_by(email = email).first()
+    user = User.query.filter_by(email=email).first()
 
+    #create empty sets to be used to store user's alerts 
     moon_phase_type_alerts = set()
     full_moon_nickname_alets = set()
 
+    #grabs all moon phase types and full moon nicknames
     all_moon_phase_types = MoonPhaseType.query.all()
     all_full_moon_nicknames = FullMoonNickname.query.all()
 
+    #checks for user's alerts using helper function
     moon_phase_type_alerts, full_moon_nickname_alerts = add_active_alerts_to_sets(user, all_moon_phase_types, all_full_moon_nicknames)
 
+    #passes user information and user alerts to frontend
     return render_template('settings.html', user=user, moon_phases=all_moon_phase_types, full_moon_nicknames=all_full_moon_nicknames, moon_phase_type_alerts=moon_phase_type_alerts, full_moon_nickname_alerts=full_moon_nickname_alerts)
 
 
 @app.route('/change-settings.json', methods=['GET'])
-def  change_settings():
+def change_settings():
     '''Receives AJAX request from change-settings.html, and updates database'''
 
+    #gets data from updated form
     data = request.args.get('data')
 
+    #parses json data into dictionary
     data_dict = parse_qs(data)
 
+    #grab current user
     email = session['email']
     user = User.query.filter_by(email = email).first()
 
+    #checks phone number is real
     new_phone = lookup_phone_number(data_dict['phone'][0])
 
+    #access information from dictionary to update user
     user.fname, user.lname, user.phone, user.email = data_dict['fname'][0], data_dict['lname'][0], new_phone, data_dict['email'][0]
 
+    #update email in session if it has been changed
     session['email'] = email
 
     new_full_moon_nicknames = []
     new_moon_phases = []
 
+    #makes separate lists of full moon nickname and moon phase types 
     if 'full_moon_nickname_choices' in data_dict:
         for full_moon_nickname_id in data_dict['full_moon_nickname_choices']:
             new_full_moon_nicknames.append(int(full_moon_nickname_id))
@@ -253,10 +277,12 @@ def  change_settings():
         for moon_phase_id in data_dict['moon_phase_choices']:
             new_moon_phases.append(int(moon_phase_id))
 
+    #uses helper function to set new alerts
     change_alerts_for_user(user, new_moon_phases, new_full_moon_nicknames)
 
     db.session.commit()
 
+    #return back the data to display the updated information
     return jsonify(data_dict)
 
 
@@ -273,6 +299,7 @@ def logout_user():
 
 if __name__ == '__main__':
 
+    #for Google OAuth
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
     app.debug = False

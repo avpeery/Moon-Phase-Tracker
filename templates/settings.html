@@ -11,7 +11,7 @@
                 <td>First name:
                 <input type="text" name ="fname" value = "{{ user.fname }}" disabled></td>
                 <td>Last name:
-                <input type="text" name ="lname" value = "{{ user.lname }}"" disabled></td>
+                <input type="text" name ="lname" value = "{{ user.lname }}" disabled></td>
             </tr>
             <tr>
                 <td><br></td>
@@ -82,8 +82,6 @@
         evt.preventDefault();
         evt.stopPropagation();
         $('input').removeAttr('disabled');
-        // $('.change-settings').replaceWith($('<input type=submit>'));
-
         $('.save-settings').show();
         $('.change-settings').hide();
     });

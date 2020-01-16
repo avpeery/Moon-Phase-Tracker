@@ -1,7 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy  
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-
 #Instatiate a SQLAlchemy object
 db = SQLAlchemy()
 
@@ -29,7 +28,6 @@ class User(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
-
 
 
 class MoonPhaseType(db.Model):
@@ -124,7 +122,6 @@ def connect_to_db(app, db_uri = 'postgresql:///moon_phases'):
     '''Connect the database to app'''
 
     app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
-
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_ECHO'] = True
 

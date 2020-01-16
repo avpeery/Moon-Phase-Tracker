@@ -27,7 +27,7 @@ class MoonPhaseTrackerTests(TestCase):
 
         result = self.client.get('/calendar')
         self.assertEqual(result.status_code, 200)
-        self.assertIn(b'<title>Moon Phase Tracker</title>', result.data)
+        self.assertIn(b'<h5 class="subheading">Click on any moon phase', result.data)
 
 
 class TestMoonPhaseDatabase(TestCase):
@@ -95,7 +95,7 @@ class TestMoonPhaseLoggedIn(TestCase):
             result = c.post('/register', follow_redirects=True)
 
         self.assertEqual(result.status_code, 200)
-        self.assertIn(b'<title>Moon Phase Tracker</title>', result.data)
+        self.assertIn(b'<h3>Complete the form below to sign up for texts</h3>', result.data)
 
 
     def test_settings(self):
@@ -105,7 +105,7 @@ class TestMoonPhaseLoggedIn(TestCase):
             result = c.get('/display-settings', follow_redirects=True)
 
         self.assertEqual(result.status_code, 200)
-        self.assertIn(b'<title>Moon Phase Tracker</title>', result.data)
+        self.assertIn(b'<h3>Manage Settings</h3>', result.data)
 
 
     def test_logout(self):
