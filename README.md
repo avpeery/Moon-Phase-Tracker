@@ -12,6 +12,7 @@ Users interested in tracking moon phases can sign up to receive text alerts for 
 </p>
 
 ## About the Developer
+[Python](https://www.python.org/downloads/)
 
 Moon Phase Tracker was developed by Anna Peery. Anna's interest in astrology (Taurus sun, Scorpio moon) inspired her to build this app. This is her first fullstack web app project. Learn more about the developer on [LinkedIn](https://www.linkedin.com/in/avpeery/).
 
